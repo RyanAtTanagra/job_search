@@ -514,7 +514,7 @@ def search_indeed():
                 awsutils.dynamodb_put_item('indeed_jobs', 'job_id', id)
                 metrics["fitness_count"] += 1
                 continue
-            company = job_details.get('company') or "Unknown Company"
+            company = job['company'] or "Unknown Company"
             email_body=f"{company} - {title}\n{url}\nsalary: {highest_salary}/yr\nfitness: {fitness}"
             logging.info(email_body)
             cover_letter_path=get_cover_letter(company, title, description)
