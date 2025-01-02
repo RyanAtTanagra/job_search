@@ -1,0 +1,11 @@
+requests
+selenium
+anthropic
+argparse
+python-dotenv
+urllib3
+boto3
+linkedin_api
+python-docx
+undetected_chromedriver
+setuptools

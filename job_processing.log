@@ -1,0 +1,3707 @@
+INFO:root:https://www.linkedin.com/jobs/view/4114131010
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4112833902 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4096162439
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:LinkedIn job 4108548372 already seen
+INFO:root:LinkedIn job 4106600067 already seen
+INFO:root:LinkedIn job 4109983021 already seen
+INFO:root:LinkedIn job 4109426492 already seen
+INFO:root:LinkedIn job 4108718707 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112866128
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4087412400 already seen
+INFO:root:LinkedIn job 4108774557 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114124927
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4111414467 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114124873
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4112815329 already seen
+INFO:root:LinkedIn job 4111981037 already seen
+INFO:root:LinkedIn job 4103784398 already seen
+INFO:root:LinkedIn job 4113709375 already seen
+INFO:root:LinkedIn job 4111985078 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112436452
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:LinkedIn job 4108008865 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4096911336
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4106738121 already seen
+INFO:root:LinkedIn job 4091544988 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112868040
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4108126390 already seen
+INFO:root:LinkedIn job 4113724165 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4079531616
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4114015799 already seen
+INFO:root:LinkedIn job 4111942546 already seen
+INFO:root:LinkedIn job 4108715949 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4096912293
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4077289230
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114116904
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Lead DevOps Engineer
+https://www.linkedin.com/jobs/view/4114116904
+salary: 215.0/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4114131010 already seen
+INFO:root:LinkedIn job 4106600056 already seen
+INFO:root:LinkedIn job 4112833902 already seen
+INFO:root:LinkedIn job 4096162439 already seen
+INFO:root:LinkedIn job 4108548372 already seen
+INFO:root:LinkedIn job 4106600067 already seen
+INFO:root:LinkedIn job 4109983021 already seen
+INFO:root:LinkedIn job 4109426492 already seen
+INFO:root:LinkedIn job 4108718707 already seen
+INFO:root:LinkedIn job 4112866128 already seen
+INFO:root:LinkedIn job 4087412400 already seen
+INFO:root:LinkedIn job 4108774557 already seen
+INFO:root:LinkedIn job 4114124927 already seen
+INFO:root:LinkedIn job 4111414467 already seen
+INFO:root:LinkedIn job 4114124873 already seen
+INFO:root:LinkedIn job 4111981037 already seen
+INFO:root:LinkedIn job 4103784398 already seen
+INFO:root:LinkedIn job 4113709375 already seen
+INFO:root:LinkedIn job 4111985078 already seen
+INFO:root:LinkedIn job 4112436452 already seen
+INFO:root:LinkedIn job 4108008865 already seen
+INFO:root:LinkedIn job 4096911336 already seen
+INFO:root:LinkedIn job 4106738121 already seen
+INFO:root:LinkedIn job 4091544988 already seen
+INFO:root:LinkedIn job 4112868040 already seen
+INFO:root:LinkedIn job 4108126390 already seen
+INFO:root:LinkedIn job 4114020226 already seen
+INFO:root:LinkedIn job 4079531616 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114140136
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4114015799 already seen
+INFO:root:LinkedIn job 4111942546 already seen
+INFO:root:LinkedIn job 4108715949 already seen
+INFO:root:LinkedIn job 4096912293 already seen
+INFO:root:LinkedIn job 4077289230 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114116904
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Lead DevOps Engineer
+https://www.linkedin.com/jobs/view/4114116904
+salary: 215.0/yr
+fitness: 90
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4114131010 already seen
+INFO:root:LinkedIn job 4106600056 already seen
+INFO:root:LinkedIn job 4112833902 already seen
+INFO:root:LinkedIn job 4096162439 already seen
+INFO:root:LinkedIn job 4108548372 already seen
+INFO:root:LinkedIn job 4106600067 already seen
+INFO:root:LinkedIn job 4109983021 already seen
+INFO:root:LinkedIn job 4109426492 already seen
+INFO:root:LinkedIn job 4108718707 already seen
+INFO:root:LinkedIn job 4112866128 already seen
+INFO:root:LinkedIn job 4087412400 already seen
+INFO:root:LinkedIn job 4108774557 already seen
+INFO:root:LinkedIn job 4114124927 already seen
+INFO:root:LinkedIn job 4111414467 already seen
+INFO:root:LinkedIn job 4114124873 already seen
+INFO:root:LinkedIn job 4111981037 already seen
+INFO:root:LinkedIn job 4103784398 already seen
+INFO:root:LinkedIn job 4113709375 already seen
+INFO:root:LinkedIn job 4111985078 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113300067
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4112436452 already seen
+INFO:root:LinkedIn job 4108008865 already seen
+INFO:root:LinkedIn job 4096911336 already seen
+INFO:root:LinkedIn job 4106738121 already seen
+INFO:root:LinkedIn job 4091544988 already seen
+INFO:root:LinkedIn job 4112868040 already seen
+INFO:root:LinkedIn job 4108126390 already seen
+INFO:root:LinkedIn job 4114020226 already seen
+INFO:root:LinkedIn job 4079531616 already seen
+INFO:root:LinkedIn job 4114015799 already seen
+INFO:root:LinkedIn job 4111942546 already seen
+INFO:root:LinkedIn job 4108715949 already seen
+INFO:root:LinkedIn job 4096912293 already seen
+INFO:root:LinkedIn job 4077289230 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114116904
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Lead DevOps Engineer
+https://www.linkedin.com/jobs/view/4114116904
+salary: 215.0/yr
+fitness: 80
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4106296205 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4077553460
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Product Manager - HashiCorp Terraform
+https://www.linkedin.com/jobs/view/4077553460
+salary: 195.0/yr
+fitness: 83
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4111988607 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4077293083
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Senior Manager, Platform Infrastructure
+https://www.linkedin.com/jobs/view/4077293083
+salary: 230.0/yr
+fitness: 90
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4091551248 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114129247
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4087414564 already seen
+INFO:root:LinkedIn job 4106294770 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114129240
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4113724920 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4077290276
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Senior Manager, Platform Infrastructure
+https://www.linkedin.com/jobs/view/4077290276
+salary: 230.0/yr
+fitness: 92
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4113704641 already seen
+INFO:root:LinkedIn job 4114016739 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112437381
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Cloud Architect
+https://www.linkedin.com/jobs/view/4112437381
+salary: 180.0/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4109936261 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112899062
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4077625657
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Principal Member of Technical Staff
+https://www.linkedin.com/jobs/view/4077625657
+salary: 223.5/yr
+fitness: 90
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4113721291 already seen
+INFO:root:LinkedIn job 4107709599 already seen
+INFO:root:LinkedIn job 4107709476 already seen
+INFO:root:LinkedIn job 4108014379 already seen
+INFO:root:LinkedIn job 4108477786 already seen
+INFO:root:LinkedIn job 4108720479 already seen
+INFO:root:LinkedIn job 4108008943 already seen
+INFO:root:LinkedIn job 4112825230 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4096170686
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:LinkedIn job 4112815325 already seen
+INFO:root:LinkedIn job 4108015284 already seen
+INFO:root:LinkedIn job 4112815329 already seen
+INFO:root:LinkedIn job 4112821458 already seen
+INFO:root:LinkedIn job 4108008975 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112895329
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4107704814 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113300063
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113300062
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112891877
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4106294594 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112896400
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4113717789 already seen
+INFO:root:LinkedIn job 4088773202 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4090162058
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4096144975
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4108009881 already seen
+INFO:root:LinkedIn job 4108011710 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4096149061
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4113724165 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114127386
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4112819216 already seen
+INFO:root:LinkedIn job 4108011704 already seen
+INFO:root:LinkedIn job 4113718722 already seen
+INFO:root:LinkedIn job 4107708536 already seen
+INFO:root:LinkedIn job 4108126852 already seen
+INFO:root:LinkedIn job 4113721311 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112893681
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4096305182
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Staff Engineer (REMOTE)
+https://www.linkedin.com/jobs/view/4096305182
+salary: 230.0/yr
+fitness: 95
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4107711073 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113477932
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112894519
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4107711068 already seen
+INFO:root:LinkedIn job 4112813678 already seen
+INFO:root:https://www.linkedin.com/jobs/view/3991979765
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4041918609
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Manager, Engineering - Data Governance
+https://www.linkedin.com/jobs/view/4041918609
+salary: 250.0/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4113720544 already seen
+INFO:root:LinkedIn job 4109929842 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4096900460
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113479517
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4111970713 already seen
+INFO:root:https://www.linkedin.com/jobs/view/3797070784
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112863098
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4096568356
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:LinkedIn job 4113722360 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4096146650
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:LinkedIn job 4112838248 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4096789937
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113300083
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4073157686
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4107067013 already seen
+INFO:root:LinkedIn job 4054203386 already seen
+INFO:root:LinkedIn job 4108716682 already seen
+INFO:root:LinkedIn job 4113780988 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112863174
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4096168911
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112864158
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4079840174
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4110245676 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113480583
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4077596989
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4068000665
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4094004803
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113477961
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4113716784 already seen
+INFO:root:LinkedIn job 4113710317 already seen
+INFO:root:LinkedIn job 4105716689 already seen
+INFO:root:LinkedIn job 4107064247 already seen
+INFO:root:LinkedIn job 4114025206 already seen
+INFO:root:LinkedIn job 4111939834 already seen
+INFO:root:LinkedIn job 4113788974 already seen
+INFO:root:LinkedIn job 4108772964 already seen
+INFO:root:LinkedIn job 4106299303 already seen
+INFO:root:https://www.linkedin.com/jobs/view/3968003614
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4112820181 already seen
+INFO:root:LinkedIn job 4109983101 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4067473121
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4113787665 already seen
+INFO:root:LinkedIn job 4106296264 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113484209
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4112897219
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4067466862
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113477912
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113477906
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4112813686 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113480516
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4045068564
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4113722010 already seen
+INFO:root:https://www.linkedin.com/jobs/view/3991751471
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4106299100 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4079141356
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4108796321 already seen
+INFO:root:LinkedIn job 4046232223 already seen
+INFO:root:LinkedIn job 4108477794 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112899036
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4112814616 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112895348
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4102304587 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113478757
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4091056690
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4106014864
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112896309
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4108715944 already seen
+INFO:root:LinkedIn job 4111986810 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113484180
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4079565396
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113300081
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113483400
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4081149233 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4068001364
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4060866684
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4106293810 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112862412
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4107066106 already seen
+INFO:root:LinkedIn job 4104513613 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4111994417
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4107062792 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112894558
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4093672343
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4112819228 already seen
+INFO:root:LinkedIn job 4107065125 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4096174816
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4111220622 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112893689
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4108480603 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113477937
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4061436368
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4108717603 already seen
+INFO:root:LinkedIn job 4113719669 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113477929
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114130223
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4107711069 already seen
+INFO:root:LinkedIn job 4113795841 already seen
+INFO:root:LinkedIn job 4082141915 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113480513
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112893767
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4079699642 already seen
+INFO:root:LinkedIn job 4079699643 already seen
+INFO:root:LinkedIn job 4107063484 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4096168896
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4079699633 already seen
+INFO:root:LinkedIn job 4079699639 already seen
+INFO:root:LinkedIn job 4112815254 already seen
+INFO:root:LinkedIn job 4080102212 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4095728217
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:LinkedIn job 4079695823 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4079862156
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4079695819 already seen
+INFO:root:LinkedIn job 4079698631 already seen
+INFO:root:LinkedIn job 4111942338 already seen
+INFO:root:LinkedIn job 4107061826 already seen
+INFO:root:LinkedIn job 4107061827 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4095724928
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4112860927
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4080101424 already seen
+INFO:root:LinkedIn job 4111939781 already seen
+INFO:root:LinkedIn job 4082142823 already seen
+INFO:root:LinkedIn job 4111939782 already seen
+INFO:root:LinkedIn job 4112836804 already seen
+INFO:root:LinkedIn job 4112821457 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112898156
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4079697646 already seen
+INFO:root:LinkedIn job 4114034789 already seen
+INFO:root:LinkedIn job 4107066102 already seen
+INFO:root:https://www.linkedin.com/jobs/view/3972579841
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4094009365
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4107060902 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4077285567
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4082145523 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113483398
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4077533637
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4113788973 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4077534617
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4096786010
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:LinkedIn job 4067669964 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4079537116
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4074595328 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113481503
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113483367
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4113718928 already seen
+INFO:root:LinkedIn job 4111943284 already seen
+INFO:root:LinkedIn job 4114028292 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113484206
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4079355356
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4101248544 already seen
+INFO:root:LinkedIn job 4108793742 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112895386
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4042273767
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Salesforce Technical Lead, Partner & Channel Sales
+https://www.linkedin.com/jobs/view/4042273767
+salary: 189.0/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4079518338
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4107709475 already seen
+INFO:root:LinkedIn job 4106295411 already seen
+INFO:root:LinkedIn job 4079699635 already seen
+INFO:root:LinkedIn job 4079699638 already seen
+INFO:root:LinkedIn job 4107062806 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112899046
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4038539970
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4096524053
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Director, Core Salesforce Platform
+https://www.linkedin.com/jobs/view/4096524053
+salary: 257.0/yr
+fitness: 90
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4079695822 already seen
+INFO:root:LinkedIn job 4079695820 already seen
+INFO:root:LinkedIn job 4080102208 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114128293
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4096907048
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:LinkedIn job 4102330076 already seen
+INFO:root:LinkedIn job 4079698630 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4102597855
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113478730
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4113783100 already seen
+INFO:root:LinkedIn job 4112815335 already seen
+INFO:root:LinkedIn job 4079697648 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114130731
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:LinkedIn job 4107696572 already seen
+INFO:root:LinkedIn job 4107066105 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112885743
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:LinkedIn job 4108778063 already seen
+INFO:root:LinkedIn job 4082145524 already seen
+INFO:root:LinkedIn job 4112817287 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113483397
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4080100435 already seen
+INFO:root:LinkedIn job 4107066101 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4077532786
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4107064246 already seen
+INFO:root:LinkedIn job 4107064244 already seen
+INFO:root:LinkedIn job 4079696839 already seen
+INFO:root:LinkedIn job 4079696838 already seen
+INFO:root:LinkedIn job 4113797571 already seen
+INFO:root:LinkedIn job 4108475824 already seen
+INFO:root:LinkedIn job 4113793402 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113477922
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4073747024
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4079696835 already seen
+INFO:root:LinkedIn job 4112838047 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4094045584
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Sr. Mgr, Software Engineering, Copilot Workspace
+https://www.linkedin.com/jobs/view/4094045584
+salary: 299.3/yr
+fitness: 92
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4113796011 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4084612478
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4113728590 already seen
+INFO:root:LinkedIn job 4108795371 already seen
+INFO:root:LinkedIn job 4111976492 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114102819
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4112825044 already seen
+INFO:root:LinkedIn job 4079699634 already seen
+INFO:root:LinkedIn job 4079699636 already seen
+INFO:root:LinkedIn job 4082148074 already seen
+INFO:root:LinkedIn job 4080102210 already seen
+INFO:root:LinkedIn job 4113743178 already seen
+INFO:root:LinkedIn job 4112833917 already seen
+INFO:root:LinkedIn job 4087327742 already seen
+INFO:root:LinkedIn job 4079698632 already seen
+INFO:root:LinkedIn job 4079698633 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113478745
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4080101425 already seen
+INFO:root:LinkedIn job 4080101422 already seen
+INFO:root:LinkedIn job 4079697650 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112876391
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:LinkedIn job 4113721132 already seen
+INFO:root:LinkedIn job 4079697652 already seen
+INFO:root:LinkedIn job 4082142824 already seen
+INFO:root:LinkedIn job 4112837245 already seen
+INFO:root:LinkedIn job 4102064327 already seen
+INFO:root:LinkedIn job 4106299135 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113478732
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4113796420 already seen
+INFO:root:LinkedIn job 4079697647 already seen
+INFO:root:LinkedIn job 4106298153 already seen
+INFO:root:LinkedIn job 4112837239 already seen
+INFO:root:LinkedIn job 4082146522 already seen
+INFO:root:LinkedIn job 4107066111 already seen
+INFO:root:LinkedIn job 4107062793 already seen
+INFO:root:LinkedIn job 4101250453 already seen
+INFO:root:LinkedIn job 4082147115 already seen
+INFO:root:LinkedIn job 4108714987 already seen
+INFO:root:LinkedIn job 4107060903 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113481535
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4080100437 already seen
+INFO:root:LinkedIn job 4082144546 already seen
+INFO:root:LinkedIn job 4108773630 already seen
+INFO:root:LinkedIn job 4108124574 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4077531595
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Senior Software Engineer, Distributed Systems
+https://www.linkedin.com/jobs/view/4077531595
+salary: 240.0/yr
+fitness: 87
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4113480536
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4108128705 already seen
+INFO:root:LinkedIn job 4109424617 already seen
+INFO:root:LinkedIn job 4079696836 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113300102
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112893769
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Senior Full Stack Software Engineer
+https://www.linkedin.com/jobs/view/4112893769
+salary: 200.0/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4108718615 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112896105
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4077630447
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112873486
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Response for fitness score isn't only a number: invalid literal for int() with base 10: 'Based on your resume and the provided job description, here is my scoring analysis:\n\n85'
+INFO:root:LinkedIn job 4112837257 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113479519
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4113720521 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114134426
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113478766
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4082143852 already seen
+INFO:root:LinkedIn job 4112817851 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112896312
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4102825192 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4094027857
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4112892986
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112862319
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113300082
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4093665337
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4112895449
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4108476773 already seen
+INFO:root:LinkedIn job 4113722312 already seen
+INFO:root:LinkedIn job 4065467453 already seen
+INFO:root:LinkedIn job 4109738337 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112897299
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4108716698 already seen
+INFO:root:LinkedIn job 4112835850 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4111990766
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4114034790 already seen
+INFO:root:LinkedIn job 4111982306 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112861539
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4108991858 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112873402
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112898249
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4112435581
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Audio Systems Software Engineer
+https://www.linkedin.com/jobs/view/4112435581
+salary: 200.0/yr
+fitness: 80
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4113481531
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112896286
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4108125994 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112866095
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4108716868 already seen
+INFO:root:LinkedIn job 4112822364 already seen
+INFO:root:LinkedIn job 4108721301 already seen
+INFO:root:LinkedIn job 4112835795 already seen
+INFO:root:LinkedIn job 4112818205 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112834810
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4113705731 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113480515
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113487147
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112863221
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4113711359 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114125498
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4112899063
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4113793211 already seen
+INFO:root:LinkedIn job 4108969534 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114094898
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4103386956 already seen
+INFO:root:LinkedIn job 4106298257 already seen
+INFO:root:LinkedIn job 4113790843 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112447152
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114033929
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4111940773 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4061581033
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4112898192
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114124493
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4037023895 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114039125
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Senior Solution Engineer, AI Enterprise
+https://www.linkedin.com/jobs/view/4114039125
+salary: 258.75/yr
+fitness: 80
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4113707428 already seen
+INFO:root:LinkedIn job 4111941485 already seen
+INFO:root:LinkedIn job 4108994408 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112872475
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4090753356
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4114014149 already seen
+INFO:root:LinkedIn job 4113721344 already seen
+INFO:root:LinkedIn job 4096910803 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4096781721
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Technical Support Engineer - PART TIME role
+https://www.linkedin.com/jobs/view/4096781721
+salary: 183.0/yr
+fitness: 90
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4109422983 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4111994418
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4075825539
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4113789356 already seen
+INFO:root:LinkedIn job 4113723077 already seen
+INFO:root:LinkedIn job 4113721541 already seen
+INFO:root:LinkedIn job 4114000635 already seen
+INFO:root:LinkedIn job 4107518245 already seen
+INFO:root:LinkedIn job 4075810607 already seen
+INFO:root:LinkedIn job 4112819226 already seen
+INFO:root:LinkedIn job 4113796698 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4077537438
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4111978241 already seen
+INFO:root:LinkedIn job 4047676927 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4080666361
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4077536486
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4112835794 already seen
+INFO:root:LinkedIn job 4108722053 already seen
+INFO:root:LinkedIn job 4111937510 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112834816
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114124570
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4108478687 already seen
+INFO:root:LinkedIn job 4114013232 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114093693
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4112428524
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4093623554
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4113711348 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112895374
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4113727390 already seen
+INFO:root:https://www.linkedin.com/jobs/view/3763596691
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Principal Software Engineer
+https://www.linkedin.com/jobs/view/3763596691
+salary: 294.0/yr
+fitness: 95
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4113788325 already seen
+INFO:root:LinkedIn job 4108771917 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4096193555
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4104359129 already seen
+INFO:root:LinkedIn job 4111937803 already seen
+INFO:root:LinkedIn job 4108774614 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112435475
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Staff Engineer / Architect (DeFi)
+https://www.linkedin.com/jobs/view/4112435475
+salary: 275.0/yr
+fitness: 80
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4114017323 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114127443
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114126111
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4112828658 already seen
+INFO:root:LinkedIn job 4102599690 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112860903
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4112824051 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112439163
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4112899103
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4112818229 already seen
+INFO:root:LinkedIn job 4111975683 already seen
+INFO:root:LinkedIn job 4113711416 already seen
+INFO:root:LinkedIn job 4112823278 already seen
+INFO:root:LinkedIn job 4114002033 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112867050
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4113723046 already seen
+INFO:root:LinkedIn job 4112811973 already seen
+INFO:root:LinkedIn job 4112834722 already seen
+INFO:root:LinkedIn job 4113793064 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114126422
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4079375052
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113481518
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4093848282
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4108012608
+INFO:utils.linkedin_api.linkedin:request failed: Unknown error
+INFO:root:https://www.linkedin.com/jobs/view/4114280154
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Principal Cloud Infrastructure & Platform Engineer
+https://www.linkedin.com/jobs/view/4114280154
+salary: 353.5/yr
+fitness: 92
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4114274824
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114277666
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Senior Platform Engineer, Infrastructure & Security
+https://www.linkedin.com/jobs/view/4114277666
+salary: 195.0/yr
+fitness: 88
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4114274819
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113885203
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114280010
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114274802
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114273951
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114273944
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4114124927 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113825600
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114276810
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4101291366 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114279190
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114274739
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114275821
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113835702
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Senior Solutions Architect - DevOps - REMOTE
+https://www.linkedin.com/jobs/view/4113835702
+salary: 202.73/yr
+fitness: 90
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4112436452 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114274835
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114274832
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114277669
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114274833
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4096911336 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114280155
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114279208
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114441882
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114278358
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113800478
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114489131
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114275854
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4096912293 already seen
+INFO:root:LinkedIn job 4077289230 already seen
+INFO:root:LinkedIn job 4114116904 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114276815
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114275850
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114477598
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114276769
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114280100
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114275680
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4114129247 already seen
+INFO:root:LinkedIn job 4095432659 already seen
+INFO:root:LinkedIn job 4107795994 already seen
+INFO:root:LinkedIn job 4114129240 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114446286
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4077290276 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113883279
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Senior Software Engineer - Infrastructure
+https://www.linkedin.com/jobs/view/4113883279
+salary: 270.0/yr
+fitness: 90
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4096811070 already seen
+INFO:root:LinkedIn job 4079355356 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4090610075
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114277537
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114279043
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4096162439 already seen
+INFO:root:LinkedIn job 4077625657 already seen
+INFO:root:LinkedIn job 4079141356 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114451500
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114273840
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113879898
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Senior Software Engineer - Infrastructure
+https://www.linkedin.com/jobs/view/4113879898
+salary: 270.0/yr
+fitness: 89
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4113841073
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Senior Solutions Architect DevOps - REMOTE
+https://www.linkedin.com/jobs/view/4113841073
+salary: 202.73/yr
+fitness: 95
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4038539970 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4074908348
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114273950
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114276665
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112476990
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114276808
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4096907048 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114275841
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114280066
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4096170686 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114277688
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4114130731 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114277679
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114279171
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4088773202 already seen
+INFO:root:LinkedIn job 4096144975 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114279205
+INFO:root:No salary information found
+INFO:root:LinkedIn job 3972579841 already seen
+INFO:root:LinkedIn job 4079531616 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112484197
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114276722
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114275737
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114278211
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113830341
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113801429
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114487981
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4105716689 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114278205
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4096305182 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114275669
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113300126
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114275675
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114444302
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114275671
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114448223
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114278371
+INFO:root:No salary information found
+INFO:root:LinkedIn job 3991979765 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114453274
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113499914
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4112437381 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113837597
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114280146
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114280142
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4096900460 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114273963
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114279037
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113834773
+INFO:root:No salary information found
+INFO:root:LinkedIn job 3797070784 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114276798
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114276796
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114273960
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Senior Software Engineer
+https://www.linkedin.com/jobs/view/4114273960
+salary: 225.0/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4114276793
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114278291
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114273948
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112481422
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114280072
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4102304587 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114275836
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114275834
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114275835
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4091056690 already seen
+INFO:root:LinkedIn job 4094027857 already seen
+INFO:root:LinkedIn job 4096193555 already seen
+INFO:root:LinkedIn job 4096789937 already seen
+INFO:root:LinkedIn job 4073157686 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112481323
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4074539635
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114274721
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4068001364 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113836800
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114134877
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4096168911 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112484173
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112612690
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4068000665 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114140816
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Sr. Partner Solutions Architect
+https://www.linkedin.com/jobs/view/4114140816
+salary: 198.3/yr
+fitness: 90
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4096149061 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112484198
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4094004803 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113495981
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4112894558 already seen
+INFO:root:LinkedIn job 4113477961 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113841128
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114276814
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4067473121 already seen
+INFO:root:LinkedIn job 4073747024 already seen
+INFO:root:LinkedIn job 4067466862 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113499918
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113498835
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Principal Software Engineer / Remote
+https://www.linkedin.com/jobs/view/4113498835
+salary: 225.0/yr
+fitness: 95
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4114280150
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4045068564 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113499929
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114274823
+INFO:root:No salary information found
+INFO:root:LinkedIn job 3991751471 already seen
+INFO:root:LinkedIn job 3763596691 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113498608
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114274808
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114276797
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114901076
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114295678
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114295679
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114276778
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114446388
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114279088
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4106014864 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113828541
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4088776697
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114275818
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114900183
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114277684
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114274838
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114273873
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114280157
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4113480583 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114297445
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113837530
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Full Stack Senior Solutions Architect with Pre-Sales Experience - Remote
+https://www.linkedin.com/jobs/view/4113837530
+salary: 202.73/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4093672343 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114274773
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114276817
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114275847
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114275848
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113497939
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4096174816 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114275845
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114275846
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114275844
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113804005
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112498125
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114181312
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114276768
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4061436368 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114294800
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114294802
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4077531595 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113804053
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114296561
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114296562
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114279212
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114274828
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114274826
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114449075
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114274811
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114277650
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112494609
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112494608
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114274805
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114277645
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114901075
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114276791
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112494610
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114436521
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114276803
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4079138650
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114452440
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4095724928 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114443849
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114443758
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4060866684 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114277687
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114277683
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114274836
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112481346
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114274837
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114279206
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Senior Software Engineer (Backend C#) - TrainingPeaks
+https://www.linkedin.com/jobs/view/4114279206
+salary: 185.36/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4114279201
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114276712
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114278336
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113833976
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4112477795
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114275849
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114276811
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114275843
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113497943
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4112498124
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114452298
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4077293083 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112499008
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4079537116 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114294801
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114275790
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114446285
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114273918
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114275769
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114279209
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4079140489
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114279216
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4113487147 already seen
+INFO:root:LinkedIn job 4112893769 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112482286
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113835619
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:LinkedIn job 4096168896 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112482296
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112477823
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114279154
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114183239
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4095728217 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4074908347
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4074908349
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4074906602
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112480451
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4096146650 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112479466
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4114128293 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112476991
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112483176
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112483177
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114275839
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112479480
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4102597855 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114275830
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113499744
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114104575
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4112479495
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112479497
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112479496
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112484177
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112484175
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112484186
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113497902
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4112885743 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114278351
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112484196
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112478753
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4094009365 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114275734
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112478765
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4077533637 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114199547
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112483210
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112483212
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112483214
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4096786010 already seen
+INFO:root:LinkedIn job 4114130223 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112484200
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112484201
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114276751
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4084612478 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114274829
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114274827
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112873486
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - AEM Expert Solution Consultant
+https://www.linkedin.com/jobs/view/4112873486
+salary: 280.3/yr
+fitness: 80
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4114274813
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114277526
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114451743
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4104164434 already seen
+INFO:root:LinkedIn job 4112899046 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114274800
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114276799
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114299232
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114273945
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4112899036 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114198735
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113498870
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4112479468
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114276805
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113828547
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4102922006
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114280051
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4093665337 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113496920
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113838545
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4072341652
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4112484172
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4095716042
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4077268192
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4106872992
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114278353
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4077596989 already seen
+INFO:root:LinkedIn job 4101250453 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4104255858
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114280099
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4102764132
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4077285567 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4096148202
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114278335
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112477794
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114181340
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113837533
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113497940
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114451689
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112499009
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114276770
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112439311
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4094045584 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114279213
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114279211
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114125494
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4101248544 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113497883
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114182267
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114273959
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113498739
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114277522
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113802117
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4061581033 already seen
+INFO:root:LinkedIn job 4096524053 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112480453
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114275697
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114280118
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114276801
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114275840
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113834723
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Enterprise Architect / Multi-Solution Architect / Chief Architect - REMOTE
+https://www.linkedin.com/jobs/view/4113834723
+salary: 202.73/yr
+fitness: 93
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4114279192
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4090753356 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114275831
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113828542
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4112435475 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4077624671
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114277682
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114277677
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114277673
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114278359
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114276715
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114275857
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4106079427 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112478768
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4113483397 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112483205
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113803033
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114276812
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Google Cloud Platform AI Architect/ Engineer - REMOTE
+https://www.linkedin.com/jobs/view/4114276812
+salary: 202.73/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4113497941
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4077532786 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114277618
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114295688
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113496978
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4077534617 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114276771
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4080666361 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114273921
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113801352
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113481509
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4113480536 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4096148123
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113498713
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114278365
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114280151
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114196328
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4093623554 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114277662
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4064848671
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Software Engineer
+https://www.linkedin.com/jobs/view/4064848671
+salary: 201.3/yr
+fitness: 92
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4106270381
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4114273959 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114273955
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114277639
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4096568356 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113804082
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114273941
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114276780
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4114039125 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114183579
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4077623680
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113803020
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4112896312 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4096904229
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4112481324
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114279194
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4089824799
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - VP, Data
+https://www.linkedin.com/jobs/view/4089824799
+salary: 350.0/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4113827560
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114299311
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4114277682 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113498782
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114279187
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114270747
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:LinkedIn job 4096781721 already seen
+INFO:root:LinkedIn job 4113481531 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114276818
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4114276812 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114444128
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Sr. Staff Software Engineer (CDN, Cloud Networking)
+https://www.linkedin.com/jobs/view/4114444128
+salary: 234.0/yr
+fitness: 90
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4077553460 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114274760
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114126425
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114279127
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4042263527
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114275783
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112439431
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113803073
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4041918609 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113840230
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114276734
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113499922
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114279214
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114451888
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113879906
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113879904
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4096785128
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Technical Support Engineer - PART TIME role
+https://www.linkedin.com/jobs/view/4096785128
+salary: 183.0/yr
+fitness: 80
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4114280152
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4114125498 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113499813
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112482297
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112899058
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4112447152 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113499704
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112476973
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4114102819 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113499828
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114273954
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114198603
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113497772
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114280128
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114273949
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112480455
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112878237
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114276807
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114455166
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113875951
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113839500
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114275827
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113825835
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114275823
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114275824
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113802048
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4114127443 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114277671
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4096150151
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4106266943
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113800581
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114278350
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114278227
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114138625
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4077537438 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114273936
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114273935
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4096170705
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114276774
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112483209
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4077536486 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113498807
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114124903
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113830306
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113835313
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114089614
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114278364
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114279210
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4114093693 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113494919
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113801282
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113827546
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114277658
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114280144
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4042273767 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113483573
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4114094898 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112476969
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113802116
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4098070732
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114444882
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114130127
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4112479471
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114274751
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4031749689 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112479482
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112479481
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4093863800
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4096904230
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4113478732 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112457706
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4112479498
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114445145
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4079840174 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4061390041
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114280158
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112439282
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Principal Software Engineer (Remote) - Golang, Node, & AWS
+https://www.linkedin.com/jobs/view/4112439282
+salary: 180.0/yr
+fitness: 83
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4114279052
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4090162058 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114131091
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4112478746
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114447982
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114278345
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114451103
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113804014
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4096552618
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112434598
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Principal Software Engineer (Remote) - Golang, Node, & AWS
+https://www.linkedin.com/jobs/view/4112434598
+salary: 180.0/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4096799021
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113497822
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114450793
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114404012
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4077265733
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114128282
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114135788
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113477915
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4112439430
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113804045
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113827548
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113828516
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4112496331
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Response for fitness score isn't only a number: invalid literal for int() with base 10: 'Based on the provided resume and job description, my score for how good of a fit you are for the Engineering Director role at EnergyHub is 80.'
+INFO:root:https://www.linkedin.com/jobs/view/4113499932
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4079518338 already seen
+INFO:root:LinkedIn job 4112476969 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114273962
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113497898
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114129267
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4098070732 already seen
+INFO:root:LinkedIn job 4079862156 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112874434
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - AEM Expert Solution Consultant
+https://www.linkedin.com/jobs/view/4112874434
+salary: 280.3/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4114273940
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113498749
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4057313132 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112480447
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4112479471 already seen
+INFO:root:LinkedIn job 4031749689 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113801405
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4069058099
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Senior Lead Cloud Architect - Azure (RapidScale)
+https://www.linkedin.com/jobs/view/4069058099
+salary: 241.5/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4114275826
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114277692
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114182261
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114146290
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Security Engineer
+https://www.linkedin.com/jobs/view/4114146290
+salary: 180.0/yr
+fitness: 90
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4114273878
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4112479498 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114279186
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4079850537
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:LinkedIn job 4112439163 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112440245
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113825886
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4112497026
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113826608
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114456327
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112455849
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113841117
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4112439234
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4113804014 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113495881
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114273934
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4077265733 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112437392
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4112487712
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112482269
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114194970
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4113477915 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114271968
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114274799
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114278361
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114482228
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113802016
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4106312523 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114442683
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113879899
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Senior Software Engineer - Front End
+https://www.linkedin.com/jobs/view/4113879899
+salary: 270.0/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4114299232 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113497895
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Principal Software Engineer (Remote) - Golang, Node, & AWS
+https://www.linkedin.com/jobs/view/4113497895
+salary: 180.0/yr
+fitness: 80
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4112874433
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4112874432
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4112476992
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114185529
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114131044
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4113478745 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113802043
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4112876391 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4094082901
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Principal Technical Program Manager
+https://www.linkedin.com/jobs/view/4094082901
+salary: 199.5/yr
+fitness: 90
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4050006716
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Senior Lead Cloud Database Architect (MSSQL Focus) - RapidScale
+https://www.linkedin.com/jobs/view/4050006716
+salary: 241.5/yr
+fitness: 92
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4113800402
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4112490849
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112481329
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4096691945
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113494980
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113499766
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112438199
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114279173
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113830329
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114278352
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4042438267
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113803056
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Principal Software Engineer (Remote) - Golang, Node, & AWS
+https://www.linkedin.com/jobs/view/4113803056
+salary: 180.0/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4112455856
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114179854
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4112432841
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4112478769
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114175007
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114479447
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Systems Engineer - MDM
+https://www.linkedin.com/jobs/view/4114479447
+salary: 190.0/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4113483398 already seen
+INFO:root:LinkedIn job 4112896286 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4113800577
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113479561
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4112481943
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113480548
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114273925
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4106872833
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112435634
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113829437
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112482273
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113883281
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114096818
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4112482275
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113496785
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113835735
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113800511
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113885204
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4112482298
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4092093312 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112438425
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113825907
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112492424
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:LinkedIn job 4114274800 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112615232
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114276785
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114194934
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113802051
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114197737
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114134859
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113827574
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4096985557
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4112479499
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114450845
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114081848
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114456148
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113363815
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:LinkedIn job 4102599690 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114454278
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113886009
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113886006
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114445442
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4112872559
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4112872558
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - AEM Expert Solution Consultant
+https://www.linkedin.com/jobs/view/4112872558
+salary: 280.3/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4114131085
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4112432996
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4102818885
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4112482350
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113495998
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114225157
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113392833
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113397664
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114123157
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114273927
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112618000
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113496755
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113373230
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4112432122
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Remote Strategic Partnerships (AI & Cloud Infra)
+https://www.linkedin.com/jobs/view/4112432122
+salary: 200.0/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4114426228
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114272027
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114454362
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - SciTech Only - Software Engineer
+https://www.linkedin.com/jobs/view/4114454362
+salary: 252.0/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4113477903
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113890929
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114400493
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112441174
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113801166
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4096780908
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112492758
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114198296
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114446030
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113405992
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113373028
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4112480452
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114126438
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114446029
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113802109
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4105047220
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4112476993
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112484261
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113800670
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4114197737 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114481202
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112425224
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113482439
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4096905562
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113802031
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114124864
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113800650
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114192943
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113386238
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113882357
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113800649
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114412239
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4094040461
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113393811
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114191717
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114403475
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4112872558 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114403353
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112442790
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114408480
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Head of Partner Solutions - GSI & Next Gen Partners
+https://www.linkedin.com/jobs/view/4114408480
+salary: 288.0/yr
+fitness: 90
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4114129313
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114181319
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114441716
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:LinkedIn job 4079375052 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112435782
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114446040
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4113881654
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Senior Software Engineer - Java
+https://www.linkedin.com/jobs/view/4113881654
+salary: 270.0/yr
+fitness: 80
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4114478433
+INFO:utils.linkedin_api.linkedin:request failed: Unknown error
+INFO:root:LinkedIn job 4114274824 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4069304217
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Systems Engineer, WordPress VIP
+https://www.linkedin.com/jobs/view/4069304217
+salary: 180.0/yr
+fitness: 87
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4114911910
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4098297215
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Director, IT Cloud Architecture
+https://www.linkedin.com/jobs/view/4098297215
+salary: 190.0/yr
+fitness: 80
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4115156542
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4059092524
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114553185
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4115159017
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114528892
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4111504609 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4061819948
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4093856914
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Senior Staff Engineer (REMOTE)
+https://www.linkedin.com/jobs/view/4093856914
+salary: 260.0/yr
+fitness: 90
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4115154937
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/3984498221
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4114279190 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4074863409
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114560199
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4092842349 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114550278
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4073984668
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114551904
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4115161654
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114545230
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114545118
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4115158258
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4024772013
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Engineering Manager, Cloud Platform
+https://www.linkedin.com/jobs/view/4024772013
+salary: 269.0/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4114277669 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4096303393
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Staff Engineer (REMOTE)
+https://www.linkedin.com/jobs/view/4096303393
+salary: 230.0/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4114279208 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4115168241
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4110709702 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4059790288
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4114489131 already seen
+INFO:root:https://www.linkedin.com/jobs/view/3825253530
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4079807222
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4098210961
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4115162046
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4110516557 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4115159041
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4094748114
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/3991905309
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4096532505
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4115137767
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4077850617
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4114446286 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4085448485
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/3847755148
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4061969861
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4057183718
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Solution Architect
+https://www.linkedin.com/jobs/view/4057183718
+salary: 205.0/yr
+fitness: 83
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4094028621
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4100573835
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114552303
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4086846563
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4114274819 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4096489532
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4098470538 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114907061
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114917467
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4061556260
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114918203
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4069919637
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Solutions Architect - Kinaxis
+https://www.linkedin.com/jobs/view/4069919637
+salary: 200.0/yr
+fitness: 80
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4079294754
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4113825600 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4096150025
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4107300044 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4096179128
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4110711336 already seen
+INFO:root:https://www.linkedin.com/jobs/view/3954168753
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Enterprise Solutions Engineer
+https://www.linkedin.com/jobs/view/3954168753
+salary: 260.0/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4110711348 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4093862397
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Staff Engineer – DevOps (REMOTE)
+https://www.linkedin.com/jobs/view/4093862397
+salary: 230.0/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4085422824
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Engineering Manager, Edge
+https://www.linkedin.com/jobs/view/4085422824
+salary: 288.0/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4077835178
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/3948444622
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4091244329
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/3931932449
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Technical Consultant
+https://www.linkedin.com/jobs/view/3931932449
+salary: 222.0/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4083078239
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Staff Security Architect
+https://www.linkedin.com/jobs/view/4083078239
+salary: 195.0/yr
+fitness: 90
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4094554145
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Senior Solutions Engineer, Alliances
+https://www.linkedin.com/jobs/view/4094554145
+salary: 282.0/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4074850089
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Principal Cloud Services Engineer - Gaming
+https://www.linkedin.com/jobs/view/4074850089
+salary: 294.0/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4113800478 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4084273218
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114551720
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114913814
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4115151492
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114498515
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4092889264
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4060157436
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/3975651280
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4092206741
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Technical Program Manager (L6) - Cloud Infrastructure Engineering
+https://www.linkedin.com/jobs/view/4092206741
+salary: 960.0/yr
+fitness: 80
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4075158578
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Cloud Network Engineer (3933)
+https://www.linkedin.com/jobs/view/4075158578
+salary: 186.5/yr
+fitness: 95
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4070851322
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4093857895
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Senior Engineer - SRE CI/CD (REMOTE)
+https://www.linkedin.com/jobs/view/4093857895
+salary: 185.0/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4114448223 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4077290271
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Senior Manager, Platform Infrastructure
+https://www.linkedin.com/jobs/view/4077290271
+salary: 230.0/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4113883279 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4104806725
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4110709698
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4067395986
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Solutions Engineer, Enterprise - US North/Central
+https://www.linkedin.com/jobs/view/4067395986
+salary: 240.0/yr
+fitness: 95
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4114547481
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4086824777
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4096334421
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4102941091 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4093857905
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4070262744
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4075886643
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4073741703
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4084672770
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4079835651
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Sr. Business Development Manager, Digital Solutions
+https://www.linkedin.com/jobs/view/4079835651
+salary: 223.0/yr
+fitness: 88
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 400 Bad Request"
+INFO:root:Error connecting to Claude for cover letter: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Output blocked by content filtering policy'}}
+INFO:root:https://www.linkedin.com/jobs/view/4115147340
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:LinkedIn job 4114273944 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4016987645
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4111384726 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4092392541
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4072595786
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - AI/HPC Pre-Sales Systems Engineer
+https://www.linkedin.com/jobs/view/4072595786
+salary: 243.6/yr
+fitness: 90
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4101291366 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4058649243
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/3954755696
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:LinkedIn job 4114275821 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4077532607
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Senior Software Engineer, Distributed Systems
+https://www.linkedin.com/jobs/view/4077532607
+salary: 240.0/yr
+fitness: 95
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4026712633
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114911966
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114911962
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4021108771
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4078304786
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4114274833 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114551222
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4086825575
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4114279171 already seen
+INFO:root:https://www.linkedin.com/jobs/view/3991981294
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4076051533
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4088511977
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4081445716
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4079961036
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4077264869
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4093858809
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Senior Manager, Engineering - Virtual Desktop Infrastructure (VDI) REMOTE
+https://www.linkedin.com/jobs/view/4093858809
+salary: 261.5/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4058674685
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4114276769 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4086817641
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4115164744
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114915587
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/3990079128
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114547490
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4096148129
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4069039556
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Senior Site Reliability Engineer, Omniverse Cloud Platform
+https://www.linkedin.com/jobs/view/4069039556
+salary: 327.75/yr
+fitness: 80
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4096811070 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4025772082
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:LinkedIn job 4113499918 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4042610036
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Technical Alliances Manager
+https://www.linkedin.com/jobs/view/4042610036
+salary: 200.0/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4079811578
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Staff Software Engineer | Forward Deployed
+https://www.linkedin.com/jobs/view/4079811578
+salary: 275.0/yr
+fitness: 84
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4114916475
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4043118968
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4113885203 already seen
+INFO:root:LinkedIn job 4079141356 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4084713504
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4092176594
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4074979612
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4072340767
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4079246986
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4112476990 already seen
+INFO:root:LinkedIn job 4114276808 already seen
+INFO:root:LinkedIn job 4111509312 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4074872117
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4090759577
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4096379887
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4056206153
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4093070702
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Sr. IT Security Engineer
+https://www.linkedin.com/jobs/view/4093070702
+salary: 215.1/yr
+fitness: 82
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4114277688 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4115156999
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4080346737
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:LinkedIn job 4114277679 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4112679601
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4099072997
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4114278358 already seen
+INFO:root:LinkedIn job 4114276722 already seen
+INFO:root:LinkedIn job 4104156577 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114918158
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4094915906
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Senior Solutions Architect - Enterprise West
+https://www.linkedin.com/jobs/view/4094915906
+salary: 242.9/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4110578706 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114918151
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4098895702
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Senior Site Reliability Engineer, Engineering Enablement - REMOTE
+https://www.linkedin.com/jobs/view/4098895702
+salary: 184.6/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4078031889
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:LinkedIn job 4102031496 already seen
+INFO:root:LinkedIn job 4114477598 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4098217625
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4078078718
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:LinkedIn job 4114444302 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4077635042
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Staff Product Manager - Third-Party Risk Management
+https://www.linkedin.com/jobs/view/4077635042
+salary: 238.0/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4073791995
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Principal Cloud Solution Engineer
+https://www.linkedin.com/jobs/view/4073791995
+salary: 185.2/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4114278371 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4092138933
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4106932978 already seen
+INFO:root:LinkedIn job 4090610075 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4069390827
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4087465447
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4104152711 already seen
+INFO:root:LinkedIn job 4104823833 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4052609105
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Sr. Tools Engineer - SDX (Remote)
+https://www.linkedin.com/jobs/view/4052609105
+salary: 210.0/yr
+fitness: 98
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4114911917
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114914622
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4093857685
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Sr Staff Software Engineer – IaaS (Cluster Management) REMOTE
+https://www.linkedin.com/jobs/view/4093857685
+salary: 260.0/yr
+fitness: 90
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4092097112 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4094558915
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Solutions Engineer (Boston, MA)
+https://www.linkedin.com/jobs/view/4094558915
+salary: 189.2/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4074908348 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4068338028
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/3916263506
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4113498870 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4009059896
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4061580084
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4064821844
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4114275841 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4043510797
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4032354653
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4096055778
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114555167
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4113825835 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4098742618
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4083232224
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4114443758 already seen
+INFO:root:LinkedIn job 4110584151 already seen
+INFO:root:LinkedIn job 4110584150 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114913901
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4086843307
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4076904567
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4055005900
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4089146919
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Principal Security Technology Strategist
+https://www.linkedin.com/jobs/view/4089146919
+salary: 231.978/yr
+fitness: 88
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4114918149
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112673855
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4112484197 already seen
+INFO:root:LinkedIn job 4112478753 already seen
+INFO:root:LinkedIn job 4114275737 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4080384233
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4113801429 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4076999373
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Solutions Sales Executive, Jira Service Management (ITSM) - Mid Atlantic
+https://www.linkedin.com/jobs/view/4076999373
+salary: 241.2/yr
+fitness: 83
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/3775662133
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4089266240
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4077025941
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Cloud Solution Architect (CSA) – Business Applications
+https://www.linkedin.com/jobs/view/4077025941
+salary: 183.0/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4049513931
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Remote ServiceNow Platform ITSM Developer (Secret Clearance, ITSM, Portal Development, Catalog)
+https://www.linkedin.com/jobs/view/4049513931
+salary: 200.0/yr
+fitness: 80
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4096306154
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Staff Engineer (REMOTE)
+https://www.linkedin.com/jobs/view/4096306154
+salary: 230.0/yr
+fitness: 90
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4112611867
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4095353325
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Senior Engineering Manager, AI Platform (FULLY REMOTE)
+https://www.linkedin.com/jobs/view/4095353325
+salary: 279.4/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4114275671 already seen
+INFO:root:LinkedIn job 4114446285 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4100045588
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4028806229
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4053408044
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114901667
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4039761549
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Sr. Technical Enablement Architect, Partner Enablement - Incident Response (Remote, USA)
+https://www.linkedin.com/jobs/view/4039761549
+salary: 220.0/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4114916470
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4051901767
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4096911464
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Senior Manager, Solutions Engineering, Northeast (Remote, Great Boston or Greater New York City)
+https://www.linkedin.com/jobs/view/4096911464
+salary: 305.0/yr
+fitness: 90
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4086850376
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4113497883 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114549804
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114916494
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Data Strategist - Remote
+https://www.linkedin.com/jobs/view/4114916494
+salary: 202.73/yr
+fitness: 80
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4069021820
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4114446388 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114914645
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4094540063
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4093860432
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Sr Staff Software Engineer – IaaS (Cluster Management) REMOTE
+https://www.linkedin.com/jobs/view/4093860432
+salary: 260.0/yr
+fitness: 95
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4090184208
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - EBM Platform Lead
+https://www.linkedin.com/jobs/view/4090184208
+salary: 194.6/yr
+fitness: 83
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4080690007
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4073744501
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4114279088 already seen
+INFO:root:LinkedIn job 4112481323 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114550701
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4086862628
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4074539635 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4049801724
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4110581356 already seen
+INFO:root:LinkedIn job 4114275818 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4086839058
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114915529
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4068493370
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114915525
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4112484173 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4085841816
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114912957
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4086847377
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4077085892
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4080204989
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114918150
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4061291931
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Director - Development Cloud Strategy
+https://www.linkedin.com/jobs/view/4061291931
+salary: 300.0/yr
+fitness: 90
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4039383177
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4112477795 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4093858815
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Sr. Software Engineer - IaaS (Cluster Management) (REMOTE)
+https://www.linkedin.com/jobs/view/4093858815
+salary: 185.0/yr
+fitness: 80
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4074992095
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4093061952
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Staff Software Engineer - (Data) - Query Optimization, Schema Design
+https://www.linkedin.com/jobs/view/4093061952
+salary: 201.666/yr
+fitness: 80
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/3998522462
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4113801352 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4009061478
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4096199476
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4093862544
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Distinguished Software Engineer – Data Lakehouse Platform (REMOTE)
+https://www.linkedin.com/jobs/view/4093862544
+salary: 300.0/yr
+fitness: 90
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4079513268
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4057168460
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114904131
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114916471
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4086837616
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114552666
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4114280146 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114549933
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114914613
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4077097120
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4055871846
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114917469
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4114275697 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4070710844
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4092885610
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4096564690
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:LinkedIn job 4091056690 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4077029216
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Cloud Solution Architect (CSA) – Business Applications
+https://www.linkedin.com/jobs/view/4077029216
+salary: 183.0/yr
+fitness: 92
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4086858805
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4057165580
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Senior System Architect - GPU Architecture
+https://www.linkedin.com/jobs/view/4057165580
+salary: 339.25/yr
+fitness: 80
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4113838545 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4070828934
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4040895295
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4096977912
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:LinkedIn job 4101273466 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4020540212
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114913920
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4114140816 already seen
+INFO:root:LinkedIn job 4114276715 already seen
+INFO:root:LinkedIn job 4112455849 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4087641585
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4086113611
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Advisory Solution Consultant - Commercial
+https://www.linkedin.com/jobs/view/4086113611
+salary: 208.425/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4115155854
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4058446500
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4068736596
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4096150083
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:LinkedIn job 4113804005 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4069013135
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Platform - Control Plane - Software Engineer II (Go, K8s)
+https://www.linkedin.com/jobs/view/4069013135
+salary: 210.7/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4094508457
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4090757667
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4086858519
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4086840667
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4077490433
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4077030169
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Cloud Solution Architect (CSA) – Business Applications
+https://www.linkedin.com/jobs/view/4077030169
+salary: 183.0/yr
+fitness: 90
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4062539152
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4075118842
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4058494421
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4096798825
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4088560527
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4113498835 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4093858729
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Response for fitness score isn't only a number: invalid literal for int() with base 10: 'Based on the provided resume and job description, my score for how good of a fit I am for this role is: 80'
+INFO:root:https://www.linkedin.com/jobs/view/4074245848
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/3952744581
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:LinkedIn job 4114196328 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4059305809
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Client Executive, GTS/AHT
+https://www.linkedin.com/jobs/view/4059305809
+salary: 191.0/yr
+fitness: 82
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/3997360496
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4098299754
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4077832765
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4057684098
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Principal Business Value Advisor, West AMER
+https://www.linkedin.com/jobs/view/4057684098
+salary: 210.0/yr
+fitness: 90
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/3854984838
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Principal Architect
+https://www.linkedin.com/jobs/view/3854984838
+salary: 264.0/yr
+fitness: 95
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4099042046
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4057208036
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4093862231
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Senior Software Engineer - IaaS (Cluster Management) (REMOTE)
+https://www.linkedin.com/jobs/view/4093862231
+salary: 215.0/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4062141520
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4114901076 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4061658775
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:LinkedIn job 4114295678 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4095415342
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/3982658423
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4090989825
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4095348707
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Sr. Software Engineer - Attack Analyzer
+https://www.linkedin.com/jobs/view/4095348707
+salary: 240.35/yr
+fitness: 82
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/3980772966
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4078043290
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4077837367
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4086850643
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4092651871
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4089010090
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4094012725
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4093860644
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4076265018
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4076665507
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4040158878
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4091894981
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4033697059
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114918145
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4114276712 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4091851460
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4094471690
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4111504560 already seen
+INFO:root:LinkedIn job 4113497939 already seen
+INFO:root:LinkedIn job 4113497943 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4003230631
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Remote Principal Software Engineer - Distributed Systems
+https://www.linkedin.com/jobs/view/4003230631
+salary: 223.5/yr
+fitness: 90
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4095135170
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4113804079
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4113496978 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4065193843
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114915591
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4114294800 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4046729185
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4005698793
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Staff Software Engineer-Flink Control Plane
+https://www.linkedin.com/jobs/view/4005698793
+salary: 208.575/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4114296562 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4052502911
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4015575332
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Sr. Solutions Architect - Digital Native Business
+https://www.linkedin.com/jobs/view/4015575332
+salary: 299.0/yr
+fitness: 83
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/3104427968
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/3974895291
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Middleware Architect/Senior Principal Engineer (SaaS Continuity Engineering)
+https://www.linkedin.com/jobs/view/3974895291
+salary: 251.6/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4078035756
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Staff Software Engineer
+https://www.linkedin.com/jobs/view/4078035756
+salary: 227.5/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4078035753
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Principal Blockchain Security Engineer
+https://www.linkedin.com/jobs/view/4078035753
+salary: 257.5/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4096156793
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4072277088
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4096783405
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:LinkedIn job 4110583145 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4077564198
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Principal Software Developer Engg, AI Workload Orchestration
+https://www.linkedin.com/jobs/view/4077564198
+salary: 223.5/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4061569693
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Principal Data Technology Consultant (with focus on Architecture)
+https://www.linkedin.com/jobs/view/4061569693
+salary: 185.0/yr
+fitness: 87
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4076261776
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4061749774
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Senior Manager, Solutions Architecture
+https://www.linkedin.com/jobs/view/4061749774
+salary: 280.0/yr
+fitness: 95
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4095832706
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4069008791
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Platform - Control Plane - Software Engineer II (Go, K8s)
+https://www.linkedin.com/jobs/view/4069008791
+salary: 210.7/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:LinkedIn job 4114276803 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114552576
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4074455093
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Sr. Backend Software Engineer - LogScale (Remote, East Coast)
+https://www.linkedin.com/jobs/view/4074455093
+salary: 210.0/yr
+fitness: 95
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4114914669
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4043201323
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4096399015
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4096951676
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4078405846
+INFO:root:Salary below threshold
+INFO:root:LinkedIn job 4112481346 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4093957449
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4000275743
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4035651806
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4095724835
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4063732673
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4052505582
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4083266823
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114299859
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4062143310
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4077832807
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4113833976 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114557491
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114299810
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4095711452
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4041082293
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/3903179121
+INFO:root:Salary below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4061599431
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Principal Software Engineer, Orders Ecosystem Platform
+https://www.linkedin.com/jobs/view/4061599431
+salary: 435.0/yr
+fitness: 85
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4070402581
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4069934803
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4058551709
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Response for fitness score isn't only a number: invalid literal for int() with base 10: 'Based on the resume and job description provided, here is the calculated score for the fit between the role and the background:\n\n15'
+INFO:root:LinkedIn job 4113840230 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4097287578
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4092210916
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4098280249
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114539204
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4114277537 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4043541782
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Senior Software Engineer, AI/ML
+https://www.linkedin.com/jobs/view/4043541782
+salary: 300.0/yr
+fitness: 80
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4114536503
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/3697567142
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4115170157
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4114549804 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114512540
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4112492424 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114911918
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4114198296 already seen
+INFO:root:LinkedIn job 4057208036 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114534779
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4112662418
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Unknown Company - Software Engineer
+https://www.linkedin.com/jobs/view/4112662418
+salary: 200.0/yr
+fitness: 95
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:https://www.linkedin.com/jobs/view/4114537256
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114911929
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114536775
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4113803020 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4094816807
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:LinkedIn job 4079138650 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114912910
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4054610000
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4113825835 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4076264025
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4093900487
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4049939988
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:LinkedIn job 4114551222 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114915538
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4114454278 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4076262335
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:LinkedIn job 4112673855 already seen
+INFO:root:LinkedIn job 4114276722 already seen
+INFO:root:LinkedIn job 4106079427 already seen
+INFO:root:LinkedIn job 4111504560 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4114918169
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114906355
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:https://www.linkedin.com/jobs/view/4114546231
+INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:root:Fitness score below threshold
+INFO:root:LinkedIn job 4060157436 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4115160269
+INFO:root:No salary information found
+INFO:root:LinkedIn job 4114135788 already seen
+INFO:root:https://www.linkedin.com/jobs/view/4043519199
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114917419
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114170407
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4093853960
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114546286
+INFO:root:No salary information found
+INFO:root:https://www.linkedin.com/jobs/view/4114957643
+INFO:utils.linkedin_api.linkedin:request failed: Unknown error

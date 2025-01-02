@@ -1,0 +1,3 @@
+.env
+utils/__pycache__
+utils/linkedin_api/__pycache__
