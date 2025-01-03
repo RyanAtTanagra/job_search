@@ -37,7 +37,7 @@ if not linkedin_email or not linkedin_password:
     raise ValueError("LinkedIn email or password is not set in the .env file!")
 
 # Resume used for fitness scoring and cover letter generation
-resume_path = "RyanJAlder Resume.txt"
+resume_path = "Ryan J Alder Resume.txt"
 # Template used for cover letter
 template_path = "Ryan J Alder Header Template.docx"
 
