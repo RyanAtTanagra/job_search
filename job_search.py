@@ -17,7 +17,9 @@ from utils.linkedin_api import Linkedin
 import logging
 import warnings
 from dotenv import load_dotenv
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import urlparse, parse_qs, urljoin, urlencode
+from bs4 import BeautifulSoup
+from pprint import pprint
 
 logging.basicConfig(level=logging.INFO, filename='job_processing.log')
 logging.getLogger("fontTools").setLevel(logging.WARNING)
@@ -37,7 +39,7 @@ if not linkedin_email or not linkedin_password:
 # Resume used for fitness scoring and cover letter generation
 resume_path = "RyanJAlder Resume.txt"
 # Template used for cover letter
-template_path = "RyanJAlder Header Template.docx"
+template_path = "Ryan J Alder Header Template.docx"
 
 metrics = {
     "seen_count": 0,
@@ -71,6 +73,191 @@ def get_linkedin_job_details(id):
         return None
     result = api.get_job_description(id)
     return(result)
+
+def scrape_upwork_jobs(url):
+    """
+    Scrape Upwork jobs from the search results page
+    """
+    driver = setup_chrome_driver()
+    jobs = []
+    current_url = url
+    try:
+        while current_url:
+            print(current_url)
+            driver.get(current_url)
+            # Wait for job listings to load
+            driver.implicitly_wait(10)
+
+            soup = BeautifulSoup(driver.page_source, 'html.parser')
+            with open("upwork.html", "w", encoding="utf-8") as file:
+                file.write(driver.page_source)
+
+            # Find all job listings
+            for job_element in soup.find_all('article', class_='job-tile'):
+                try:
+                    # Extract job title and URL
+                    title_element = job_element.find('h2', class_='job-tile-title')
+                    title = title_element.get_text(strip=True) if title_element else None
+                    url_element = title_element.find('a') if title_element else None
+                    job_url = urljoin('https://www.upwork.com', url_element['href']) if url_element else None
+                    job_id = int(re.search(r'_~(\d+)', job_url).group(1))
+
+                    # Extract payment information
+                    info_list = job_element.find('ul', class_='job-tile-info-list')
+                    price_element = info_list.find('li', attrs={'data-test': 'job-type-label'}) if info_list else None
+                    price_text = price_element.get_text(strip=True) if price_element else None
+
+                    # Parse price information
+                    try:
+                        if 'Hourly' in price_text:
+                            amounts = re.findall(r'\$(\d+(?:\.\d{2})?)', price_text)
+                            if len(amounts) == 2:
+                                price_type = 'hourly'
+                                min_amount = float(amounts[0])
+                                max_amount = float(amounts[1])
+                            elif len(amounts) == 1:
+                                price_type = 'hourly'
+                                min_amount = float(amounts[0])
+                                max_amount = float(amounts[0])
+                        elif 'Fixed price' in price_text:
+                            fixed_price_element = info_list.find('li', attrs={'data-test': 'is-fixed-price'})
+                            if fixed_price_element:
+                                amount = re.search(r'\$(\d+(?:\.\d{2})?)', fixed_price_element.get_text(strip=True))
+                            if amount:
+                                price_type = 'fixed'
+                                min_amount = float(amount.group(1))
+                                max_amount = float(amount.group(1))
+                        else:
+                            price_type, min_amount, max_amount = None, None, None
+                    except Exception as e:
+                        logging.error(f"Error parsing price: {e}")
+                        price_type, min_amount, max_amount = None, None, None
+
+                    # Extract and parse duration if available
+                    duration_element = info_list.find('li', attrs={'data-test': 'duration-label'}) if info_list else None
+                    duration_text = duration_element.get_text(strip=True) if duration_element else None
+
+                    job_info = {
+                        'job_id': job_id,
+                        'title': title,
+                        'url': job_url,
+                        'payment_type': price_type,
+                        'min_amount': min_amount,
+                        'max_amount': max_amount,
+                        'original_price_text': price_text
+                    }
+
+                    # If it's a fixed price job with duration, calculate estimated hourly rate
+                    if price_type == 'fixed' and duration_text:
+                        min_months, max_months, min_hours, max_hours = parse_duration_hours(duration_text)
+                        if all(x is not None for x in [min_months, max_months, min_hours, max_hours]):
+                            # Calculate average monthly hours
+                            avg_hours_per_month = (min_hours + max_hours) / 2 * 4  # 4 weeks per month
+                            avg_months = (min_months + max_months) / 2
+                            total_hours = avg_hours_per_month * avg_months
+                            estimated_hourly_rate = min_amount / total_hours if total_hours > 0 else None
+
+                            job_info.update({
+                                'estimated_hourly_rate': round(estimated_hourly_rate, 2) if estimated_hourly_rate else None,
+                                'duration_months': f"{min_months} to {max_months}",
+                                'hours_per_week': f"{min_hours} to {max_hours}"
+                            })
+
+                    jobs.append(job_info)
+
+                except Exception as e:
+                    logging.error(f"Error processing job listing: {e}")
+                    continue
+
+            # Get next page URL
+            try:
+                next_button = soup.find('button', {'data-test': 'next-page'})
+                if not next_button or 'disabled' in next_button.attrs:
+                    print("No next_button")
+                    break
+                    
+                next_page = next_button.get('data-ev-page_index')
+                if not next_page:
+                    print("No next_page")
+                    break
+                    
+                # Parse the current URL and update page number
+                parsed_url = urlparse(current_url)
+                query_params = parse_qs(parsed_url.query)
+                query_params['page'] = next_page
+                new_query = urlencode(query_params, doseq=True)
+                current_url = f"{parsed_url.scheme}://{parsed_url.netloc}{parsed_url.path}?{new_query}"
+                
+                # Optional: Add a slight delay between pages to be nice to the server
+                sleep(2)
+                
+            except Exception as e:
+                logging.error(f"Error getting next page URL: {e}")
+                break
+
+        return jobs
+
+    except Exception as e:
+        logging.error(f"Error scraping Upwork jobs: {e}")
+        return []
+
+def get_upwork_job_description(url):
+    try:
+        driver = setup_chrome_driver()
+        driver.get(url)
+        driver.implicitly_wait(10)  # Wait for content to load
+
+        # Find the description
+        soup = BeautifulSoup(driver.page_source, 'html.parser')
+        # First check to see if it's a private listing
+        private_check = soup.find('h4', text='This job is a private listing.')
+        if private_check:
+            return "private"
+        description_element = soup.find('p', class_='text-body-sm')
+
+        if description_element:
+            description = description_element.get_text(strip=True)
+            driver.quit()
+            return description
+
+        driver.quit()
+        return None
+
+    except Exception as e:
+        logging.error(f"Error extracting job description: {e}")
+        driver.quit()
+        return None
+
+def parse_duration_hours(duration_text):
+    """
+    Parse the duration and hours per week from text like "3 to 6 months, 30+ hrs/week"
+    Returns (min_months, max_months, min_hours, max_hours)
+    """
+    try:
+        # Extract months
+        months_match = re.search(r'(\d+)(?:\s+to\s+(\d+))?\s+months?', duration_text)
+        if months_match:
+            min_months = int(months_match.group(1))
+            max_months = int(months_match.group(2)) if months_match.group(2) else min_months
+        else:
+            min_months = max_months = None
+            
+        # Extract hours
+        hours_match = re.search(r'(\d+)\+?\s*hrs/week|Less than (\d+)\s*hrs/week', duration_text)
+        if hours_match:
+            if hours_match.group(1):  # matches "30+ hrs/week"
+                min_hours = int(hours_match.group(1))
+                max_hours = 40  # assume 40 as max for "X+" format
+            else:  # matches "Less than X hrs/week"
+                min_hours = 1
+                max_hours = int(hours_match.group(2))
+        else:
+            min_hours = max_hours = None
+            
+        return min_months, max_months, min_hours, max_hours
+    except Exception as e:
+        logging.error(f"Error parsing duration: {e}")
+        return None, None, None, None
 
 def scrape_indeed_jobs(url):
     offset = 0
@@ -227,8 +414,9 @@ Bonus points (up to 40):
 Deductions:
 
 -15 points if it's primarily a software development role
--15 points if it's sales related or a management/vice president/director level role
+-15 points if it's sales/solutions related or a management/vice president/director level role
 -15 points if the experience requirements are significantly mismatched with my background
+-10 points if the company is GEICO
 
 Please provide only a numerical score in the output, no other details or reasoning needed.
 
@@ -262,7 +450,7 @@ def get_cover_letter(company, title, description):
     with open(resume_path, 'r') as file:
         resume_text = file.read()
     prompt = f"""
-Generate a cover letter for the {title} role at {company}, customized based on my resume and the job description. The letter should:
+Generate a cover letter for the {title} role at {company}, customized based on my resume and the job description. If the company name is "Unknown Company", see if you can figure out the actual company name from the description.  The letter should:
 
 Be professional but conversational in tone
 Prioritize highlighting my experience with:
@@ -275,7 +463,6 @@ Address any experience gaps or requirement mismatches directly but positively
 Include 3-4 bullet points maximum, focusing on technical achievements that best match the role's requirements.  Use dashes instead of bullet point characters.
 Keep to 20 lines or less for single-page fit, with 1.25-inch side margins for PDF compatibility
 Omit generic statements about company mission/excitement
-Subtly incorporate a propular 80s song lyric into the letter where it fits well, but leave out the commentary at the bottom telling me about where you put it.
 
 Use this format, replacing each section with appropriate content:
 - Current date in Month DD, YYYY format
@@ -430,7 +617,7 @@ def search_linkedin(event=None, context=None):
         description = job_details.get('description', None)
         title = job_details.get('title', None)
         salary = int(float(job_details.get('salary') or 0))
-        salary_period = job_details['salary_period'] or None
+        salary_period = job_details.get('salary_period') or None
         if description is None or title is None:
             logging.info("Couldn't find job description or title")
             metrics["description_count"] += 1
@@ -473,7 +660,7 @@ def search_indeed():
     url = 'https://www.indeed.com/jobs?q=aws&l=San+Francisco%2C+CA&fromage=7&salaryType=%24185%2C000&radius=100&from=searchOnDesktopSerp'
     jobs = scrape_indeed_jobs(url)
     if not jobs:
-        print("No search results")
+        print("No Indeed search results")
         return
     print("Found", len(jobs), "Indeed jobs")
     # Reset metric counters to zero
@@ -524,6 +711,61 @@ def search_indeed():
     print_metrics(metrics)
     return None
 
+def search_upwork():
+    url = 'https://www.upwork.com/nx/search/jobs/?contractor_tier=3&q=aws%20cloud&sort=recency'
+    jobs = scrape_upwork_jobs(url)
+    if not jobs:
+        print("No Upwork search results")
+        return
+    print("Found", len(jobs), "Upwork jobs")
+    # Reset metric counters to zero
+    global metrics
+    metrics = {key: 0 for key in metrics}
+    for idx, job in enumerate(jobs):
+        print(f"Processing {idx}/{len(jobs)}", end="\r")
+        id = job['job_id']
+        if not id:
+            logging.info(f"No job id: {id}")
+            continue
+        if awsutils.dynamodb_check_if_value_exists('upwork_jobs', 'job_id', id):
+            logging.info(f"Upwork job {id} already seen")
+            metrics["seen_count"] += 1
+            continue
+        url = job['url']
+        logging.info(url)
+        description = get_upwork_job_description(url)
+        title = job['title']
+        highest_rate = job['max_amount']
+        if description in (None, "private"):
+            logging.info("Couldn't find job description")
+            metrics["description_count"] += 1
+            continue
+        if highest_rate is None:
+            logging.info("No rate information found")
+            awsutils.dynamodb_put_item('upwork_jobs', 'job_id', id)
+            metrics["salary_count"] += 1
+            continue
+        if highest_rate < 100:
+            logging.info("Rate below threshold")
+            awsutils.dynamodb_put_item('upwork_jobs', 'job_id', id)
+            metrics["salary_count"] += 1
+        else:
+            fitness=get_fitness_rating(description)
+            if fitness < 80:
+                logging.info("Fitness score below threshold")
+                awsutils.dynamodb_put_item('upwork_jobs', 'job_id', id)
+                metrics["fitness_count"] += 1
+                continue
+            company = "Unknown Company"
+            email_body=f"{company} - {title}\n{url}\nrate: {highest_rate}/hr\nfitness: {fitness}"
+            logging.info(email_body)
+            cover_letter_path=get_cover_letter(company, title, description)
+            awsutils.send_email('Python Upwork Search <python@twistedslinky.org>', 'ryan@twistedslinky.org', company + " - " + title, email_body, cover_letter_path)
+            awsutils.dynamodb_put_item('upwork_jobs', 'job_id', id)
+            metrics["valid_count"] += 1
+    print_metrics(metrics)
+    return None
+
 def search_all():
     search_linkedin()
     search_indeed()
@@ -532,7 +774,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run a search on job postings and email details and cover letter to myself",formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument(
         "website",
-        choices=['linkedin','indeed','all'],
+        choices=['linkedin','indeed','upwork', 'all'],
         help="Website to search, or all"
     )
     args = parser.parse_args()
