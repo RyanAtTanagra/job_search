@@ -696,6 +696,8 @@ def search_indeed():
             metrics["salary_count"] += 1
         else:
             fitness=get_fitness_rating(description)
+            if fitness is None:
+                continue
             if fitness < 80:
                 logging.info("Fitness score below threshold")
                 awsutils.dynamodb_put_item('indeed_jobs', 'job_id', id)
@@ -751,6 +753,8 @@ def search_upwork():
             metrics["salary_count"] += 1
         else:
             fitness=get_fitness_rating(description)
+            if fitness is None:
+                continue
             if fitness < 80:
                 logging.info("Fitness score below threshold")
                 awsutils.dynamodb_put_item('upwork_jobs', 'job_id', id)
@@ -768,7 +772,10 @@ def search_upwork():
 
 def search_all():
     search_linkedin()
+    print("\n")
     search_indeed()
+    print("\n")
+    search_upwork()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run a search on job postings and email details and cover letter to myself",formatter_class=argparse.RawTextHelpFormatter)
