@@ -83,7 +83,6 @@ def scrape_upwork_jobs(url):
     current_url = url
     try:
         while current_url:
-            print(current_url)
             driver.get(current_url)
             # Wait for job listings to load
             driver.implicitly_wait(10)
@@ -407,16 +406,32 @@ def get_fitness_rating(description):
 Base score (0-60): Match between job requirements and my demonstrated experience
 Bonus points (up to 40):
 
-+20 points if the role heavily involves my core expertise areas (AWS infrastructure, Linux systems administration, high availability and disaster recovery, or infrastructure automation)
++20 points if the role heavily involves my core expertise areas (AWS infrastructure, Linux systems administration, high availability and disaster recovery, or infrastructure automation). Note: Infrastructure development/programming roles do not qualify for this bonus.
 +10 points if the role's seniority level matches my experience (subtract points if significantly junior or if requiring different experience level)
 +10 points if remote work is possible (for non-remote roles, only award these points if the location is specified as acceptable to me)
 
 Deductions:
 
--15 points if it's primarily a software development role
+-20 points if it's primarily a software engineering focus
+-15 points if the role has significant software engineering requirements but includes some infrastructure work
+-10 points if the role requires occasional coding but is primarily infrastructure-focused
 -15 points if it's sales/solutions related or a management/vice president/director level role
 -15 points if the experience requirements are significantly mismatched with my background
--10 points if the company is GEICO
+-10 points if the company is GEICO, Atlassian, Oracle, or NVidia
+
+Indicators of software engineering focus include:
+- Job title contains "Software Engineer" or "Developer"
+- Primary responsibilities include writing new features or applications
+- Multiple programming languages listed as requirements (rather than just scripting)
+- Focus on APIs, services, or application development
+- Requirements for computer science fundamentals (data structures, algorithms)
+- Focus on building/developing infrastructure (rather than operating/maintaining it)
+- Requirements for specific programming languages beyond Python/Shell
+- Emphasis on protocol/software development
+- Requirements for blockchain/crypto development experience
+
+Indicators of a sales/solutions related role:
+- Job title contains "sales" or "solution"
 
 Please provide only a numerical score in the output, no other details or reasoning needed.
 
@@ -609,10 +624,9 @@ def search_linkedin(event=None, context=None):
             continue
         url = f"https://www.linkedin.com/jobs/view/{id}"
         logging.info(url)
-        try:
-            job_details = get_linkedin_job_details(id)
-        except Exception as e:
-            logging.info(f"Error getting job details, skipping: {e}")
+        job_details = get_linkedin_job_details(id)
+        if job_details is None:
+            logging.info(f"Error getting job details, skipping")
             continue
         description = job_details.get('description', None)
         title = job_details.get('title', None)
