@@ -21,23 +21,18 @@ from urllib.parse import urlparse, parse_qs, urljoin, urlencode
 from bs4 import BeautifulSoup
 from pprint import pprint
 
-logging.basicConfig(level=logging.INFO, filename='job_processing.log')
-logging.getLogger("fontTools").setLevel(logging.WARNING)
-logging.getLogger("botocore").setLevel(logging.WARNING)
-warnings.filterwarnings("ignore", category=DeprecationWarning)
+# Annual salary threshold
+salary_threshold = 180
 
-load_dotenv()
-anthropic_api_key = os.getenv("ANTHROPIC_API_KEY")
-if not anthropic_api_key:
-    raise ValueError("Anthropic API key is not set in the .env file!")
+# Hourly threshold
+hourly_threshold = 100
 
-linkedin_email = os.getenv("LINKEDIN_EMAIL")
-linkedin_password = os.getenv("LINKEDIN_PASSWORD")
-if not linkedin_email or not linkedin_password:
-    raise ValueError("LinkedIn email or password is not set in the .env file!")
+# Job fitness score threshold
+fitness_threshold = 80
 
-# Resume used for fitness scoring and cover letter generation
+# Resume text used for fitness scoring and cover letter generation
 resume_path = "Ryan J Alder Resume.txt"
+
 # Template used for cover letter
 template_path = "Ryan J Alder Header Template.docx"
 
@@ -49,7 +44,21 @@ metrics = {
     "valid_count": 0,
     }
 
-# Used for Indeed scraper
+load_dotenv()
+anthropic_api_key = os.getenv("ANTHROPIC_API_KEY")
+if not anthropic_api_key:
+    raise ValueError("Anthropic API key is not set in the .env file!")
+
+linkedin_email = os.getenv("LINKEDIN_EMAIL")
+linkedin_password = os.getenv("LINKEDIN_PASSWORD")
+if not linkedin_email or not linkedin_password:
+    raise ValueError("LinkedIn email or password is not set in the .env file!")
+
+logging.basicConfig(level=logging.INFO, filename='job_processing.log')
+logging.getLogger("botocore").setLevel(logging.WARNING)
+#warnings.filterwarnings("ignore", category=DeprecationWarning)
+
+# Used for Indeed and Upwork scrapers
 def setup_chrome_driver():
     options = uc.ChromeOptions()
     options.add_argument('--headless=new')
@@ -209,7 +218,7 @@ def get_upwork_job_description(url):
         # Find the description
         soup = BeautifulSoup(driver.page_source, 'html.parser')
         # First check to see if it's a private listing
-        private_check = soup.find('h4', text='This job is a private listing.')
+        private_check = soup.find('h4', string='This job is a private listing.')
         if private_check:
             return "private"
         description_element = soup.find('p', class_='text-body-sm')
@@ -647,7 +656,7 @@ def search_linkedin(event=None, context=None):
                 awsutils.dynamodb_put_item('linkedin_jobs', 'job_id', id)
                 metrics["salary_count"] += 1
                 continue
-        if highest_salary < 180:
+        if highest_salary < salary_threshold:
             logging.info("Salary below threshold")
             awsutils.dynamodb_put_item('linkedin_jobs', 'job_id', id)
             metrics["salary_count"] += 1
@@ -655,7 +664,7 @@ def search_linkedin(event=None, context=None):
             fitness=get_fitness_rating(description)
             if fitness is None:
                 continue
-            if fitness < 80:
+            if fitness < fitness_threshold:
                 logging.info("Fitness score below threshold")
                 awsutils.dynamodb_put_item('linkedin_jobs', 'job_id', id)
                 metrics["fitness_count"] += 1
@@ -704,7 +713,7 @@ def search_indeed():
             awsutils.dynamodb_put_item('indeed_jobs', 'job_id', id)
             metrics["salary_count"] += 1
             continue
-        if highest_salary < 180:
+        if highest_salary < salary_threshold:
             logging.info("Salary below threshold")
             awsutils.dynamodb_put_item('indeed_jobs', 'job_id', id)
             metrics["salary_count"] += 1
@@ -712,7 +721,7 @@ def search_indeed():
             fitness=get_fitness_rating(description)
             if fitness is None:
                 continue
-            if fitness < 80:
+            if fitness < fitness_threshold:
                 logging.info("Fitness score below threshold")
                 awsutils.dynamodb_put_item('indeed_jobs', 'job_id', id)
                 metrics["fitness_count"] += 1
@@ -753,7 +762,10 @@ def search_upwork():
         title = job['title']
         highest_rate = job['max_amount']
         if description in (None, "private"):
-            logging.info("Couldn't find job description")
+            logging.info("Couldn't find job description, possibly private, emailing URL")
+            email_body=f"Private Upwork listing:\n{url}"
+            awsutils.send_email('Python Upwork Search <python@twistedslinky.org>', 'ryan@twistedslinky.org', 'Private Upwork listing', email_body)
+            awsutils.dynamodb_put_item('upwork_jobs', 'job_id', id)
             metrics["description_count"] += 1
             continue
         if highest_rate is None:
@@ -761,7 +773,7 @@ def search_upwork():
             awsutils.dynamodb_put_item('upwork_jobs', 'job_id', id)
             metrics["salary_count"] += 1
             continue
-        if highest_rate < 100:
+        if highest_rate < hourly_threshold:
             logging.info("Rate below threshold")
             awsutils.dynamodb_put_item('upwork_jobs', 'job_id', id)
             metrics["salary_count"] += 1
@@ -769,7 +781,7 @@ def search_upwork():
             fitness=get_fitness_rating(description)
             if fitness is None:
                 continue
-            if fitness < 80:
+            if fitness < fitness_threshold:
                 logging.info("Fitness score below threshold")
                 awsutils.dynamodb_put_item('upwork_jobs', 'job_id', id)
                 metrics["fitness_count"] += 1
