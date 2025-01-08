@@ -178,7 +178,7 @@ def scrape_upwork_jobs(url):
             try:
                 next_button = soup.find('button', {'data-test': 'next-page'})
                 if not next_button or 'disabled' in next_button.attrs:
-                    print("No next_button")
+                    logging.info("No next_button")
                     break
                     
                 next_page = next_button.get('data-ev-page_index')
