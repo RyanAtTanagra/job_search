@@ -734,7 +734,7 @@ def search_indeed():
     return None
 
 def search_upwork():
-    url = 'https://www.upwork.com/nx/search/jobs/?contractor_tier=3&q=aws%20cloud&sort=recency'
+    url = 'https://www.upwork.com/nx/search/jobs/?q=aws%20cloud&sort=recency&per_page=50'
     jobs = scrape_upwork_jobs(url)
     if not jobs:
         print("No Upwork search results")
