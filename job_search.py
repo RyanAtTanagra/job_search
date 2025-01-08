@@ -1,6 +1,5 @@
 import undetected_chromedriver as uc
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -15,11 +14,9 @@ from time import sleep
 from utils import awsutils
 from utils.linkedin_api import Linkedin
 import logging
-import warnings
 from dotenv import load_dotenv
 from urllib.parse import urlparse, parse_qs, urljoin, urlencode
 from bs4 import BeautifulSoup
-from pprint import pprint
 
 # Annual salary threshold
 salary_threshold = 180
