@@ -32,6 +32,9 @@ linkedin_search_keywords = "cloud engineer"
 indeed_search_url = 'https://www.indeed.com/jobs?q=aws&l=San+Francisco%2C+CA&fromage=7&salaryType=%24185%2C000&radius=100&from=searchOnDesktopSerp'
 upwork_search_url = 'https://www.upwork.com/nx/search/jobs/?q=aws%20cloud&sort=recency&per_page=50'
 
+# Where to send the emails
+mail_to = "ryan@twistedslinky.org"
+
 # Resume text used for fitness scoring and cover letter generation
 resume_path = "Ryan J Alder Resume.txt"
 
@@ -675,7 +678,7 @@ def search_linkedin(event=None, context=None):
             email_body=f"{company} - {title}\n{url}\nsalary: {highest_salary}/yr\nfitness: {fitness}"
             logging.info(email_body)
             cover_letter_path=get_cover_letter(company, title, description)
-            awsutils.send_email('Python LinkedIn Search <python@twistedslinky.org>', 'ryan@twistedslinky.org', company + " - " + title, email_body, cover_letter_path)
+            awsutils.send_email('Python LinkedIn Search <python@twistedslinky.org>', mail_to, company + " - " + title, email_body, cover_letter_path)
             awsutils.dynamodb_put_item('linkedin_jobs', 'job_id', id)
             metrics["valid_count"] += 1
     print_metrics(metrics)
@@ -731,7 +734,7 @@ def search_indeed():
             email_body=f"{company} - {title}\n{url}\nsalary: {highest_salary}/yr\nfitness: {fitness}"
             logging.info(email_body)
             cover_letter_path=get_cover_letter(company, title, description)
-            awsutils.send_email('Python Indeed Search <python@twistedslinky.org>', 'ryan@twistedslinky.org', company + " - " + title, email_body, cover_letter_path)
+            awsutils.send_email('Python Indeed Search <python@twistedslinky.org>', mail_to, company + " - " + title, email_body, cover_letter_path)
             awsutils.dynamodb_put_item('indeed_jobs', 'job_id', id)
             metrics["valid_count"] += 1
     print_metrics(metrics)
@@ -764,7 +767,7 @@ def search_upwork():
         if description in (None, "private"):
             logging.info("Couldn't find job description, possibly private, emailing URL")
             email_body=f"Private Upwork listing:\n{url}"
-            awsutils.send_email('Python Upwork Search <python@twistedslinky.org>', 'ryan@twistedslinky.org', 'Private Upwork listing', email_body)
+            awsutils.send_email('Python Upwork Search <python@twistedslinky.org>', mail_to, 'Private Upwork listing', email_body)
             awsutils.dynamodb_put_item('upwork_jobs', 'job_id', id)
             metrics["description_count"] += 1
             continue
