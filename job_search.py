@@ -22,10 +22,15 @@ from bs4 import BeautifulSoup
 salary_threshold = 180
 
 # Hourly threshold
-hourly_threshold = 100
+hourly_threshold = 80
 
 # Job fitness score threshold
 fitness_threshold = 80
+
+# Search URLs and terms
+linkedin_search_keywords = "cloud engineer"
+indeed_search_url = 'https://www.indeed.com/jobs?q=aws&l=San+Francisco%2C+CA&fromage=7&salaryType=%24185%2C000&radius=100&from=searchOnDesktopSerp'
+upwork_search_url = 'https://www.upwork.com/nx/search/jobs/?q=aws%20cloud&sort=recency&per_page=50'
 
 # Resume text used for fitness scoring and cover letter generation
 resume_path = "Ryan J Alder Resume.txt"
@@ -613,7 +618,7 @@ def search_linkedin(event=None, context=None):
     except Exception as e:
         print(f"Error connecting to LinkedIn to get search results. Details: {e}")
         return
-    jobs = api.search_jobs(keywords="cloud engineer", listed_at=86400, remote=['2'])
+    jobs = api.search_jobs(keywords=keywords, listed_at=86400, remote=['2'])
     if len(jobs) < 1:
         print("No search results")
         return
@@ -677,8 +682,7 @@ def search_linkedin(event=None, context=None):
     return None
 
 def search_indeed():
-    url = 'https://www.indeed.com/jobs?q=aws&l=San+Francisco%2C+CA&fromage=7&salaryType=%24185%2C000&radius=100&from=searchOnDesktopSerp'
-    jobs = scrape_indeed_jobs(url)
+    jobs = scrape_indeed_jobs(indeed_search_url)
     if not jobs:
         print("No Indeed search results")
         return
@@ -734,8 +738,7 @@ def search_indeed():
     return None
 
 def search_upwork():
-    url = 'https://www.upwork.com/nx/search/jobs/?q=aws%20cloud&sort=recency&per_page=50'
-    jobs = scrape_upwork_jobs(url)
+    jobs = scrape_upwork_jobs(upwork_search_url)
     if not jobs:
         print("No Upwork search results")
         return
