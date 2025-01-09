@@ -1,3 +1,8 @@
 .env
 utils/__pycache__
 utils/linkedin_api/__pycache__
+
+# debugging output files
+job_processing.log
+indeed_last_html.html
+upwork.html
