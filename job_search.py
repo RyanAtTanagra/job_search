@@ -10,7 +10,7 @@ import os
 import anthropic
 import argparse
 import random
-from time import sleep
+from time import sleep,time
 from utils import awsutils
 from utils.linkedin_api import Linkedin
 import logging
@@ -350,15 +350,23 @@ def scrape_indeed_jobs(url):
                 if job['salary_text'] is None:
                     job['highest_salary'] = None
                     continue
+                # If there is a salary range, it's probably separated by '-'
                 if ' - ' in job['salary_text']:
-                    highest_salary_part = job['salary_text'].split(' - ')[1]
-                    # Remove everything after 'a' (e.g., 'a year', 'an hour')
-                    highest_salary_clean = highest_salary_part.split(' a ')[0]
+                    # So grab the part after the dash (the highest value)
+                    salary_part = job['salary_text'].split(' - ')[1]
+                    # Split between salary value and 'a year' or 'an hour'
+                    salary_parts = re.split(' a | an ', salary_part)
                 else:
-                    higehst_salary_clean = job['salary_text'].split(' a ')[0]
+                    salary_parts = re.split(' a | an ', job['salary_text'])
                 # Clean and convert to float
-                highest_salary_clean = highest_salary_clean.replace('$', '').replace(',', '')
-                job['highest_salary'] = float(highest_salary_clean) / 1000  # Convert to thousands
+                salary_clean = salary_parts[0]
+                # If 'hour' exists in the salary, flag it as hourly to be converted to salary
+                is_hourly = len(salary_parts) > 1 and 'hour' in salary_parts[1]
+                salary_clean = salary_clean.replace('$', '').replace(',', '')
+                salary_value = float(salary_clean)
+                if is_hourly:
+                    salary_value = salary_value * 2080
+                job['highest_salary'] = salary_value / 1000  # Convert to thousands
                 
                 try:
                     job['url'] = next((elem.get_attribute('href') for elem in card.find_elements(By.CLASS_NAME, 'jcs-JobTitle')), None)
@@ -807,6 +815,7 @@ def search_all():
     search_upwork()
 
 if __name__ == "__main__":
+    start_time = time()
     parser = argparse.ArgumentParser(description="Run a search on job postings and email details and cover letter to myself",formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument(
         "website",
@@ -816,3 +825,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
     search = f"search_{args.website}()"
     eval(search)
+    end_time = time()
+    elapsed_time = end_time - start_time
+    print(f"\nScript completed in {elapsed_time:.2f} seconds")
