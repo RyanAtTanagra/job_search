@@ -621,7 +621,7 @@ def search_linkedin(event=None, context=None):
     except Exception as e:
         print(f"Error connecting to LinkedIn to get search results. Details: {e}")
         return
-    jobs = api.search_jobs(keywords=keywords, listed_at=86400, remote=['2'])
+    jobs = api.search_jobs(keywords=linkedin_search_keywords, listed_at=86400, remote=['2'])
     if len(jobs) < 1:
         print("No search results")
         return
