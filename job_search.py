@@ -425,43 +425,71 @@ def get_fitness_rating(description):
     with open(resume_path, 'r') as file:
         resume_text = file.read()
     prompt = f"""Here is my resume and a job description. On a scale of 0-100, analyze how good of a fit I am for this role using the following scoring system:
-Base score (0-60): Match between job requirements and my demonstrated experience
-Bonus points (up to 40):
 
-+20 points if the role heavily involves my core expertise areas (AWS infrastructure, Linux systems administration, high availability and disaster recovery, or infrastructure automation). Note: Infrastructure development/programming roles do not qualify for this bonus.
+Base score (0-60): Match between job's core requirements (not "nice to have" or optional skills) and my demonstrated experience
+
+IMPORTANT: Before applying any infrastructure-related bonuses, check these disqualifying conditions:
+- If job title contains "Software Engineer", "Developer", or "Programmer", role is automatically classified as software engineering
+- If 2 or more software engineering indicators are present in the core requirements (not "nice to have"), role is classified as software engineering
+- Infrastructure-related skills listed only in "nice to have" or "preferred" sections do not qualify for infrastructure bonuses
+
+Bonus points (up to 40):
++20 points if ALL these conditions are met:
+- Role's primary responsibilities (not "nice to have") heavily involve infrastructure operations/maintenance
+- Role involves AWS infrastructure, Linux systems administration, or disaster recovery as core duties
+- Role is NOT classified as software engineering based on the above checks
+- Infrastructure skills are listed in required/core skills, not just "nice to have"
+
 +10 points if the role's seniority level matches my experience (subtract points if significantly junior or if requiring different experience level)
-+10 points if remote work is possible (for non-remote roles, only award these points if the location is specified as acceptable to me)
++10 points if:
+- Role is fully remote OR
+- Role location is within 25 miles of Grass Valley, CA
 
 Deductions:
 
--20 points if it's primarily a software engineering focus
--15 points if the role has significant software engineering requirements but includes some infrastructure work
--10 points if the role requires occasional coding but is primarily infrastructure-focused
--15 points if it's sales/solutions related or a management/vice president/director level role
--15 points if the experience requirements are significantly mismatched with my background
+-20 points if ANY of these are true:
+- Job title contains "Software Engineer", "Developer", or "Programmer"
+- Role requires building new features or applications as primary duty
+- Role focuses on product development or customer-facing features
+
+-15 points if:
+- Role has significant software engineering requirements but includes some infrastructure work
+- Core requirements emphasize coding/development over infrastructure operations
+- Experience requirements focus on software development years over infrastructure experience
+
+-10 points if:
+- Role requires occasional coding but is primarily infrastructure-focused
+- Infrastructure skills are only listed in "nice to have" sections
+
+-15 points if:
+- It's sales/solutions related or a management/vice president/director level role
+- Experience requirements are significantly mismatched with my background
+
 -10 points if the company is GEICO, Atlassian, Oracle, or NVidia
 
 Indicators of software engineering focus include:
-- Job title contains "Software Engineer" or "Developer"
 - Primary responsibilities include writing new features or applications
-- Multiple programming languages listed as requirements (rather than just scripting)
+- Multiple programming languages listed as core requirements
 - Focus on APIs, services, or application development
-- Requirements for computer science fundamentals (data structures, algorithms)
+- Requirements for computer science fundamentals
 - Focus on building/developing infrastructure (rather than operating/maintaining it)
 - Requirements for specific programming languages beyond Python/Shell
 - Emphasis on protocol/software development
 - Requirements for blockchain/crypto development experience
+- Product development or customer-facing feature development
+- Business logic implementation
+- UI/UX development responsibilities
 
 Indicators of a sales/solutions related role:
 - Job title contains "sales" or "solution"
 
 Please provide only a numerical score in the output, no other details or reasoning needed.
 
-        Resume:
-        {resume_text}
+Resume:
+{resume_text}
 
-        Job Description:
-        {description}
+Job Description:
+{description}
         """
     try:
         client = anthropic.Client(api_key=anthropic_api_key)
