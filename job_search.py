@@ -919,9 +919,9 @@ if __name__ == "__main__":
     progress = not args.cron
     if args.website == "all":
         search_linkedin(progress)
-        print("\n"
+        print("\n")
         search_indeed(progress)
-        print("\n"
+        print("\n")
         search_upwork(progress)
     else:
         search = f"search_{args.website}({progress})"        
