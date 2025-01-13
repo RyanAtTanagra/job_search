@@ -47,6 +47,7 @@ poor_fit_titles = [
     "program manager",
     "data architect",
     "data engineer",
+    "data scientist",
     "account executive",
     "client executive"
     "marketing manager",
