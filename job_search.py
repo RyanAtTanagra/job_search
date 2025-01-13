@@ -517,60 +517,35 @@ def get_fitness_rating(description, title):
 
 Base score (0-60): Match between job's core requirements (not "nice to have" or optional skills) and my demonstrated experience
 
-IMPORTANT: Before applying any infrastructure-related bonuses, check these disqualifying conditions:
-- If job title contains "Software Engineer", "Developer", or "Programmer", role is automatically classified as software engineering
-- If 2 or more software engineering indicators are present in the core requirements (not "nice to have"), role is classified as software engineering
-- Infrastructure-related skills listed only in "nice to have" or "preferred" sections do not qualify for infrastructure bonuses
-
 Bonus points (up to 40):
+
 +20 points if ALL these conditions are met:
 - Role's primary responsibilities (not "nice to have") heavily involve infrastructure operations/maintenance
 - Role involves AWS infrastructure, Linux systems administration, or disaster recovery as core duties
-- Role is NOT classified as software engineering based on the above checks
+- Role is NOT classified as software engineering
 - Infrastructure skills are listed in required/core skills, not just "nice to have"
 
 +10 points if the role's seniority level matches my experience (subtract points if significantly junior or if requiring different experience level)
-+10 points if:
-- Role is fully remote OR
-- Role location is within 25 miles of Grass Valley, CA
++10 points if role is fully remote OR is within 25 miles of Grass Valley, CA
 
 Deductions:
 
 -20 points if ANY of these are true:
-- Job title contains "Software Engineer", "Developer", or "Programmer"
-- Role requires building new features or applications as primary duty
-- Role focuses on product development or customer-facing features
+    - Role requires building new features or applications as primary duty
+    - Role focuses on product development or customer-facing features
 
 -15 points if:
-- Role has significant software engineering requirements but includes some infrastructure work
-- Core requirements emphasize coding/development over infrastructure operations
-- Experience requirements focus on software development years over infrastructure experience
+    - Role has significant software engineering requirements but includes some infrastructure work
+    - Core requirements emphasize coding/development over infrastructure operations
+    - Experience requirements focus on software development years over infrastructure experience
 
 -10 points if:
-- Role requires occasional coding but is primarily infrastructure-focused
-- Infrastructure skills are only listed in "nice to have" sections
+    - Role requires occasional coding but is primarily infrastructure-focused
+    - Infrastructure skills are only listed in "nice to have" sections
 
 -15 points if:
-- It's sales/solutions related or a management/vice president/director level role
-- Experience requirements are significantly mismatched with my background
-
--10 points if the company is GEICO, Atlassian, Oracle, or NVidia
-
-Indicators of software engineering focus include:
-- Primary responsibilities include writing new features or applications
-- Multiple programming languages listed as core requirements
-- Focus on APIs, services, or application development
-- Requirements for computer science fundamentals
-- Focus on building/developing infrastructure (rather than operating/maintaining it)
-- Requirements for specific programming languages beyond Python/Shell
-- Emphasis on protocol/software development
-- Requirements for blockchain/crypto development experience
-- Product development or customer-facing feature development
-- Business logic implementation
-- UI/UX development responsibilities
-
-Indicators of a sales/solutions related role:
-- Job title contains "sales" or "solution"
+    - It's sales/solutions related or a management/vice president/director level role
+    - Experience requirements are significantly mismatched with my background
 
 Please provide only a numerical score in the output, no other details or reasoning needed.
 
@@ -606,26 +581,25 @@ def get_cover_letter(company, title, description):
     prompt = f"""
 Generate a cover letter for the {title} role at {company}, customized based on my resume and the job description. If the company name is "Unknown Company", see if you can figure out the actual company name from the description.  The letter should:
 
-Be professional but conversational in tone
-Prioritize highlighting my experience with:
+Style: Professional yet conversational, max 20 lines, 1.25" margins
 
+Prioritize highlighting my experience with:
 AWS and cloud engineering
 Migration of production services to cloud environments
 Relevant technical achievements
 
-Address any experience gaps or requirement mismatches directly but positively
-Include 3-4 bullet points maximum, focusing on technical achievements that best match the role's requirements.  Use dashes instead of bullet point characters.
-Keep to 20 lines or less for single-page fit, with 1.25-inch side margins for PDF compatibility
-Omit generic statements about company mission/excitement
+Include:
+1. Brief intro (2-3 sentences)
+2. Experience section with 3-4 dashes showing achievements matching role
+3. Short closing requesting interview
+4. "Sincerely," + "Ryan J Alder"
 
-Use this format, replacing each section with appropriate content:
-- Current date in Month DD, YYYY format
-- Complete business letter header with my name, address, recipient's name, title, company name and address
-- Begin with "Dear Hiring Manager," unless a specific recipient name is provided
-- Opening paragraph introducing myself and stating my interest (2-3 sentences)
-- Experience paragraph with relevant bullet points (3-4 bullets maximum)
-- Closing paragraph requesting an interview (1-2 sentences)
-- Professional signature line starting with "Sincerely," followed by "Ryan J Alder"
+Skip:
+- Generic company praise
+- Mission statements
+- Non-technical details
+
+Address any experience gaps or requirement mismatches directly but positively
 
 Resume:
 {resume_text}
