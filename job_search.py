@@ -730,8 +730,9 @@ def get_salary_from_description(description):
 
     return None
 
-def print_metrics(metrics):
-    print("\r" + " " * 80, end="\r")  # Clears the line
+def print_metrics(metrics, progress=None):
+    if progress:
+        print("\r" + " " * 80, end="\r")  # Clears the progress line
     print(f"{metrics['seen_count']} already seen")
     print(f"{metrics['salary_count']} with no or low salary")
     print(f"{metrics['fitness_count']} with a bad fit")
@@ -806,7 +807,7 @@ def search_linkedin(progress=None):
             awsutils.send_email('Python LinkedIn Search <python@twistedslinky.org>', mail_to, company + " - " + title, email_body, cover_letter_path)
             awsutils.dynamodb_put_item('linkedin_jobs', 'job_id', id)
             metrics["valid_count"] += 1
-    print_metrics(metrics)
+    print_metrics(metrics, progress)
     return None
 
 def search_indeed(progress=None):
@@ -863,7 +864,7 @@ def search_indeed(progress=None):
             awsutils.send_email('Python Indeed Search <python@twistedslinky.org>', mail_to, company + " - " + title, email_body, cover_letter_path)
             awsutils.dynamodb_put_item('indeed_jobs', 'job_id', id)
             metrics["valid_count"] += 1
-    print_metrics(metrics)
+    print_metrics(metrics, progress)
     return None
 
 def search_upwork(progress=None):
@@ -923,7 +924,7 @@ def search_upwork(progress=None):
             awsutils.send_email('Python Upwork Search <python@twistedslinky.org>', 'ryan@twistedslinky.org', company + " - " + title, email_body, cover_letter_path)
             awsutils.dynamodb_put_item('upwork_jobs', 'job_id', id)
             metrics["valid_count"] += 1
-    print_metrics(metrics)
+    print_metrics(metrics, progress)
     return None
 
 if __name__ == "__main__":
