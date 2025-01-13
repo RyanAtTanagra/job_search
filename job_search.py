@@ -32,6 +32,45 @@ linkedin_search_keywords = "cloud engineer"
 indeed_search_url = 'https://www.indeed.com/jobs?q=aws&l=San+Francisco%2C+CA&fromage=7&salaryType=%24185%2C000&radius=100&from=searchOnDesktopSerp'
 upwork_search_url = 'https://www.upwork.com/nx/search/jobs/?q=aws%20cloud&sort=recency&per_page=50'
 
+# Constants for job filtering
+poor_fit_titles = [
+    "software engineer",
+    "sales",
+    "solutions engineer",
+    "solutions architect",
+    "product manager",
+    "data architect",
+    "data engineer"
+]
+
+poor_fit_companies = [
+    "geico",
+    "atlassian",
+    "oracle",
+    "nvidia"
+]
+
+software_role_indicatiors = [
+    "angular",
+    "react",
+    "vue",
+    "java ",  # space after to avoid matching javascript
+    "c++",
+    "rust",
+    "golang",
+    "front end",
+    "frontend",
+    "back end",
+    "backend",
+    "full stack",
+    "fullstack",
+    "ui/ux",
+    "user interface",
+    "mobile app",
+    "android",
+    "ios development"
+]
+
 # Where to send the emails
 mail_to = "ryan@twistedslinky.org"
 
@@ -421,7 +460,31 @@ def get_indeed_job_description(url):
     finally:
         driver.quit()
 
-def get_fitness_rating(description):
+def get_fitness_rating(description, title):
+    # Check title first as it's fastest
+    title_lower = title.lower()
+    for keyword in poor_fit_titles:
+        if keyword in title_lower:
+            logging.info(f"Job filtered out due to title containing '{keyword}'")
+            return 0  # Return 0 for poor fit jobs
+    
+    # Check company name if we can identify it
+    description_lower = description.lower()
+    for company in poor_fit_companies:
+        if company in description_lower:
+            logging.info(f"Job filtered out due to company {company}")
+            return 0
+
+
+    # Count how many software development indicators are present
+    software_indicator_count = sum(1 for indicator in software_role_indicatiors
+                                 if indicator in description_lower)
+    # If we find multiple software indicators, it's likely a dev role
+    if software_indicator_count >= 3:
+        logging.info(f"Job filtered out due to {software_indicator_count} software development indicators")
+        return 0
+
+    # If we passed the above tests, pass the description and our resume to anthropic for a fitness score
     with open(resume_path, 'r') as file:
         resume_text = file.read()
     prompt = f"""Here is my resume and a job description. On a scale of 0-100, analyze how good of a fit I am for this role using the following scoring system:
@@ -702,7 +765,7 @@ def search_linkedin(event=None, context=None):
             awsutils.dynamodb_put_item('linkedin_jobs', 'job_id', id)
             metrics["salary_count"] += 1
         else:
-            fitness=get_fitness_rating(description)
+            fitness=get_fitness_rating(description,title)
             if fitness is None:
                 continue
             if fitness < fitness_threshold:
@@ -758,7 +821,7 @@ def search_indeed():
             awsutils.dynamodb_put_item('indeed_jobs', 'job_id', id)
             metrics["salary_count"] += 1
         else:
-            fitness=get_fitness_rating(description)
+            fitness=get_fitness_rating(description,title)
             if fitness is None:
                 continue
             if fitness < fitness_threshold:
@@ -817,7 +880,7 @@ def search_upwork():
             awsutils.dynamodb_put_item('upwork_jobs', 'job_id', id)
             metrics["salary_count"] += 1
         else:
-            fitness=get_fitness_rating(description)
+            fitness=get_fitness_rating(description,title)
             if fitness is None:
                 continue
             if fitness < fitness_threshold:
