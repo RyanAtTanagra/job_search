@@ -35,13 +35,25 @@ upwork_search_url = 'https://www.upwork.com/nx/search/jobs/?q=aws%20cloud&sort=r
 # Constants for job filtering
 poor_fit_titles = [
     "software engineer",
+    "software architect",
+    "frontend engineer",
+    "backend engineer",
+    "protocol engineer",
+    "blockchain engineer",
     "sales",
     "solutions engineer",
     "solutions architect",
     "product manager",
     "program manager",
     "data architect",
-    "data engineer"
+    "data engineer",
+    "account executive",
+    "client executive"
+    "marketing manager",
+    "vp of "
+    "vice president of "
+    "senior manager",
+    "sr. manager"
 ]
 
 poor_fit_companies = [
