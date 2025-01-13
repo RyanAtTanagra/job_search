@@ -39,6 +39,7 @@ poor_fit_titles = [
     "solutions engineer",
     "solutions architect",
     "product manager",
+    "program manager",
     "data architect",
     "data engineer"
 ]
