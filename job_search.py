@@ -72,7 +72,8 @@ poor_fit_companies = [
     "geico",
     "atlassian",
     "oracle",
-    "nvidia"
+    "nvidia",
+    "microsoft"
 ]
 
 software_role_indicatiors = [
