@@ -714,7 +714,7 @@ def print_metrics(metrics):
     print(f"{metrics['valid_count']} potential jobs sent")
 
 
-def search_linkedin(event=None, context=None):
+def search_linkedin(progress=None):
     try:
         api = Linkedin(linkedin_email, linkedin_password)
     except Exception as e:
@@ -729,7 +729,8 @@ def search_linkedin(event=None, context=None):
     global metrics
     metrics = {key: 0 for key in metrics}
     for idx, job in enumerate(jobs):
-        print(f"Processing {idx}/{len(jobs)}", end="\r")
+        if progress:
+            print(f"Processing {idx}/{len(jobs)}", end="\r")
         id = int(job['trackingUrn'].split(":")[-1])
         if awsutils.dynamodb_check_if_value_exists('linkedin_jobs', 'job_id', id):
             logging.info(f"LinkedIn job {id} already seen")
@@ -783,7 +784,7 @@ def search_linkedin(event=None, context=None):
     print_metrics(metrics)
     return None
 
-def search_indeed():
+def search_indeed(progress=None):
     jobs = scrape_indeed_jobs(indeed_search_url)
     if not jobs:
         print("No Indeed search results")
@@ -793,7 +794,8 @@ def search_indeed():
     global metrics
     metrics = {key: 0 for key in metrics}
     for idx, job in enumerate(jobs):
-        print(f"Processing {idx}/{len(jobs)}", end="\r")
+        if progress:
+            print(f"Processing {idx}/{len(jobs)}", end="\r")
         id = job['job_id']
         if not id:
             logging.info(f"No job id: {id}")
@@ -839,7 +841,7 @@ def search_indeed():
     print_metrics(metrics)
     return None
 
-def search_upwork():
+def search_upwork(progress=None):
     jobs = scrape_upwork_jobs(upwork_search_url)
     if not jobs:
         print("No Upwork search results")
@@ -849,7 +851,8 @@ def search_upwork():
     global metrics
     metrics = {key: 0 for key in metrics}
     for idx, job in enumerate(jobs):
-        print(f"Processing {idx}/{len(jobs)}", end="\r")
+        if progress:
+            print(f"Processing {idx}/{len(jobs)}", end="\r")
         id = job['job_id']
         if not id:
             logging.info(f"No job id: {id}")
@@ -898,13 +901,6 @@ def search_upwork():
     print_metrics(metrics)
     return None
 
-def search_all():
-    search_linkedin()
-    print("\n")
-    search_indeed()
-    print("\n")
-    search_upwork()
-
 if __name__ == "__main__":
     start_time = time()
     parser = argparse.ArgumentParser(description="Run a search on job postings and email details and cover letter to myself",formatter_class=argparse.RawTextHelpFormatter)
@@ -913,9 +909,23 @@ if __name__ == "__main__":
         choices=['linkedin','indeed','upwork', 'all'],
         help="Website to search, or all"
     )
+    parser.add_argument(
+        "--cron",
+        action="store_true",
+        help="If set, suppress progress output for cron jobs"
+    )
     args = parser.parse_args()
-    search = f"search_{args.website}()"
-    eval(search)
+    # Determine if progress output should be included
+    progress = not args.cron
+    if args.website == "all":
+        search_linkedin(progress)
+        print("\n"
+        search_indeed(progress)
+        print("\n"
+        search_upwork(progress)
+    else:
+        search = f"search_{args.website}({progress})"        
+        eval(search)
     end_time = time()
     elapsed_time = end_time - start_time
     print(f"\nScript completed in {elapsed_time:.2f} seconds")
