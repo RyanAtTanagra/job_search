@@ -47,7 +47,7 @@ poor_fit_titles = [
     "security engineer",
     "solution",
     "account executive",
-    "client executive"
+    "client executive",
     "sales",
     "product manager",
     "program manager",
@@ -55,8 +55,9 @@ poor_fit_titles = [
     "data engineer",
     "data scientist",
     "marketing manager",
-    "vp of "
-    "vice president of "
+    "director",
+    "vp of ",
+    "vice president of ",
     "senior manager",
     "sr. manager"
 ]
@@ -481,16 +482,14 @@ def get_indeed_job_description(url):
 
 def get_fitness_rating(description, title):
     # Check title first as it's fastest
-    title_lower = title.lower()
     for keyword in poor_fit_titles:
-        if keyword in title_lower:
+        if keyword in title.lower():
             logging.info(f"Job filtered out due to title containing '{keyword}'")
             return 0  # Return 0 for poor fit jobs
     
     # Check company name if we can identify it
-    description_lower = description.lower()
     for company in poor_fit_companies:
-        if company in description_lower:
+        if company in description.lower():
             logging.info(f"Job filtered out due to company {company}")
             return 0
 
