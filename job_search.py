@@ -31,6 +31,7 @@ fitness_threshold = 80
 linkedin_search_keywords = "cloud engineer"
 indeed_search_url = 'https://www.indeed.com/jobs?q=aws&l=San+Francisco%2C+CA&fromage=7&salaryType=%24185%2C000&radius=100&from=searchOnDesktopSerp'
 upwork_search_url = 'https://www.upwork.com/nx/search/jobs/?q=aws%20cloud&sort=recency&per_page=50'
+insight_global_search_url = 'https://jobs.insightglobal.com/jobs/find_a_job/1/?rd=Distance&remote=true&miles=False&page=2&srch=AWS+Cloud+Engineer'
 
 # Constants for job filtering
 poor_fit_titles = [
@@ -66,14 +67,12 @@ poor_fit_companies = [
     "geico",
     "atlassian",
     "oracle",
-    "nvidia",
-    "microsoft"
+    "nvidia"
 ]
 
 software_role_indicatiors = [
     "angular",
     "react",
-    "vue",
     "java ",  # space after to avoid matching javascript
     "c++",
     "rust",
@@ -137,6 +136,155 @@ def setup_chrome_driver():
     
     driver = uc.Chrome(options=options)
     return driver
+
+def scrape_insight_global(base_url):
+    driver = setup_chrome_driver()
+    jobs = []
+    current_page = 1
+
+    try:
+        while True:
+            # Construct the URL for the current page
+            page_url = base_url.replace('/find_a_job/', f'/find_a_job/{current_page}/')
+ 
+            # Navigate to the page
+            logging.info(f"Scraping insight global page {current_page}: {page_url}")
+            driver.get(page_url)
+
+            # Wait for job listings to be present
+            wait = WebDriverWait(driver, 10)
+            try:
+                # First check if we have valid pagination
+                pagination = wait.until(EC.presence_of_element_located(
+                    (By.CLASS_NAME, "paging-container")
+                ))
+                
+                # Check if we're beyond the last page by looking for "1 - 10 of X" text
+                result_text = pagination.find_element(By.CLASS_NAME, "h").text
+                if " of " in result_text:
+                    match = re.search(r'of (\d+)', result_text)
+                    if match:
+                        total_jobs = int(match.group(1))
+                        # If we've processed more than total jobs, we're done
+                        if len(jobs) >= total_jobs:
+                            print(f"Reached end of listings (processed {len(jobs)} of {total_jobs} jobs)")
+                            break
+                
+                # Get job listings
+                job_listings = driver.find_elements(By.CLASS_NAME, "result")
+                if not job_listings:
+                    print("No job listings found on page")
+                    break 
+            except:
+                print(f"Problem getting content for page: {current_page}")
+                break
+
+            # Process each job listing
+            for listing in job_listings:
+                try:
+                    # Get title and URL
+                    title_elem = listing.find_element(By.CLASS_NAME, "job-title").find_element(By.TAG_NAME, "a")
+                    title = title_elem.text.strip()
+                    url = title_elem.get_attribute("href")
+                    
+                    # Extract job ID from URL using regex
+                    job_id_match = re.search(r'job-(\d+)', url)
+                    job_id = job_id_match.group(1) if job_id_match else None
+                    
+                    # Get job info section
+                    job_info = listing.find_element(By.CLASS_NAME, "job-info")
+                    info_text = job_info.text
+                    
+                    # Extract location, type, and compensation from info section
+                    info_parts = [p.strip() for p in info_text.split("|")]
+                    location = info_parts[0].strip() if len(info_parts) > 0 else ""
+                    job_type = info_parts[2].strip() if len(info_parts) > 2 else ""
+                    
+                    # Extract and convert compensation
+                    compensation = info_parts[3].strip() if len(info_parts) > 3 else ""
+                    hourly_rate_match = re.search(r'\$(\d+)\s*-\s*\$?(\d+)', compensation)
+                    min_rate = float(hourly_rate_match.group(1)) if hourly_rate_match else None
+                    max_rate = float(hourly_rate_match.group(2)) if hourly_rate_match else None
+                    
+                    # Get company name if available
+                    company = "Insight Global"  # Default since all jobs are from Insight Global
+                    
+                    # Get description
+                    description = listing.find_element(By.CSS_SELECTOR, "div.result p").text.strip()
+                    
+                    jobs.append({
+                        'job_id': job_id,
+                        'url': url,
+                        'title': title,
+                        'company': company,
+                        'location': location,
+                        'job_type': job_type,
+                        'min_hourly_rate': min_rate,
+                        'max_hourly_rate': max_rate,
+                        'description': description,
+                        'annual_min': min_rate * 2080 / 1000 if min_rate else None,  # Convert hourly to annual (2080 hrs/year)
+                        'annual_max': max_rate * 2080 / 1000 if max_rate else None
+                    })
+                    
+                    print(f"Scraped job: {title}")
+                    
+                except Exception as e:
+                    print(f"Error processing job listing: {str(e)}")
+                    continue
+            
+            # Check if there's a next page by looking for the navigation
+            try:
+                # Look for the active page number and see if there's a next page link
+                pagination = driver.find_element(By.CLASS_NAME, "paging-container")
+                active_page = pagination.find_element(By.CLASS_NAME, "active")
+                next_page = active_page.find_element(By.XPATH, "following-sibling::li[1]/a")
+                
+                if not next_page.get_attribute("href"):
+                    print("No link to next page found")
+                    break
+                    
+                current_page += 1
+            except NoSuchElementException:
+                print("No more pages available")
+                break
+                
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+    
+    finally:
+        driver.quit()
+    
+    return jobs
+
+def get_insight_global_job_description(url):
+    driver = setup_chrome_driver()
+    description = None
+    
+    try:
+        driver.get(url)
+        
+        # Get all description divs
+        wait = WebDriverWait(driver, 10)
+        desc_sections = wait.until(EC.presence_of_all_elements_located(
+            (By.CLASS_NAME, "detailpage-desc")
+        ))
+        
+        # Combine all description sections into one string
+        description_parts = []
+        for section in desc_sections:
+            text = section.text.strip()
+            if text:  # Only add non-empty sections
+                description_parts.append(text)
+        
+        description = "\n\n".join(description_parts)
+                
+    except Exception as e:
+        print(f"Error scraping job description: {str(e)}")
+        
+    finally:
+        driver.quit()
+        
+    return description
 
 def get_linkedin_job_details(id):
     try:
@@ -894,12 +1042,68 @@ def search_upwork(progress=None):
     print_metrics(metrics, progress)
     return None
 
+def search_insight(progress=None):
+    jobs = scrape_insight_global(insight_global_search_url)
+    if not jobs:
+        print("No Insight Global search results")
+        return
+    print("Found", len(jobs), "Insight Global jobs")
+    # Reset metric counters to zero
+    global metrics
+    metrics = {key: 0 for key in metrics}
+    for idx, job in enumerate(jobs):
+        if progress:
+            print(f"Processing {idx}/{len(jobs)}", end="\r")
+        id = job['job_id']
+        if not id:
+            logging.info(f"No job id: {id}")
+            continue
+        if awsutils.dynamodb_check_if_value_exists('insight_global_jobs', 'job_id', id):
+            logging.info(f"Insight Global job {id} already seen")
+            metrics["seen_count"] += 1
+            continue
+        url = job['url']
+        logging.info(url)
+        description = get_insight_global_job_description(url)
+        title = job['title']
+        highest_salary = job['annual_max']
+        if description is None:
+            logging.info("Couldn't find job description")
+            metrics["description_count"] += 1
+            continue
+        if highest_salary is None:
+            logging.info("No salary information found")
+            awsutils.dynamodb_put_item('insight_global_jobs', 'job_id', id)
+            metrics["salary_count"] += 1
+            continue
+        if highest_salary < salary_threshold:
+            logging.info("Salary below threshold")
+            awsutils.dynamodb_put_item('insight_global_jobs', 'job_id', id)
+            metrics["salary_count"] += 1
+        else:
+            fitness=get_fitness_rating(description,title)
+            if fitness is None:
+                continue
+            if fitness < fitness_threshold:
+                logging.info("Fitness score below threshold")
+                awsutils.dynamodb_put_item('insight_global_jobs', 'job_id', id)
+                metrics["fitness_count"] += 1
+                continue
+            company = job['company'] or "Unknown Company"
+            email_body=f"{company} - {title}\n{url}\nsalary: {highest_salary}/yr\nfitness: {fitness}"
+            logging.info(email_body)
+            cover_letter_path=get_cover_letter(company, title, description)
+            awsutils.send_email('Python Insight Global Search <python@twistedslinky.org>', mail_to, company + " - " + title, email_body, cover_letter_path)
+            awsutils.dynamodb_put_item('insight_global_jobs', 'job_id', id)
+            metrics["valid_count"] += 1
+    print_metrics(metrics, progress)
+    return None
 if __name__ == "__main__":
     start_time = time()
     parser = argparse.ArgumentParser(description="Run a search on job postings and email details and cover letter to myself",formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument(
         "website",
-        choices=['linkedin','indeed','upwork', 'all'],
+        choices=['linkedin','indeed','upwork','insight','all'],
         help="Website to search, or all"
     )
     parser.add_argument(
@@ -916,6 +1120,8 @@ if __name__ == "__main__":
         search_indeed(progress)
         print("\n")
         search_upwork(progress)
+        print("\n")
+        search_insight(progress)
     else:
         search = f"search_{args.website}({progress})"        
         eval(search)
