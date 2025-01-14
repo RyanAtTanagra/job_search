@@ -496,7 +496,7 @@ def get_fitness_rating(description, title):
 
     # Count how many software development indicators are present
     software_indicator_count = sum(1 for indicator in software_role_indicatiors
-                                 if indicator in description_lower)
+                                 if indicator in description.lower())
     # If we find multiple software indicators, it's likely a dev role
     if software_indicator_count >= 3:
         logging.info(f"Job filtered out due to {software_indicator_count} software development indicators")
