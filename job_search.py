@@ -894,7 +894,7 @@ def search_linkedin(progress=None):
                 metrics["salary_count"] += 1
                 continue
         if highest_salary < salary_threshold:
-            logging.info("Salary below threshold")
+            logging.info(f"Salary below threshold: {highest_salary}")
             awsutils.dynamodb_put_item('linkedin_jobs', 'job_id', id)
             metrics["salary_count"] += 1
         else:
@@ -902,7 +902,7 @@ def search_linkedin(progress=None):
             if fitness is None:
                 continue
             if fitness < fitness_threshold:
-                logging.info("Fitness score below threshold")
+                logging.info(f"Fitness score below threshold: {fitness}")
                 awsutils.dynamodb_put_item('linkedin_jobs', 'job_id', id)
                 metrics["fitness_count"] += 1
                 continue
@@ -951,7 +951,7 @@ def search_indeed(progress=None):
             metrics["salary_count"] += 1
             continue
         if highest_salary < salary_threshold:
-            logging.info("Salary below threshold")
+            logging.info(f"Salary below threshold: {highest_salary}")
             awsutils.dynamodb_put_item('indeed_jobs', 'job_id', id)
             metrics["salary_count"] += 1
         else:
@@ -959,7 +959,7 @@ def search_indeed(progress=None):
             if fitness is None:
                 continue
             if fitness < fitness_threshold:
-                logging.info("Fitness score below threshold")
+                logging.info(f"Fitness score below threshold: {fitness}")
                 awsutils.dynamodb_put_item('indeed_jobs', 'job_id', id)
                 metrics["fitness_count"] += 1
                 continue
@@ -1011,7 +1011,7 @@ def search_upwork(progress=None):
             metrics["salary_count"] += 1
             continue
         if highest_rate < hourly_threshold:
-            logging.info("Rate below threshold")
+            logging.info(f"Rate below threshold: {highest_rate}")
             awsutils.dynamodb_put_item('upwork_jobs', 'job_id', id)
             metrics["salary_count"] += 1
         else:
@@ -1019,7 +1019,7 @@ def search_upwork(progress=None):
             if fitness is None:
                 continue
             if fitness < fitness_threshold:
-                logging.info("Fitness score below threshold")
+                logging.info(f"Fitness score below threshold: {fitness}")
                 awsutils.dynamodb_put_item('upwork_jobs', 'job_id', id)
                 metrics["fitness_count"] += 1
                 continue
@@ -1068,7 +1068,7 @@ def search_insight(progress=None):
             metrics["salary_count"] += 1
             continue
         if highest_salary < salary_threshold:
-            logging.info("Salary below threshold")
+            logging.info(f"Salary below threshold: {highest_salary}")
             awsutils.dynamodb_put_item('insight_global_jobs', 'job_id', id)
             metrics["salary_count"] += 1
         else:
@@ -1076,7 +1076,7 @@ def search_insight(progress=None):
             if fitness is None:
                 continue
             if fitness < fitness_threshold:
-                logging.info("Fitness score below threshold")
+                logging.info(f"Fitness score below threshold: {fitness}")
                 awsutils.dynamodb_put_item('insight_global_jobs', 'job_id', id)
                 metrics["fitness_count"] += 1
                 continue
