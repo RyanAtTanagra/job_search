@@ -321,11 +321,11 @@ def scrape_indeed_jobs(url):
     paginated_url = f"{url}&start={offset}"
     logging.info(f"Loading URL: {paginated_url}")
     driver.get(paginated_url)
-    with open("indeed_last_html.html", "w", encoding="utf-8") as file:
-        file.write(driver.page_source)
 
     # Wait for Turnstile iframe
     wait = WebDriverWait(driver, 10)
+    with open("indeed_last_html.html", "w", encoding="utf-8") as file:
+        file.write(driver.page_source)
     try:
         # Look for multiple possible selectors that might indicate the challenge
         turnstile_frame = wait.until(
