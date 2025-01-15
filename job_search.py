@@ -119,9 +119,8 @@ if not linkedin_email or not linkedin_password:
 
 logging.basicConfig(level=logging.INFO, filename='job_processing.log')
 logging.getLogger("botocore").setLevel(logging.WARNING)
-#warnings.filterwarnings("ignore", category=DeprecationWarning)
 
-# Used for Indeed and Upwork scrapers
+# Used for general web scrapers
 def setup_chrome_driver():
     options = uc.ChromeOptions()
     options.add_argument('--headless=new')
@@ -137,496 +136,23 @@ def setup_chrome_driver():
     driver = uc.Chrome(options=options, version_main=131)
     return driver
 
-def scrape_insight_global(base_url):
-    driver = setup_chrome_driver()
-    jobs = []
-    current_page = 1
-
-    try:
-        while True:
-            # Construct the URL for the current page
-            page_url = base_url.replace('/find_a_job/', f'/find_a_job/{current_page}/')
- 
-            # Navigate to the page
-            logging.info(f"Scraping insight global page {current_page}: {page_url}")
-            driver.get(page_url)
-
-            # Wait for job listings to be present
-            wait = WebDriverWait(driver, 10)
-            try:
-                # First check if we have valid pagination
-                pagination = wait.until(EC.presence_of_element_located(
-                    (By.CLASS_NAME, "paging-container")
-                ))
-                
-                # Check if we're beyond the last page by looking for "1 - 10 of X" text
-                result_text = pagination.find_element(By.CLASS_NAME, "h").text
-                if " of " in result_text:
-                    match = re.search(r'of (\d+)', result_text)
-                    if match:
-                        total_jobs = int(match.group(1))
-                        # If we've processed more than total jobs, we're done
-                        if len(jobs) >= total_jobs:
-                            print(f"Reached end of listings (processed {len(jobs)} of {total_jobs} jobs)")
-                            break
-                
-                # Get job listings
-                job_listings = driver.find_elements(By.CLASS_NAME, "result")
-                if not job_listings:
-                    print("No job listings found on page")
-                    break 
-            except:
-                print(f"Problem getting content for page: {current_page}")
-                break
-
-            # Process each job listing
-            for listing in job_listings:
-                try:
-                    # Get title and URL
-                    title_elem = listing.find_element(By.CLASS_NAME, "job-title").find_element(By.TAG_NAME, "a")
-                    title = title_elem.text.strip()
-                    url = title_elem.get_attribute("href")
-                    
-                    # Extract job ID from URL using regex
-                    job_id_match = re.search(r'job-(\d+)', url)
-                    job_id = job_id_match.group(1) if job_id_match else None
-                    
-                    # Get job info section
-                    job_info = listing.find_element(By.CLASS_NAME, "job-info")
-                    info_text = job_info.text
-                    
-                    # Extract location, type, and compensation from info section
-                    info_parts = [p.strip() for p in info_text.split("|")]
-                    location = info_parts[0].strip() if len(info_parts) > 0 else ""
-                    job_type = info_parts[2].strip() if len(info_parts) > 2 else ""
-                    
-                    # Extract and convert compensation
-                    compensation = info_parts[3].strip() if len(info_parts) > 3 else ""
-                    hourly_rate_match = re.search(r'\$(\d+)\s*-\s*\$?(\d+)', compensation)
-                    min_rate = float(hourly_rate_match.group(1)) if hourly_rate_match else None
-                    max_rate = float(hourly_rate_match.group(2)) if hourly_rate_match else None
-                    
-                    # Get company name if available
-                    company = "Insight Global"  # Default since all jobs are from Insight Global
-                    
-                    # Get description
-                    description = listing.find_element(By.CSS_SELECTOR, "div.result p").text.strip()
-                    
-                    jobs.append({
-                        'job_id': job_id,
-                        'url': url,
-                        'title': title,
-                        'company': company,
-                        'location': location,
-                        'job_type': job_type,
-                        'min_hourly_rate': min_rate,
-                        'max_hourly_rate': max_rate,
-                        'description': description,
-                        'annual_min': min_rate * 2080 / 1000 if min_rate else None,  # Convert hourly to annual (2080 hrs/year)
-                        'annual_max': max_rate * 2080 / 1000 if max_rate else None
-                    })
-                    
-                    print(f"Scraped job: {title}")
-                    
-                except Exception as e:
-                    print(f"Error processing job listing: {str(e)}")
-                    continue
-            
-            # Check if there's a next page by looking for the navigation
-            try:
-                # Look for the active page number and see if there's a next page link
-                pagination = driver.find_element(By.CLASS_NAME, "paging-container")
-                active_page = pagination.find_element(By.CLASS_NAME, "active")
-                next_page = active_page.find_element(By.XPATH, "following-sibling::li[1]/a")
-                
-                if not next_page.get_attribute("href"):
-                    print("No link to next page found")
-                    break
-                    
-                current_page += 1
-            except NoSuchElementException:
-                print("No more pages available")
-                break
-                
-    except Exception as e:
-        print(f"An error occurred: {str(e)}")
-    
-    finally:
-        driver.quit()
-    
-    return jobs
-
-def get_insight_global_job_description(url):
-    driver = setup_chrome_driver()
-    description = None
-    
-    try:
-        driver.get(url)
-        
-        # Get all description divs
-        wait = WebDriverWait(driver, 10)
-        desc_sections = wait.until(EC.presence_of_all_elements_located(
-            (By.CLASS_NAME, "detailpage-desc")
-        ))
-        
-        # Combine all description sections into one string
-        description_parts = []
-        for section in desc_sections:
-            text = section.text.strip()
-            if text:  # Only add non-empty sections
-                description_parts.append(text)
-        
-        description = "\n\n".join(description_parts)
-                
-    except Exception as e:
-        print(f"Error scraping job description: {str(e)}")
-        
-    finally:
-        driver.quit()
-        
-    return description
-
-def get_linkedin_job_details(id):
-    try:
-        api = Linkedin(linkedin_email, linkedin_password)
-    except Exception as e:
-        logging.info(f"Error connecting to LinkedIn to get job description")
-        return None
-    result = api.get_job_description(id)
-    return(result)
-
-def scrape_upwork_jobs(url):
-    """
-    Scrape Upwork jobs from the search results page
-    """
-    driver = setup_chrome_driver()
-    jobs = []
-    current_url = url
-    try:
-        while current_url:
-            driver.get(current_url)
-            # Wait for job listings to load
-            driver.implicitly_wait(10)
-
-            soup = BeautifulSoup(driver.page_source, 'html.parser')
-            with open("upwork.html", "w", encoding="utf-8") as file:
-                file.write(driver.page_source)
-
-            # Find all job listings
-            for job_element in soup.find_all('article', class_='job-tile'):
-                try:
-                    # Extract job title and URL
-                    title_element = job_element.find('h2', class_='job-tile-title')
-                    title = title_element.get_text(strip=True) if title_element else None
-                    url_element = title_element.find('a') if title_element else None
-                    job_url = urljoin('https://www.upwork.com', url_element['href']) if url_element else None
-                    job_id = int(re.search(r'_~(\d+)', job_url).group(1))
-
-                    # Extract payment information
-                    info_list = job_element.find('ul', class_='job-tile-info-list')
-                    price_element = info_list.find('li', attrs={'data-test': 'job-type-label'}) if info_list else None
-                    price_text = price_element.get_text(strip=True) if price_element else None
-
-                    # Parse price information
-                    try:
-                        if 'Hourly' in price_text:
-                            amounts = re.findall(r'\$(\d+(?:\.\d{2})?)', price_text)
-                            if len(amounts) == 2:
-                                price_type = 'hourly'
-                                min_amount = float(amounts[0])
-                                max_amount = float(amounts[1])
-                            elif len(amounts) == 1:
-                                price_type = 'hourly'
-                                min_amount = float(amounts[0])
-                                max_amount = float(amounts[0])
-                        elif 'Fixed price' in price_text:
-                            fixed_price_element = info_list.find('li', attrs={'data-test': 'is-fixed-price'})
-                            if fixed_price_element:
-                                amount = re.search(r'\$(\d+(?:\.\d{2})?)', fixed_price_element.get_text(strip=True))
-                            if amount:
-                                price_type = 'fixed'
-                                min_amount = float(amount.group(1))
-                                max_amount = float(amount.group(1))
-                        else:
-                            price_type, min_amount, max_amount = None, None, None
-                    except Exception as e:
-                        logging.error(f"Error parsing price: {e}")
-                        price_type, min_amount, max_amount = None, None, None
-
-                    # Extract and parse duration if available
-                    duration_element = info_list.find('li', attrs={'data-test': 'duration-label'}) if info_list else None
-                    duration_text = duration_element.get_text(strip=True) if duration_element else None
-
-                    job_info = {
-                        'job_id': job_id,
-                        'title': title,
-                        'url': job_url,
-                        'payment_type': price_type,
-                        'min_amount': min_amount,
-                        'max_amount': max_amount,
-                        'original_price_text': price_text
-                    }
-
-                    # If it's a fixed price job with duration, calculate estimated hourly rate
-                    if price_type == 'fixed' and duration_text:
-                        min_months, max_months, min_hours, max_hours = parse_duration_hours(duration_text)
-                        if all(x is not None for x in [min_months, max_months, min_hours, max_hours]):
-                            # Calculate average monthly hours
-                            avg_hours_per_month = (min_hours + max_hours) / 2 * 4  # 4 weeks per month
-                            avg_months = (min_months + max_months) / 2
-                            total_hours = avg_hours_per_month * avg_months
-                            estimated_hourly_rate = min_amount / total_hours if total_hours > 0 else None
-
-                            job_info.update({
-                                'estimated_hourly_rate': round(estimated_hourly_rate, 2) if estimated_hourly_rate else None,
-                                'duration_months': f"{min_months} to {max_months}",
-                                'hours_per_week': f"{min_hours} to {max_hours}"
-                            })
-
-                    jobs.append(job_info)
-
-                except Exception as e:
-                    logging.error(f"Error processing job listing: {e}")
-                    continue
-
-            # Get next page URL
-            try:
-                next_button = soup.find('button', {'data-test': 'next-page'})
-                if not next_button or 'disabled' in next_button.attrs:
-                    logging.info("No next_button")
-                    break
-                    
-                next_page = next_button.get('data-ev-page_index')
-                if not next_page:
-                    print("No next_page")
-                    break
-                    
-                # Parse the current URL and update page number
-                parsed_url = urlparse(current_url)
-                query_params = parse_qs(parsed_url.query)
-                query_params['page'] = next_page
-                new_query = urlencode(query_params, doseq=True)
-                current_url = f"{parsed_url.scheme}://{parsed_url.netloc}{parsed_url.path}?{new_query}"
-                
-                # Optional: Add a slight delay between pages to be nice to the server
-                sleep(2)
-                
-            except Exception as e:
-                logging.error(f"Error getting next page URL: {e}")
-                break
-
-        return jobs
-
-    except Exception as e:
-        logging.error(f"Error scraping Upwork jobs: {e}")
-        return []
-
-def get_upwork_job_description(url):
-    try:
-        driver = setup_chrome_driver()
-        driver.get(url)
-        driver.implicitly_wait(10)  # Wait for content to load
-
-        # Find the description
-        soup = BeautifulSoup(driver.page_source, 'html.parser')
-        # First check to see if it's a private listing
-        private_check = soup.find('h4', string='This job is a private listing.')
-        if private_check:
-            return "private"
-        description_element = soup.find('p', class_='text-body-sm')
-
-        if description_element:
-            description = description_element.get_text(strip=True)
-            driver.quit()
-            return description
-
-        driver.quit()
-        return None
-
-    except Exception as e:
-        logging.error(f"Error extracting job description: {e}")
-        driver.quit()
-        return None
-
-def parse_duration_hours(duration_text):
-    """
-    Parse the duration and hours per week from text like "3 to 6 months, 30+ hrs/week"
-    Returns (min_months, max_months, min_hours, max_hours)
-    """
-    try:
-        # Extract months
-        months_match = re.search(r'(\d+)(?:\s+to\s+(\d+))?\s+months?', duration_text)
-        if months_match:
-            min_months = int(months_match.group(1))
-            max_months = int(months_match.group(2)) if months_match.group(2) else min_months
-        else:
-            min_months = max_months = None
-            
-        # Extract hours
-        hours_match = re.search(r'(\d+)\+?\s*hrs/week|Less than (\d+)\s*hrs/week', duration_text)
-        if hours_match:
-            if hours_match.group(1):  # matches "30+ hrs/week"
-                min_hours = int(hours_match.group(1))
-                max_hours = 40  # assume 40 as max for "X+" format
-            else:  # matches "Less than X hrs/week"
-                min_hours = 1
-                max_hours = int(hours_match.group(2))
-        else:
-            min_hours = max_hours = None
-            
-        return min_months, max_months, min_hours, max_hours
-    except Exception as e:
-        logging.error(f"Error parsing duration: {e}")
-        return None, None, None, None
-
-def scrape_indeed_jobs(url):
-    offset = 0
-    driver = setup_chrome_driver()
-    paginated_url = f"{url}&start={offset}"
-    logging.info(f"Loading URL: {paginated_url}")
-    driver.get(paginated_url)
-    with open("indeed_last_html.html", "w", encoding="utf-8") as file:
-        file.write(driver.page_source)
-
-    # Wait for Turnstile iframe
-    wait = WebDriverWait(driver, 10)
-    try:
-        # Look for multiple possible selectors that might indicate the challenge
-        turnstile_frame = wait.until(
-            EC.presence_of_element_located((
-                By.CSS_SELECTOR, 
-                "iframe[src*='challenges.cloudflare.com'], iframe[src*='turnstile'], #challenge-form iframe"
-            ))
-        )
-            
-        logging.info("Found verification iframe, switching to it...")
-        driver.switch_to.frame(turnstile_frame)
-        
-        # Try to find and interact with the challenge
-        try:
-            checkbox = wait.until(
-                EC.element_to_be_clickable((
-                    By.CSS_SELECTOR, 
-                    ".turnstile-checkbox, .challenge-checkbox"
-               ))
-            )
-            checkbox.click()
-            logging.info("Clicked verification checkbox")
-        except Exception as e:
-            logging.info(f"Could not find checkbox: {e}")
-            
-        # Switch back to main content
-        driver.switch_to.default_content()
-            
-        # Wait for page to load after verification
-        sleep(5)
-            
-    except Exception as e:
-        logging.info(f"Error handling verification: {e}")
-
-    jobs = []
-    while True:
-        # Adjust URL for pagination
-        paginated_url = f"{url}&start={offset}"
-        logging.info(f"Loading URL: {paginated_url}")
-        driver.get(paginated_url)
-
-        #print("Waiting for job cards...")
-        try:
-            wait = WebDriverWait(driver, 10)
-            job_cards = driver.find_elements(By.CLASS_NAME, "job_seen_beacon")
-            logging.info(f"Found {len(job_cards)} Indeed jobs")
-            if len(job_cards) == 0:
-                return jobs
-        except Exception as e:
-            logging.info(f"Error finding job cards: {e}")
-            return []
-
-        for idx,card in enumerate(job_cards):
-            try:
-                job = {}
-                
-                job['title'] = next((elem.text.strip() for elem in card.find_elements(By.CSS_SELECTOR, 'span[id^="jobTitle"]')), None)
-                job['company'] = next((elem.text.strip() for elem in card.find_elements(By.CSS_SELECTOR, '[data-testid="company-name"]')), None)
-                job['description'] = next((elem.text.strip() for elem in card.find_elements(By.CSS_SELECTOR, '[data-testid="jobsnippet_footer"]')), None)
-                
-                # Salary processing
-                job['salary_text'] = next((elem.text.strip() for elem in card.find_elements(By.CSS_SELECTOR, '.metadata.salary-snippet-container')), None)
-                if job['salary_text'] is None:
-                    job['salary_text'] = get_salary_from_description(job['description'])
-                if job['salary_text'] is None:
-                    job['highest_salary'] = None
-                    continue
-                # If there is a salary range, it's probably separated by '-'
-                if ' - ' in job['salary_text']:
-                    # So grab the part after the dash (the highest value)
-                    salary_part = job['salary_text'].split(' - ')[1]
-                    # Split between salary value and 'a year' or 'an hour'
-                    salary_parts = re.split(' a | an ', salary_part)
-                else:
-                    salary_parts = re.split(' a | an ', job['salary_text'])
-                # Clean and convert to float
-                salary_clean = salary_parts[0]
-                # If 'hour' exists in the salary, flag it as hourly to be converted to salary
-                is_hourly = len(salary_parts) > 1 and 'hour' in salary_parts[1]
-                salary_clean = salary_clean.replace('$', '').replace(',', '')
-                salary_value = float(salary_clean)
-                if is_hourly:
-                    salary_value = salary_value * 2080
-                job['highest_salary'] = salary_value / 1000  # Convert to thousands
-                
-                try:
-                    job['url'] = next((elem.get_attribute('href') for elem in card.find_elements(By.CLASS_NAME, 'jcs-JobTitle')), None)
-                    try:
-                        parsed_url = urlparse(job['url'])
-                        query_params = parse_qs(parsed_url.query)
-                        job['job_id'] = query_params.get('jk', [None])[0]                            
-                    except Exception as e:
-                        logging.info(f"Error parsing job URL for {job.get('title', 'Unknown title')}: {e}")
-                        job['job_id'] = None
-                except:
-                    logging.info(f"Error getting job_url for {job.get('title', 'Unknown title')}: {e}")
-                    job['url'] = None
-                    job['job_id'] = None
-                jobs.append(job)
-            
-            except Exception as e:
-                logging.info(f"Error processing job card: {e}")
-                continue
-
-        offset += 10
-        sleep(random.uniform(2, 4))
-                
-    driver.quit()
-    
-    return jobs
-
-def get_indeed_job_description(url):
-    """Get job description from Indeed job posting using Selenium"""
-    driver = setup_chrome_driver()
-    try:
-        #print(f"Loading job URL: {url}")
-        driver.get(url)
-        # Wait for job description to load (up to 10 seconds)
-        try:
-            wait = WebDriverWait(driver, 30)
-            description_divs = driver.find_elements(By.ID, "jobDescriptionText")
-            if description_divs:  # Check if we got anything back
-                if isinstance(description_divs, list):  # If it's a list
-                    description_div = description_divs[0]
-                else:  # If it's a single WebElement
-                    description_div = description_divs
-                # Get the text content
-                description = description_div.text.strip()
-                return description
-        except Exception as e:
-            logging.info(f"Error finding job description: {e}")
-            return None
-    except Exception as e:
-        logging.info(f"Error loading page: {e}")
-        return None
-    finally:
-        driver.quit()
+# Not currently used.  Works, but was using up too many anthropic api credits
+def get_company_from_description(description):
+    prompt = f"""Given this job description, what is the company name?  only respond with the company name.  if no company name is found, respond with "Unknown Company".
+        Job Description:
+        {description}
+        """
+    client = anthropic.Client(api_key=anthropic_api_key)
+    message = client.messages.create(
+        model="claude-3-sonnet-20240229",
+        max_tokens=1000,
+        messages=[{
+            "role": "user",
+            "content": prompt
+        }]
+    )
+    company=str(message.content[0].text)
+    return company
 
 def get_fitness_rating(description, title):
     # Check title first as it's fastest
@@ -777,25 +303,487 @@ Job Description:
     
     cover_letter_path = f"/tmp/{company} Cover Letter.docx"
     doc.save(cover_letter_path)
+
+def get_linkedin_job_details(id):
+    try:
+        api = Linkedin(linkedin_email, linkedin_password)
+    except Exception as e:
+        logging.info(f"Error connecting to LinkedIn to get job description")
+        return None
+    result = api.get_job_description(id)
+    return(result)
+
+def scrape_indeed_jobs(url):
+    offset = 0
+    driver = setup_chrome_driver()
+    paginated_url = f"{url}&start={offset}"
+    logging.info(f"Loading URL: {paginated_url}")
+    driver.get(paginated_url)
+    with open("indeed_last_html.html", "w", encoding="utf-8") as file:
+        file.write(driver.page_source)
+
+    # Wait for Turnstile iframe
+    wait = WebDriverWait(driver, 10)
+    try:
+        # Look for multiple possible selectors that might indicate the challenge
+        turnstile_frame = wait.until(
+            EC.presence_of_element_located((
+                By.CSS_SELECTOR, 
+                "iframe[src*='challenges.cloudflare.com'], iframe[src*='turnstile'], #challenge-form iframe"
+            ))
+        )
+            
+        logging.info("Found verification iframe, switching to it...")
+        driver.switch_to.frame(turnstile_frame)
+        
+        # Try to find and interact with the challenge
+        try:
+            checkbox = wait.until(
+                EC.element_to_be_clickable((
+                    By.CSS_SELECTOR, 
+                    ".turnstile-checkbox, .challenge-checkbox"
+               ))
+            )
+            checkbox.click()
+            logging.info("Clicked verification checkbox")
+        except Exception as e:
+            logging.info(f"Could not find checkbox: {e}")
+            
+        # Switch back to main content
+        driver.switch_to.default_content()
+            
+        # Wait for page to load after verification
+        sleep(5)
+            
+    except Exception as e:
+        logging.info(f"Error handling verification: {e}")
+
+    jobs = []
+    while True:
+        # Adjust URL for pagination
+        paginated_url = f"{url}&start={offset}"
+        logging.info(f"Loading URL: {paginated_url}")
+        driver.get(paginated_url)
+
+        #print("Waiting for job cards...")
+        try:
+            wait = WebDriverWait(driver, 10)
+            job_cards = driver.find_elements(By.CLASS_NAME, "job_seen_beacon")
+            logging.info(f"Found {len(job_cards)} Indeed jobs")
+            if len(job_cards) == 0:
+                return jobs
+        except Exception as e:
+            logging.info(f"Error finding job cards: {e}")
+            return []
+
+        for idx,card in enumerate(job_cards):
+            try:
+                job = {}
+                
+                job['title'] = next((elem.text.strip() for elem in card.find_elements(By.CSS_SELECTOR, 'span[id^="jobTitle"]')), None)
+                job['company'] = next((elem.text.strip() for elem in card.find_elements(By.CSS_SELECTOR, '[data-testid="company-name"]')), None)
+                job['description'] = next((elem.text.strip() for elem in card.find_elements(By.CSS_SELECTOR, '[data-testid="jobsnippet_footer"]')), None)
+                
+                # Salary processing
+                job['salary_text'] = next((elem.text.strip() for elem in card.find_elements(By.CSS_SELECTOR, '.metadata.salary-snippet-container')), None)
+                if job['salary_text'] is None:
+                    job['salary_text'] = get_salary_from_description(job['description'])
+                if job['salary_text'] is None:
+                    job['highest_salary'] = None
+                    continue
+                # If there is a salary range, it's probably separated by '-'
+                if ' - ' in job['salary_text']:
+                    # So grab the part after the dash (the highest value)
+                    salary_part = job['salary_text'].split(' - ')[1]
+                    # Split between salary value and 'a year' or 'an hour'
+                    salary_parts = re.split(' a | an ', salary_part)
+                else:
+                    salary_parts = re.split(' a | an ', job['salary_text'])
+                # Clean and convert to float
+                salary_clean = salary_parts[0]
+                # If 'hour' exists in the salary, flag it as hourly to be converted to salary
+                is_hourly = len(salary_parts) > 1 and 'hour' in salary_parts[1]
+                salary_clean = salary_clean.replace('$', '').replace(',', '')
+                salary_value = float(salary_clean)
+                if is_hourly:
+                    salary_value = salary_value * 2080
+                job['highest_salary'] = salary_value / 1000  # Convert to thousands
+                
+                try:
+                    job['url'] = next((elem.get_attribute('href') for elem in card.find_elements(By.CLASS_NAME, 'jcs-JobTitle')), None)
+                    try:
+                        parsed_url = urlparse(job['url'])
+                        query_params = parse_qs(parsed_url.query)
+                        job['job_id'] = query_params.get('jk', [None])[0]                            
+                    except Exception as e:
+                        logging.info(f"Error parsing job URL for {job.get('title', 'Unknown title')}: {e}")
+                        job['job_id'] = None
+                except:
+                    logging.info(f"Error getting job_url for {job.get('title', 'Unknown title')}: {e}")
+                    job['url'] = None
+                    job['job_id'] = None
+                jobs.append(job)
+            
+            except Exception as e:
+                logging.info(f"Error processing job card: {e}")
+                continue
+
+        offset += 10
+        sleep(random.uniform(2, 4))
+                
+    driver.quit()
+    
+    return jobs
+
+def get_indeed_job_description(url):
+    """Get job description from Indeed job posting using Selenium"""
+    driver = setup_chrome_driver()
+    try:
+        #print(f"Loading job URL: {url}")
+        driver.get(url)
+        # Wait for job description to load (up to 10 seconds)
+        try:
+            wait = WebDriverWait(driver, 30)
+            description_divs = driver.find_elements(By.ID, "jobDescriptionText")
+            if description_divs:  # Check if we got anything back
+                if isinstance(description_divs, list):  # If it's a list
+                    description_div = description_divs[0]
+                else:  # If it's a single WebElement
+                    description_div = description_divs
+                # Get the text content
+                description = description_div.text.strip()
+                return description
+        except Exception as e:
+            logging.info(f"Error finding job description: {e}")
+            return None
+    except Exception as e:
+        logging.info(f"Error loading page: {e}")
+        return None
+    finally:
+        driver.quit()
     return(cover_letter_path)
 
-# Not currently used.  Works, but was using up too many anthropic api credits
-def get_company_from_description(description):
-    prompt = f"""Given this job description, what is the company name?  only respond with the company name.  if no company name is found, respond with "Unknown Company".
-        Job Description:
-        {description}
-        """
-    client = anthropic.Client(api_key=anthropic_api_key)
-    message = client.messages.create(
-        model="claude-3-sonnet-20240229",
-        max_tokens=1000,
-        messages=[{
-            "role": "user",
-            "content": prompt
-        }]
-    )
-    company=str(message.content[0].text)
-    return company
+def scrape_upwork_jobs(url):
+    """
+    Scrape Upwork jobs from the search results page
+    """
+    driver = setup_chrome_driver()
+    jobs = []
+    current_url = url
+    try:
+        while current_url:
+            driver.get(current_url)
+            # Wait for job listings to load
+            driver.implicitly_wait(10)
+
+            soup = BeautifulSoup(driver.page_source, 'html.parser')
+            with open("upwork.html", "w", encoding="utf-8") as file:
+                file.write(driver.page_source)
+
+            # Find all job listings
+            for job_element in soup.find_all('article', class_='job-tile'):
+                try:
+                    # Extract job title and URL
+                    title_element = job_element.find('h2', class_='job-tile-title')
+                    title = title_element.get_text(strip=True) if title_element else None
+                    url_element = title_element.find('a') if title_element else None
+                    job_url = urljoin('https://www.upwork.com', url_element['href']) if url_element else None
+                    job_id = int(re.search(r'_~(\d+)', job_url).group(1))
+
+                    # Extract payment information
+                    info_list = job_element.find('ul', class_='job-tile-info-list')
+                    price_element = info_list.find('li', attrs={'data-test': 'job-type-label'}) if info_list else None
+                    price_text = price_element.get_text(strip=True) if price_element else None
+
+                    # Parse price information
+                    try:
+                        if 'Hourly' in price_text:
+                            amounts = re.findall(r'\$(\d+(?:\.\d{2})?)', price_text)
+                            if len(amounts) == 2:
+                                price_type = 'hourly'
+                                min_amount = float(amounts[0])
+                                max_amount = float(amounts[1])
+                            elif len(amounts) == 1:
+                                price_type = 'hourly'
+                                min_amount = float(amounts[0])
+                                max_amount = float(amounts[0])
+                        elif 'Fixed price' in price_text:
+                            fixed_price_element = info_list.find('li', attrs={'data-test': 'is-fixed-price'})
+                            if fixed_price_element:
+                                amount = re.search(r'\$(\d+(?:\.\d{2})?)', fixed_price_element.get_text(strip=True))
+                            if amount:
+                                price_type = 'fixed'
+                                min_amount = float(amount.group(1))
+                                max_amount = float(amount.group(1))
+                        else:
+                            price_type, min_amount, max_amount = None, None, None
+                    except Exception as e:
+                        logging.error(f"Error parsing price: {e}")
+                        price_type, min_amount, max_amount = None, None, None
+
+                    # Extract and parse duration if available
+                    duration_element = info_list.find('li', attrs={'data-test': 'duration-label'}) if info_list else None
+                    duration_text = duration_element.get_text(strip=True) if duration_element else None
+
+                    job_info = {
+                        'job_id': job_id,
+                        'title': title,
+                        'url': job_url,
+                        'payment_type': price_type,
+                        #'min_amount': min_amount,
+                        'max_amount': max_amount,
+                        #'original_price_text': price_text
+                    }
+
+                    # If it's a fixed price job with duration, calculate estimated hourly rate
+                    if price_type == 'fixed' and duration_text:
+                        min_months, max_months, min_hours, max_hours = parse_duration_hours(duration_text)
+                        if all(x is not None for x in [min_months, max_months, min_hours, max_hours]):
+                            # Calculate average monthly hours
+                            avg_hours_per_month = (min_hours + max_hours) / 2 * 4  # 4 weeks per month
+                            avg_months = (min_months + max_months) / 2
+                            total_hours = avg_hours_per_month * avg_months
+                            estimated_hourly_rate = min_amount / total_hours if total_hours > 0 else None
+
+                            job_info.update({
+                                'estimated_hourly_rate': round(estimated_hourly_rate, 2) if estimated_hourly_rate else None,
+                                'duration_months': f"{min_months} to {max_months}",
+                                'hours_per_week': f"{min_hours} to {max_hours}"
+                            })
+
+                    jobs.append(job_info)
+
+                except Exception as e:
+                    logging.error(f"Error processing job listing: {e}")
+                    continue
+
+            # Get next page URL
+            try:
+                next_button = soup.find('button', {'data-test': 'next-page'})
+                if not next_button or 'disabled' in next_button.attrs:
+                    logging.info("No next_button")
+                    break
+                    
+                next_page = next_button.get('data-ev-page_index')
+                if not next_page:
+                    print("No next_page")
+                    break
+                    
+                # Parse the current URL and update page number
+                parsed_url = urlparse(current_url)
+                query_params = parse_qs(parsed_url.query)
+                query_params['page'] = next_page
+                new_query = urlencode(query_params, doseq=True)
+                current_url = f"{parsed_url.scheme}://{parsed_url.netloc}{parsed_url.path}?{new_query}"
+                
+                # Optional: Add a slight delay between pages to be nice to the server
+                sleep(2)
+                
+            except Exception as e:
+                logging.error(f"Error getting next page URL: {e}")
+                break
+
+        return jobs
+
+    except Exception as e:
+        logging.error(f"Error scraping Upwork jobs: {e}")
+        return []
+
+def get_upwork_job_description(url):
+    try:
+        driver = setup_chrome_driver()
+        driver.get(url)
+        driver.implicitly_wait(10)  # Wait for content to load
+
+        # Find the description
+        soup = BeautifulSoup(driver.page_source, 'html.parser')
+        # First check to see if it's a private listing
+        private_check = soup.find('h4', string='This job is a private listing.')
+        if private_check:
+            return "private"
+        description_element = soup.find('p', class_='text-body-sm')
+
+        if description_element:
+            description = description_element.get_text(strip=True)
+            driver.quit()
+            return description
+
+        driver.quit()
+        return None
+
+    except Exception as e:
+        logging.error(f"Error extracting job description: {e}")
+        driver.quit()
+        return None
+
+def scrape_insight_global(base_url):
+    driver = setup_chrome_driver()
+    jobs = []
+    current_page = 1
+
+    try:
+        while True:
+            # Construct the URL for the current page
+            page_url = base_url.replace('/find_a_job/', f'/find_a_job/{current_page}/')
+ 
+            # Navigate to the page
+            logging.info(f"Scraping insight global page {current_page}: {page_url}")
+            driver.get(page_url)
+
+            # Wait for job listings to be present
+            wait = WebDriverWait(driver, 10)
+            try:
+                # First check if we have valid pagination
+                pagination = wait.until(EC.presence_of_element_located(
+                    (By.CLASS_NAME, "paging-container")
+                ))
+                
+                # Check if we're beyond the last page by looking for "1 - 10 of X" text
+                result_text = pagination.find_element(By.CLASS_NAME, "h").text
+                if " of " in result_text:
+                    match = re.search(r'of (\d+)', result_text)
+                    if match:
+                        total_jobs = int(match.group(1))
+                        # If we've processed more than total jobs, we're done
+                        if len(jobs) >= total_jobs:
+                            logging.info(f"Reached end of listings (processed {len(jobs)} of {total_jobs} jobs)")
+                            break
+                
+                # Get job listings
+                job_listings = driver.find_elements(By.CLASS_NAME, "result")
+                if not job_listings:
+                    logging.info("No job listings found on page")
+                    break 
+            except:
+                logging.info(f"Problem getting content for page: {current_page}")
+                break
+
+            # Process each job listing
+            for listing in job_listings:
+                try:
+                    # Get title and URL
+                    title_elem = listing.find_element(By.CLASS_NAME, "job-title").find_element(By.TAG_NAME, "a")
+                    title = title_elem.text.strip()
+                    url = title_elem.get_attribute("href")
+                    
+                    # Extract job ID from URL using regex
+                    job_id_match = re.search(r'job-(\d+)', url)
+                    job_id = job_id_match.group(1) if job_id_match else None
+                    
+                    # Get job info section
+                    job_info = listing.find_element(By.CLASS_NAME, "job-info")
+                    info_text = job_info.text
+                    info_parts = [p.strip() for p in info_text.split("|")]
+                    
+                    # Extract and convert compensation
+                    compensation = info_parts[3].strip() if len(info_parts) > 3 else ""
+                    hourly_rate_match = re.search(r'\$(\d+)\s*-\s*\$?(\d+)', compensation)
+                    min_rate = float(hourly_rate_match.group(1)) if hourly_rate_match else None
+                    max_rate = float(hourly_rate_match.group(2)) if hourly_rate_match else None
+                    salary = max_rate * 2080 / 1000 if max_rate else None
+                    
+                    # Get company name if available
+                    company is None  # Default since all jobs are from Insight Global
+                    
+                    jobs.append({
+                        'job_id': job_id,
+                        'url': url,
+                        'title': title,
+                        'company': company,
+                        'salary': salary
+                    })
+                    
+                    logging.info(f"Scraped job: {title}")
+                    
+                except Exception as e:
+                    logging.info(f"Error processing job listing: {str(e)}")
+                    continue
+            
+            # Check if there's a next page by looking for the navigation
+            try:
+                # Look for the active page number and see if there's a next page link
+                pagination = driver.find_element(By.CLASS_NAME, "paging-container")
+                active_page = pagination.find_element(By.CLASS_NAME, "active")
+                next_page = active_page.find_element(By.XPATH, "following-sibling::li[1]/a")
+                
+                if not next_page.get_attribute("href"):
+                    logging.info("No link to next page found")
+                    break
+                    
+                current_page += 1
+            except NoSuchElementException:
+                logging.info("No more pages available")
+                break
+                
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+    
+    finally:
+        driver.quit()
+    
+    return jobs
+
+def get_insight_global_job_description(url):
+    driver = setup_chrome_driver()
+    description = None
+    
+    try:
+        driver.get(url)
+        
+        # Get all description divs
+        wait = WebDriverWait(driver, 10)
+        desc_sections = wait.until(EC.presence_of_all_elements_located(
+            (By.CLASS_NAME, "detailpage-desc")
+        ))
+        
+        # Combine all description sections into one string
+        description_parts = []
+        for section in desc_sections:
+            text = section.text.strip()
+            if text:  # Only add non-empty sections
+                description_parts.append(text)
+        
+        description = "\n\n".join(description_parts)
+                
+    except Exception as e:
+        print(f"Error scraping job description: {str(e)}")
+        
+    finally:
+        driver.quit()
+        
+    return description
+
+# For Upwork jobs
+def parse_duration_hours(duration_text):
+    """
+    Parse the duration and hours per week from text like "3 to 6 months, 30+ hrs/week"
+    Returns (min_months, max_months, min_hours, max_hours)
+    """
+    try:
+        # Extract months
+        months_match = re.search(r'(\d+)(?:\s+to\s+(\d+))?\s+months?', duration_text)
+        if months_match:
+            min_months = int(months_match.group(1))
+            max_months = int(months_match.group(2)) if months_match.group(2) else min_months
+        else:
+            min_months = max_months = None
+            
+        # Extract hours
+        hours_match = re.search(r'(\d+)\+?\s*hrs/week|Less than (\d+)\s*hrs/week', duration_text)
+        if hours_match:
+            if hours_match.group(1):  # matches "30+ hrs/week"
+                min_hours = int(hours_match.group(1))
+                max_hours = 40  # assume 40 as max for "X+" format
+            else:  # matches "Less than X hrs/week"
+                min_hours = 1
+                max_hours = int(hours_match.group(2))
+        else:
+            min_hours = max_hours = None
+            
+        return min_months, max_months, min_hours, max_hours
+    except Exception as e:
+        logging.error(f"Error parsing duration: {e}")
+        return None, None, None, None
 
 # If a job post doesn't have the salary in the normal job details, see if they say it in the description
 def get_salary_from_description(description):
@@ -853,7 +841,6 @@ def print_metrics(metrics, progress=None):
     print(f"{metrics['fitness_count']} with a bad fit")
     print(f"{metrics['description_count']} failed to get description")
     print(f"{metrics['valid_count']} potential jobs sent")
-
 
 def search_linkedin(progress=None):
     try:
@@ -1064,9 +1051,9 @@ def search_insight(progress=None):
             continue
         url = job['url']
         logging.info(url)
-        description = get_insight_global_job_description(url)
         title = job['title']
-        highest_salary = job['annual_max']
+        highest_salary = job['salary']
+        description = get_insight_global_job_description(url)
         if description is None:
             logging.info("Couldn't find job description")
             metrics["description_count"] += 1
@@ -1098,6 +1085,7 @@ def search_insight(progress=None):
             metrics["valid_count"] += 1
     print_metrics(metrics, progress)
     return None
+
 if __name__ == "__main__":
     start_time = time()
     parser = argparse.ArgumentParser(description="Run a search on job postings and email details and cover letter to myself",formatter_class=argparse.RawTextHelpFormatter)
