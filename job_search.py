@@ -18,6 +18,8 @@ from dotenv import load_dotenv
 from urllib.parse import urlparse, parse_qs, urljoin, urlencode
 from bs4 import BeautifulSoup
 
+DEBUG = 1
+
 # Annual salary threshold
 salary_threshold = 180
 
@@ -31,7 +33,7 @@ fitness_threshold = 80
 linkedin_search_keywords = "cloud engineer"
 indeed_search_url = 'https://www.indeed.com/jobs?q=aws&l=San+Francisco%2C+CA&fromage=7&salaryType=%24185%2C000&radius=100&from=searchOnDesktopSerp'
 upwork_search_url = 'https://www.upwork.com/nx/search/jobs/?q=aws%20cloud&sort=recency&per_page=50'
-insight_global_search_url = 'https://jobs.insightglobal.com/jobs/find_a_job/1/?rd=Distance&remote=true&miles=False&page=2&srch=AWS+Cloud+Engineer'
+insight_global_search_url = 'https://jobs.insightglobal.com/jobs/find_a_job/?rd=Distance&remote=true&miles=False&page=2&srch=AWS+Cloud+Engineer'
 
 # Constants for job filtering
 poor_fit_titles = [
@@ -629,6 +631,8 @@ def scrape_insight_global(base_url):
             # Navigate to the page
             logging.info(f"Scraping insight global page {current_page}: {page_url}")
             driver.get(page_url)
+            with open("insight_last_html.html", "w", encoding="utf-8") as file:
+                file.write(driver.page_source)
 
             # Wait for job listings to be present
             wait = WebDriverWait(driver, 10)
@@ -683,7 +687,7 @@ def scrape_insight_global(base_url):
                     salary = max_rate * 2080 / 1000 if max_rate else None
                     
                     # Get company name if available
-                    company is None  # Default since all jobs are from Insight Global
+                    company = "Unknown Company"  # Default since all jobs are from Insight Global
                     
                     jobs.append({
                         'job_id': job_id,
