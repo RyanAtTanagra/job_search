@@ -132,9 +132,10 @@ def setup_chrome_driver():
     options.add_argument('--disable-gpu')
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
+    options.add_argument('--enable-cookies')
     
     # Add a realistic user agent
-    options.add_argument('--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36')
+    options.add_argument('--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36')
     
     driver = uc.Chrome(options=options, version_main=131)
     return driver
@@ -763,7 +764,52 @@ def scrape_ziprecruiter(url):
     current_page = 1
 
     driver = setup_chrome_driver()
+    print(f"Scraping page {current_page}...")
 
+    # Modify URL for pagination
+    parsed_url = urlparse(url)
+    query_params = parse_qs(parsed_url.query)
+    query_params['page'] = [str(current_page)]
+    new_query = urlencode(query_params, doseq=True)
+    paginated_url = parsed_url._replace(query=new_query).geturl()
+    print(paginated_url)
+
+    # Load the page and look for a cloudflare challenge
+    driver.get(paginated_url)
+    wait = WebDriverWait(driver, 10)
+    try:
+        # Look for multiple possible selectors that might indicate the challenge
+        turnstile_frame = wait.until(
+            EC.presence_of_element_located((
+                By.CSS_SELECTOR,
+                "iframe[src*='challenges.cloudflare.com'], iframe[src*='turnstile'], #challenge-form iframe"
+            ))
+        )
+
+        logging.info("Found verification iframe, switching to it...")
+        driver.switch_to.frame(turnstile_frame)
+
+        # Try to find and interact with the challenge
+        try:
+            checkbox = wait.until(
+                EC.element_to_be_clickable((
+                    By.CSS_SELECTOR,
+                    ".turnstile-checkbox, .challenge-checkbox"
+               ))
+            )
+            checkbox.click()
+            logging.info("Clicked verification checkbox")
+        except Exception as e:
+            logging.info(f"Could not find checkbox: {e}")
+
+        # Switch back to main content
+        driver.switch_to.default_content()
+
+        # Wait for page to load after verification
+        wait.until(EC.presence_of_element_located((By.CLASS_NAME, "job_result_two_pane")))
+
+    except Exception as e:
+        logging.info(f"Error handling verification: {e}")
     try:
         while True:
             print(f"Scraping page {current_page}...")
@@ -778,7 +824,9 @@ def scrape_ziprecruiter(url):
 
             # Load the page
             driver.get(paginated_url)
-            sleep(5)  # Wait for dynamic content to load
+            wait = WebDriverWait(driver, 10)
+            with open("ziprecruiter_last_html.html", "w", encoding="utf-8") as file:
+                file.write(driver.page_source)
 
             # Get page source after JavaScript execution
             html = driver.page_source
