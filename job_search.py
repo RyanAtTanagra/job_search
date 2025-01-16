@@ -764,7 +764,7 @@ def scrape_ziprecruiter(url):
     current_page = 1
 
     driver = setup_chrome_driver()
-    print(f"Scraping page {current_page}...")
+    logging.info(f"Scraping page {current_page}...")
 
     # Modify URL for pagination
     parsed_url = urlparse(url)
@@ -772,7 +772,7 @@ def scrape_ziprecruiter(url):
     query_params['page'] = [str(current_page)]
     new_query = urlencode(query_params, doseq=True)
     paginated_url = parsed_url._replace(query=new_query).geturl()
-    print(paginated_url)
+    logging.info(paginated_url)
 
     # Load the page and look for a cloudflare challenge
     driver.get(paginated_url)
@@ -812,7 +812,7 @@ def scrape_ziprecruiter(url):
         logging.info(f"Error handling verification: {e}")
     try:
         while True:
-            print(f"Scraping page {current_page}...")
+            logging.info(f"Scraping page {current_page}...")
 
             # Modify URL for pagination
             parsed_url = urlparse(url)
@@ -820,7 +820,7 @@ def scrape_ziprecruiter(url):
             query_params['page'] = [str(current_page)]
             new_query = urlencode(query_params, doseq=True)
             paginated_url = parsed_url._replace(query=new_query).geturl()
-            print(paginated_url)
+            logging.info(paginated_url)
 
             # Load the page
             driver.get(paginated_url)
@@ -846,6 +846,7 @@ def scrape_ziprecruiter(url):
                     job_link = job.find("h2").find("a")
                     job_title = job_link.get_text(strip=True).replace("NEW!", "").strip()
                     job_url = job_link.get("href")
+                    logging.info(job_url)
                     
                     # Find company name
                     company_elem = job.find("a", attrs={"data-testid": "job-card-company"})
@@ -860,25 +861,25 @@ def scrape_ziprecruiter(url):
 
                     if salary_text is None:
                         salary = None
-                        continue
-                    if ' - ' in salary_text:
-                        # Grab the part after the dash (the highest value)
-                        salary_part = salary_text.split(' - ')[1]
-                        # Split between salary value and 'a year' or 'an hour'
-                        salary_parts = re.split(' / ', salary_part)
                     else:
-                        salary_parts = re.split(' / ', salary_text)
-                    # Clean and convert to float
-                    salary_clean = salary_parts[0].replace('K', '')
-                    # If 'hr' exists in the salary, flag it as hourly to be converted to salary
-                    is_hourly = len(salary_parts) > 1 and 'hr' in salary_parts[1]
-                    salary_clean = salary_clean.replace('$', '').replace(',', '')
-                    salary_value = float(salary_clean)
-                    if is_hourly:
-                        salary_value = salary_value * 2080 / 1000
-                    salary = salary_value
+                        if ' - ' in salary_text:
+                            # Grab the part after the dash (the highest value)
+                            salary_part = salary_text.split(' - ')[1]
+                            # Split between salary value and 'a year' or 'an hour'
+                            salary_parts = re.split(' / ', salary_part)
+                        else:
+                            salary_parts = re.split(' / ', salary_text)
+                        # Clean and convert to float
+                        salary_clean = salary_parts[0].replace('K', '')
+                        # If 'hr' exists in the salary, flag it as hourly to be converted to salary
+                        is_hourly = len(salary_parts) > 1 and 'hr' in salary_parts[1]
+                        salary_clean = salary_clean.replace('$', '').replace(',', '')
+                        salary_value = float(salary_clean)
+                        if is_hourly:
+                            salary_value = salary_value * 2080 / 1000
+                        salary = salary_value
 
-                    print(f"{job_id}\n{job_url}\n{company} - {job_title} - {salary}")
+                    logging.info(f"{job_id}\n{company} - {job_title} - {salary}")
 
                     # Add job details to list
                     jobs.append({
@@ -890,7 +891,7 @@ def scrape_ziprecruiter(url):
                     })
 
                 except Exception as e:
-                    print(f"Error parsing job listing: {str(e)}")
+                    logging.info(f"Error parsing job listing: {str(e)}")
                     continue
 
             # Check for next page button
@@ -903,7 +904,7 @@ def scrape_ziprecruiter(url):
                 break
 
     except Exception as e:
-        print(f"Error scraping ZipRecruiter: {str(e)}")
+        logging.info(f"Error scraping ZipRecruiter: {str(e)}")
 
     finally:
         driver.quit()
@@ -981,28 +982,23 @@ def parse_duration_hours(duration_text):
 # If a job post doesn't have the salary in the normal job details, see if they say it in the description
 def get_salary_from_description(description):
     patterns = [
+        r'\$([0-9,]+)(?:,\d{3})*\s*-\s*\$([0-9,]+)(?:,\d{3})*',  # Matches $170,000 - $210,000
         # $X—$Y USD or $X-$Y USD format (with em dash or regular hyphen)
         r'\$([0-9,]+)(?:—|-)\$([0-9,]+)\s+USD',
-
         # $X-Y/yr or $X-$Y/yr format
         r'\$([0-9,]+)(?:—|-)\$?([0-9,]+)/yr',
         r'\$([0-9,]+)K(?:—|-)\$?([0-9,]+)K/yr',  # For ranges in K format
-
         # $X-Y/hour or /hr format
         r'\$([0-9,]+)(?:—|-)\$?([0-9,]+)/(?:hour|hr)',
-
         # Single values with K notation
         r'\$([0-9,]+)K/(?:yr|year)',
         r'\$([0-9,]+)/(?:hr|hour)',
-
         # Ranges with 'to' or '-'
         r'\$([0-9,]+)\s+to\s+\$?([0-9,]+)(?:/(?:yr|year|hr|hour))?',
-
         # Annual salary format
         r'annual.*?\$([0-9,]+)(?:—|-)\$?([0-9,]+)',
         r'salary.*?\$([0-9,]+)(?:—|-)\$?([0-9,]+)',
     ]
-
     for pattern in patterns:
         match = re.search(pattern, description, re.IGNORECASE)
         if match:
@@ -1302,8 +1298,8 @@ def search_ziprecruiter(progress=None):
         url = job['url']
         logging.info(url)
         title = job['title']
-        highest_salary = job['salary']
         description = get_ziprecruiter_job_description(url)
+        highest_salary = job['salary'] or get_salary_from_description(description)
         if description is None:
             logging.info("Couldn't find job description")
             metrics["description_count"] += 1
