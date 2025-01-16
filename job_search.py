@@ -34,7 +34,7 @@ linkedin_search_keywords = "cloud engineer"
 indeed_search_url = 'https://www.indeed.com/jobs?q=aws&l=San+Francisco%2C+CA&fromage=7&salaryType=%24185%2C000&radius=100&from=searchOnDesktopSerp'
 upwork_search_url = 'https://www.upwork.com/nx/search/jobs/?q=aws%20cloud&sort=recency&per_page=50'
 insight_global_search_url = 'https://jobs.insightglobal.com/jobs/find_a_job/?rd=Distance&remote=true&miles=False&page=2&srch=AWS+Cloud+Engineer'
-ziprecruiter_search_url = 'https://www.ziprecruiter.com/jobs-search?search=aws+cloud+engineer&location=Grass+Valley%2C+CA&refine_by_location_type=&radius=5000&days=30&refine_by_employment=employment_type%3Aall&refine_by_salary=180000&refine_by_salary_ceil='
+ziprecruiter_search_url = 'https://www.ziprecruiter.com/jobs-search?search=aws+cloud+engineer&location=Grass+Valley%2C+CA&refine_by_location_type=only_remote&radius=5000&days=30&refine_by_employment=employment_type%3Aall&refine_by_salary=180000&refine_by_salary_ceil=295000'
 
 # Constants for job filtering
 poor_fit_titles = [
@@ -774,6 +774,7 @@ def scrape_ziprecruiter(url):
             query_params['page'] = [str(current_page)]
             new_query = urlencode(query_params, doseq=True)
             paginated_url = parsed_url._replace(query=new_query).geturl()
+            print(paginated_url)
 
             # Load the page
             driver.get(paginated_url)
@@ -785,6 +786,7 @@ def scrape_ziprecruiter(url):
 
             # Find all job result containers
             job_containers = soup.find_all("div", class_="job_result_two_pane")
+            print(f"Found {len(job_containers)} jobs")
 
             # If no jobs found, we've reached the end
             if not job_containers:
@@ -796,21 +798,43 @@ def scrape_ziprecruiter(url):
                     job_link = job.find("h2").find("a")
                     job_title = job_link.get_text(strip=True)
                     job_url = job_link.get("href")
-
-                    # Extract job ID from URL
-                    job_id = job_url.split("/")[-1] if job_url else None
-
+                    
                     # Find company name
-                    company_elem = job.find("p", {"data-testid": "job-card-company"})
+                    company_elem = job.find("a", attrs={"data-testid": "job-card-company"})
                     company = company_elem.get_text(strip=True) if company_elem else None
+
+                    # Zip Recruiter is annoying and doesn't show the unique job id in the search results, so we'll fake one with company+title
+                    job_id = f"{company}_{job_title}".lower().strip()
 
                     # Find salary info
                     salary_elem = job.find("div", class_="flex items-center")
-                    salary = salary_elem.get_text(strip=True) if salary_elem else None
+                    salary_text = salary_elem.get_text(strip=True) if salary_elem else None
+
+                    if salary_text is None:
+                        salary = None
+                        continue
+                    if ' - ' in salary_text:
+                        # Grab the part after the dash (the highest value)
+                        salary_part = salary_text.split(' - ')[1]
+                        # Split between salary value and 'a year' or 'an hour'
+                        salary_parts = re.split(' / ', salary_part)
+                    else:
+                        salary_parts = re.split(' / ', salary_text)
+                    # Clean and convert to float
+                    salary_clean = salary_parts[0].replace('K', '')
+                    # If 'hr' exists in the salary, flag it as hourly to be converted to salary
+                    is_hourly = len(salary_parts) > 1 and 'hr' in salary_parts[1]
+                    salary_clean = salary_clean.replace('$', '').replace(',', '')
+                    salary_value = float(salary_clean)
+                    if is_hourly:
+                        salary_value = salary_value * 2080 / 1000
+                    salary = salary_value
+
+                    print(f"{job_id}\n{job_url}\n{company} - {job_title} - {salary}")
 
                     # Add job details to list
                     jobs.append({
-                        "id": job_id,
+                        "job_id": job_id,
                         "url": job_url,
                         "title": job_title,
                         "company": company,
@@ -827,6 +851,8 @@ def scrape_ziprecruiter(url):
                 break
 
             current_page += 1
+            if current_page > 50:
+                break
 
     except Exception as e:
         print(f"Error scraping ZipRecruiter: {str(e)}")
@@ -835,6 +861,42 @@ def scrape_ziprecruiter(url):
         driver.quit()
 
     return jobs
+
+def get_ziprecruiter_job_description(url):
+    driver = setup_chrome_driver()
+
+    try:
+        # Load the page
+        driver.get(url)
+        sleep(5)  # Wait for dynamic content to load
+
+        # Get page source after JavaScript execution
+        html = driver.page_source
+        soup = BeautifulSoup(html, 'html.parser')
+
+        # Find job description div
+        job_desc_div = soup.find('div', class_='job_description')
+        if not job_desc_div:
+            return None
+
+        # Get the text content of the description
+        description = ""
+
+        # Get all text elements within the description div
+        desc_elements = job_desc_div.find_all(string=True, recursive=True)
+        for element in desc_elements:
+            text = element.strip()
+            if text:  # Only add non-empty strings
+                description += text + "\n"
+
+        return description.strip()
+
+    except Exception as e:
+        print(f"Error scraping job description: {str(e)}")
+        return None
+
+    finally:
+        driver.quit()
 
 # For Upwork jobs
 def parse_duration_hours(duration_text):
@@ -1171,6 +1233,59 @@ def search_insight(progress=None):
 
 def search_ziprecruiter(progress=None):
     jobs = scrape_ziprecruiter(ziprecruiter_search_url)
+    if not jobs:
+        print("No Zip Recruiter search results")
+        return
+    print("Found", len(jobs), "Zip Recruiter jobs")
+    # Reset metric counters to zero
+    global metrics
+    metrics = {key: 0 for key in metrics}
+    for idx, job in enumerate(jobs):
+        if progress:
+            print(f"Processing {idx}/{len(jobs)}", end="\r")
+        id = job['job_id']
+        if not id:
+            logging.info(f"No job id: {id}")
+            continue
+        if awsutils.dynamodb_check_if_value_exists('ziprecruiter_jobs', 'job_id', id):
+            logging.info(f"Zip Recruiter job {id} already seen")
+            metrics["seen_count"] += 1
+            continue
+        url = job['url']
+        logging.info(url)
+        title = job['title']
+        highest_salary = job['salary']
+        description = get_ziprecruiter_job_description(url)
+        if description is None:
+            logging.info("Couldn't find job description")
+            metrics["description_count"] += 1
+            continue
+        if highest_salary is None:
+            logging.info("No salary information found")
+            awsutils.dynamodb_put_item('ziprecruiter_jobs', 'job_id', id)
+            metrics["salary_count"] += 1
+            continue
+        if highest_salary < salary_threshold:
+            logging.info(f"Salary below threshold: {highest_salary}")
+            awsutils.dynamodb_put_item('ziprecruiter_jobs', 'job_id', id)
+            metrics["salary_count"] += 1
+        else:
+            fitness=get_fitness_rating(description,title)
+            if fitness is None:
+                continue
+            if fitness < fitness_threshold:
+                logging.info(f"Fitness score below threshold: {fitness}")
+                awsutils.dynamodb_put_item('ziprecruiter_jobs', 'job_id', id)
+                metrics["fitness_count"] += 1
+                continue
+            company = job['company'] or get_company_from_description(description)
+            email_body=f"{company} - {title}\n{url}\nsalary: {highest_salary}/yr\nfitness: {fitness}"
+            logging.info(email_body)
+            cover_letter_path=get_cover_letter(company, title, description)
+            awsutils.send_email('Python Zip Recruiter Search <python@twistedslinky.org>', mail_to, company + " - " + title, email_body, cover_letter_path)
+            awsutils.dynamodb_put_item('ziprecruiter_jobs', 'job_id', id)
+            metrics["valid_count"] += 1
+    print_metrics(metrics, progress)
     return None
 
 if __name__ == "__main__":
