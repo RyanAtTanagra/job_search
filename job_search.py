@@ -34,6 +34,7 @@ linkedin_search_keywords = "cloud engineer"
 indeed_search_url = 'https://www.indeed.com/jobs?q=aws&l=San+Francisco%2C+CA&fromage=7&salaryType=%24185%2C000&radius=100&from=searchOnDesktopSerp'
 upwork_search_url = 'https://www.upwork.com/nx/search/jobs/?q=aws%20cloud&sort=recency&per_page=50'
 insight_global_search_url = 'https://jobs.insightglobal.com/jobs/find_a_job/?rd=Distance&remote=true&miles=False&page=2&srch=AWS+Cloud+Engineer'
+ziprecruiter_search_url = 'https://www.ziprecruiter.com/jobs-search?search=aws+cloud+engineer&location=Grass+Valley%2C+CA&refine_by_location_type=&radius=5000&days=30&refine_by_employment=employment_type%3Aall&refine_by_salary=180000&refine_by_salary_ceil='
 
 # Constants for job filtering
 poor_fit_titles = [
@@ -305,6 +306,7 @@ Job Description:
     
     cover_letter_path = f"/tmp/{company} Cover Letter.docx"
     doc.save(cover_letter_path)
+    return(cover_letter_path)
 
 def get_linkedin_job_details(id):
     try:
@@ -463,7 +465,6 @@ def get_indeed_job_description(url):
         return None
     finally:
         driver.quit()
-    return(cover_letter_path)
 
 def scrape_upwork_jobs(url):
     """
@@ -715,7 +716,7 @@ def scrape_insight_global(base_url):
                     break
                     
                 current_page += 1
-            except NoSuchElementException:
+            except:
                 logging.info("No more pages available")
                 break
                 
@@ -756,6 +757,84 @@ def get_insight_global_job_description(url):
         driver.quit()
         
     return description
+
+def scrape_ziprecruiter(url):
+    jobs = []
+    current_page = 1
+
+    driver = setup_chrome_driver()
+
+    try:
+        while True:
+            print(f"Scraping page {current_page}...")
+
+            # Modify URL for pagination
+            parsed_url = urlparse(url)
+            query_params = parse_qs(parsed_url.query)
+            query_params['page'] = [str(current_page)]
+            new_query = urlencode(query_params, doseq=True)
+            paginated_url = parsed_url._replace(query=new_query).geturl()
+
+            # Load the page
+            driver.get(paginated_url)
+            sleep(5)  # Wait for dynamic content to load
+
+            # Get page source after JavaScript execution
+            html = driver.page_source
+            soup = BeautifulSoup(html, 'html.parser')
+
+            # Find all job result containers
+            job_containers = soup.find_all("div", class_="job_result_two_pane")
+
+            # If no jobs found, we've reached the end
+            if not job_containers:
+                break
+
+            for job in job_containers:
+                try:
+                    # Find job link which contains title and URL
+                    job_link = job.find("h2").find("a")
+                    job_title = job_link.get_text(strip=True)
+                    job_url = job_link.get("href")
+
+                    # Extract job ID from URL
+                    job_id = job_url.split("/")[-1] if job_url else None
+
+                    # Find company name
+                    company_elem = job.find("p", {"data-testid": "job-card-company"})
+                    company = company_elem.get_text(strip=True) if company_elem else None
+
+                    # Find salary info
+                    salary_elem = job.find("div", class_="flex items-center")
+                    salary = salary_elem.get_text(strip=True) if salary_elem else None
+
+                    # Add job details to list
+                    jobs.append({
+                        "id": job_id,
+                        "url": job_url,
+                        "title": job_title,
+                        "company": company,
+                        "salary": salary
+                    })
+
+                except Exception as e:
+                    print(f"Error parsing job listing: {str(e)}")
+                    continue
+
+            # Check for next page button
+            next_button = soup.find("a", title="Next Page")
+            if not next_button:
+                break
+
+            current_page += 1
+
+    except Exception as e:
+        print(f"Error scraping ZipRecruiter: {str(e)}")
+
+    finally:
+        driver.quit()
+
+    return jobs
 
 # For Upwork jobs
 def parse_duration_hours(duration_text):
@@ -906,7 +985,7 @@ def search_linkedin(progress=None):
                 awsutils.dynamodb_put_item('linkedin_jobs', 'job_id', id)
                 metrics["fitness_count"] += 1
                 continue
-            company = job_details.get('company', {}).get('name') or "Unknown Company"
+            company = job_details.get('company', {}).get('name') or get_company_from_description(description)
             email_body=f"{company} - {title}\n{url}\nsalary: {highest_salary}/yr\nfitness: {fitness}"
             logging.info(email_body)
             cover_letter_path=get_cover_letter(company, title, description)
@@ -963,7 +1042,7 @@ def search_indeed(progress=None):
                 awsutils.dynamodb_put_item('indeed_jobs', 'job_id', id)
                 metrics["fitness_count"] += 1
                 continue
-            company = job['company'] or "Unknown Company"
+            company = job['company'] or get_company_from_description(description)
             email_body=f"{company} - {title}\n{url}\nsalary: {highest_salary}/yr\nfitness: {fitness}"
             logging.info(email_body)
             cover_letter_path=get_cover_letter(company, title, description)
@@ -1023,7 +1102,7 @@ def search_upwork(progress=None):
                 awsutils.dynamodb_put_item('upwork_jobs', 'job_id', id)
                 metrics["fitness_count"] += 1
                 continue
-            company = "Unknown Company"
+            company = get_company_from_description(description) or "Unknown Company"
             email_body=f"{company} - {title}\n{url}\nrate: {highest_rate}/hr\nfitness: {fitness}"
             logging.info(email_body)
             cover_letter_path=get_cover_letter(company, title, description)
@@ -1080,7 +1159,7 @@ def search_insight(progress=None):
                 awsutils.dynamodb_put_item('insight_global_jobs', 'job_id', id)
                 metrics["fitness_count"] += 1
                 continue
-            company = job['company'] or "Unknown Company"
+            company = job['company'] or get_company_from_description(description)
             email_body=f"{company} - {title}\n{url}\nsalary: {highest_salary}/yr\nfitness: {fitness}"
             logging.info(email_body)
             cover_letter_path=get_cover_letter(company, title, description)
@@ -1090,12 +1169,16 @@ def search_insight(progress=None):
     print_metrics(metrics, progress)
     return None
 
+def search_ziprecruiter(progress=None):
+    jobs = scrape_ziprecruiter(ziprecruiter_search_url)
+    return None
+
 if __name__ == "__main__":
     start_time = time()
     parser = argparse.ArgumentParser(description="Run a search on job postings and email details and cover letter to myself",formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument(
         "website",
-        choices=['linkedin','indeed','upwork','insight','all'],
+        choices=['linkedin','indeed','upwork','insight','ziprecruiter', 'all'],
         help="Website to search, or all"
     )
     parser.add_argument(
