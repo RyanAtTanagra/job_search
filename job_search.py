@@ -34,7 +34,7 @@ linkedin_search_keywords = "cloud engineer"
 indeed_search_url = 'https://www.indeed.com/jobs?q=aws&l=San+Francisco%2C+CA&fromage=7&salaryType=%24185%2C000&radius=100&from=searchOnDesktopSerp'
 upwork_search_url = 'https://www.upwork.com/nx/search/jobs/?q=aws%20cloud&sort=recency&per_page=50'
 insight_global_search_url = 'https://jobs.insightglobal.com/jobs/find_a_job/?rd=Distance&remote=true&miles=False&page=2&srch=AWS+Cloud+Engineer'
-ziprecruiter_search_url = 'https://www.ziprecruiter.com/jobs-search?search=aws+cloud+engineer&location=Grass+Valley%2C+CA&refine_by_location_type=only_remote&radius=5000&days=30&refine_by_employment=employment_type%3Aall&refine_by_salary=180000&refine_by_salary_ceil=295000'
+ziprecruiter_search_url = 'https://www.ziprecruiter.com/jobs-search?search=aws+cloud+engineer&location=Grass+Valley%2C+CA&refine_by_location_type=only_remote&radius=5000&days=1&refine_by_employment=employment_type%3Aall&refine_by_salary=180000&refine_by_salary_ceil=295000'
 
 # Constants for job filtering
 poor_fit_titles = [
@@ -796,7 +796,7 @@ def scrape_ziprecruiter(url):
                 try:
                     # Find job link which contains title and URL
                     job_link = job.find("h2").find("a")
-                    job_title = job_link.get_text(strip=True)
+                    job_title = job_link.get_text(strip=True).replace("NEW!", "").strip()
                     job_url = job_link.get("href")
                     
                     # Find company name
