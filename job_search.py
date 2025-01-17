@@ -1122,12 +1122,12 @@ def search_indeed(progress=None):
         url = job['url']
         logging.info(url)
         description = get_indeed_job_description(url)
-        title = job['title']
-        highest_salary = job['highest_salary'] or get_salary_from_description(description)
         if description is None:
             logging.info("Couldn't find job description")
             metrics["description_count"] += 1
             continue
+        title = job['title']
+        highest_salary = job['highest_salary'] or get_salary_from_description(description)
         if highest_salary is None:
             logging.info("No salary information found")
             awsutils.dynamodb_put_item('indeed_jobs', 'job_id', id)
