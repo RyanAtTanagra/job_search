@@ -320,7 +320,11 @@ def get_linkedin_job_details(id):
 
 def scrape_indeed_jobs(url):
     offset = 0
-    driver = setup_chrome_driver()
+    try:
+        driver = setup_chrome_driver()
+    except as e:
+        print(f"Error loading Chrome: {e}")
+        return None
     paginated_url = f"{url}&start={offset}"
     logging.info(f"Loading URL: {paginated_url}")
     driver.get(paginated_url)
