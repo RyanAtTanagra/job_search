@@ -449,7 +449,11 @@ def scrape_indeed_jobs(url):
 
 def get_indeed_job_description(url):
     """Get job description from Indeed job posting using Selenium"""
-    driver = setup_chrome_driver()
+    try:
+        driver = setup_chrome_driver()
+    except Exception as e:
+        print(f"Error loading Chrome: {e}")
+        return None
     try:
         #print(f"Loading job URL: {url}")
         driver.get(url)
@@ -478,7 +482,11 @@ def scrape_upwork_jobs(url):
     """
     Scrape Upwork jobs from the search results page
     """
-    driver = setup_chrome_driver()
+    try:
+        driver = setup_chrome_driver()
+    except Exception as e:
+        print(f"Error loading Chrome: {e}")
+        return None
     jobs = []
     current_url = url
     try:
@@ -737,7 +745,11 @@ def scrape_insight_global(base_url):
     return jobs
 
 def get_insight_global_job_description(url):
-    driver = setup_chrome_driver()
+    try:
+        driver = setup_chrome_driver()
+    except Exception as e:
+        print(f"Error loading Chrome: {e}")
+        return None
     description = None
     
     try:
@@ -769,8 +781,11 @@ def get_insight_global_job_description(url):
 def scrape_ziprecruiter(url):
     jobs = []
     current_page = 1
-
-    driver = setup_chrome_driver()
+    try:
+        driver = setup_chrome_driver()
+    except Exception as e:
+        print(f"Error loading Chrome: {e}")
+        return None
     logging.info(f"Scraping page {current_page}...")
 
     # Modify URL for pagination
@@ -919,7 +934,11 @@ def scrape_ziprecruiter(url):
     return jobs
 
 def get_ziprecruiter_job_description(url):
-    driver = setup_chrome_driver()
+    try:
+        driver = setup_chrome_driver()
+    except Exception as e:
+        print(f"Error loading Chrome: {e}")
+        return None
 
     try:
         # Load the page
