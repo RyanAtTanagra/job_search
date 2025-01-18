@@ -322,7 +322,7 @@ def scrape_indeed_jobs(url):
     offset = 0
     try:
         driver = setup_chrome_driver()
-    except as e:
+    except Exception as e:
         print(f"Error loading Chrome: {e}")
         return None
     paginated_url = f"{url}&start={offset}"
