@@ -1008,22 +1008,26 @@ def parse_duration_hours(duration_text):
 # If a job post doesn't have the salary in the normal job details, see if they say it in the description
 def get_salary_from_description(description):
     patterns = [
-        r'\$([0-9,]+)(?:,\d{3})*\s*-\s*\$([0-9,]+)(?:,\d{3})*',  # Matches $170,000 - $210,000
-        # $X—$Y USD or $X-$Y USD format (with em dash or regular hyphen)
-        r'\$([0-9,]+)(?:—|-)\$([0-9,]+)\s+USD',
-        # $X-Y/yr or $X-$Y/yr format
-        r'\$([0-9,]+)(?:—|-)\$?([0-9,]+)/yr',
-        r'\$([0-9,]+)K(?:—|-)\$?([0-9,]+)K/yr',  # For ranges in K format
-        # $X-Y/hour or /hr format
-        r'\$([0-9,]+)(?:—|-)\$?([0-9,]+)/(?:hour|hr)',
-        # Single values with K notation
-        r'\$([0-9,]+)K/(?:yr|year)',
-        r'\$([0-9,]+)/(?:hr|hour)',
-        # Ranges with 'to' or '-'
-        r'\$([0-9,]+)\s+to\s+\$?([0-9,]+)(?:/(?:yr|year|hr|hour))?',
-        # Annual salary format
-        r'annual.*?\$([0-9,]+)(?:—|-)\$?([0-9,]+)',
-        r'salary.*?\$([0-9,]+)(?:—|-)\$?([0-9,]+)',
+       # Specific formats first
+        r'\$([0-9,]+)K(?:—|-)\$?([0-9,]+)K/yr',  # $120K-$150K/yr
+        r'\$([0-9,]+)K/(?:yr|year)',  # $120K/yr
+        r'\$(\d+)[-—](\d+),\d{3}/yr',  # $120-150,000/yr
+    
+        # Hourly patterns
+        r'\$([0-9,.]+)(?:\s+USD)?(?:\s+per\s+|\/)(?:hour|hr)',  # $20.00 USD per hour, $48/hr
+    
+        # Special cases
+        r'(?:up to)\s*\$([0-9,]+)(?:\s+per\s+(?:month|year|hr|hour))?',  # up to $X per month/year/hour
+    
+        # Standard ranges
+        r'\$([0-9,]+)(?:,\d{3})*\s*-\s*\$([0-9,]+)(?:,\d{3})*',  # $120,000 - $150,000
+        r'\$([0-9,]+)(?:—|-)\$([0-9,]+)\s+USD',  # $120,000-$150,000 USD
+        r'\$([0-9,]+)(?:—|-)\$?([0-9,]+)/yr',  # $120,000-$150,000/yr
+        r'\$([0-9,]+)\s+to\s+\$?([0-9,]+)(?:/(?:yr|year|hr|hour))?',  # $120,000 to $150,000/yr
+    
+        # Keyword-based patterns last
+        r'annual.*?\$([0-9,]+)(?:—|-)\$?([0-9,]+)',  # annual... $120,000-$150,000
+        r'salary.*?\$([0-9,]+)(?:—|-)\$?([0-9,]+)',  # salary... $120,000-$150,000
     ]
     for pattern in patterns:
         match = re.search(pattern, description, re.IGNORECASE)
@@ -1037,9 +1041,14 @@ def get_salary_from_description(description):
             max_sal = float(max_sal) * 1000 if 'K' in match.group(0) else float(max_sal)
 
             # Convert hourly to yearly if needed (assuming 2080 hours/year)
-            if '/hr' in match.group(0) or '/hour' in match.group(0):
+            if '/hr' in match.group(0) or '/hour' in match.group(0) or 'per hour' in match.group(0):
                 min_sal *= 2080
                 max_sal *= 2080
+
+            # Convert monthly to yearly if needed (multiply by 12 months)
+            elif 'per month' in match.group(0) or '/month' in match.group(0):
+                min_sal *= 12
+                max_sal *= 12
 
             # Convert to k
             max_sal *= .001
