@@ -44,6 +44,7 @@ poor_fit_titles = [
     "frontend engineer",
     "backend engineer",
     "full stack engineer",
+    "fullstack engineer",
     "protocol engineer",
     "blockchain engineer",
     "machine learning engineer",
@@ -369,10 +370,11 @@ def scrape_indeed_jobs(url):
 
     jobs = []
     while True:
-        # Adjust URL for pagination
-        paginated_url = f"{url}&start={offset}"
-        logging.info(f"Loading URL: {paginated_url}")
-        driver.get(paginated_url)
+        if offset > 0:
+            # Adjust URL for pagination
+            paginated_url = f"{url}&start={offset}"
+            logging.info(f"Loading URL: {paginated_url}")
+            driver.get(paginated_url)
 
         #print("Waiting for job cards...")
         try:
