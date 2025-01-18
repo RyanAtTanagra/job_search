@@ -714,8 +714,6 @@ def scrape_insight_global(base_url):
                         'salary': salary
                     })
                     
-                    logging.info(f"Scraped job: {title}")
-                    
                 except Exception as e:
                     logging.info(f"Error processing job listing: {str(e)}")
                     continue
