@@ -856,7 +856,7 @@ def scrape_ziprecruiter(url):
 
             # Find all job result containers
             job_containers = soup.find_all("div", class_="job_result_two_pane")
-            print(f"Found {len(job_containers)} jobs")
+            logging.info(f"Found {len(job_containers)} jobs")
 
             # If no jobs found, we've reached the end
             if not job_containers:
