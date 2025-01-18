@@ -438,6 +438,9 @@ def scrape_indeed_jobs(url):
                 continue
 
         offset += 10
+        # Sanity stop, sometimes indeed keeps giving the same results on every page
+        if offset >= 200:
+            break
         sleep(random.uniform(2, 4))
                 
     driver.quit()
