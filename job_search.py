@@ -636,7 +636,11 @@ def get_upwork_job_description(url):
         return None
 
 def scrape_insight_global(base_url):
-    driver = setup_chrome_driver()
+    try:
+        driver = setup_chrome_driver()
+    except Exception as e:
+        print(f"Error loading Chrome: {e}")
+        return None
     jobs = []
     current_page = 1
 
