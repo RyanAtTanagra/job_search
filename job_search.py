@@ -43,6 +43,8 @@ poor_fit_titles = [
     "software develop",
     "frontend engineer",
     "backend engineer",
+    "front end engineer",
+    "back end engineer",
     "full stack engineer",
     "fullstack engineer",
     "protocol engineer",
