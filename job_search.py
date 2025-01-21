@@ -27,7 +27,7 @@ salary_threshold = 180
 hourly_threshold = 80
 
 # Job fitness score threshold
-fitness_threshold = 80
+fitness_threshold = 60
 
 # Search URLs and terms
 linkedin_search_keywords = "cloud engineer"
@@ -151,7 +151,7 @@ def get_company_from_description(description):
         """
     client = anthropic.Client(api_key=anthropic_api_key)
     message = client.messages.create(
-        model="claude-3-sonnet-20240229",
+        model="claude-3-5-haiku-20241022",
         max_tokens=1000,
         messages=[{
             "role": "user",
@@ -231,7 +231,7 @@ Job Description:
     try:
         client = anthropic.Client(api_key=anthropic_api_key)
         message = client.messages.create(
-            model="claude-3-sonnet-20240229",
+            model="claude-3-5-haiku-20241022",
             max_tokens=1000,
             messages=[{
                 "role": "user",
@@ -283,7 +283,7 @@ Job Description:
     try:
         client = anthropic.Client(api_key=anthropic_api_key)
         message = client.messages.create(
-            model="claude-3-sonnet-20240229",
+            model="claude-3-5-haiku-20241022",
             max_tokens=1000,
             messages=[{
                 "role": "user",
