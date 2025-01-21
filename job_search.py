@@ -145,7 +145,6 @@ def setup_chrome_driver():
     driver = uc.Chrome(options=options, version_main=131)
     return driver
 
-# Not currently used.  Works, but was using up too many anthropic api credits
 def get_company_from_description(description):
     prompt = f"""Given this job description, what is the company name?  only respond with the company name.  if no company name is found, respond with "Unknown Company".
         Job Description:
