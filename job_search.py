@@ -1377,8 +1377,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run a search on job postings and email details and cover letter to myself",formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument(
         "website",
-        choices=['linkedin','indeed','upwork','insight','ziprecruiter', 'all'],
-        help="Website to search, or all"
+        choices=['linkedin','indeed','upwork','insight','ziprecruiter', 'all', 'selenium'],
+        help="Website to search, or all, or those requiring selenium"
     )
     parser.add_argument(
         "--cron",
@@ -1396,6 +1396,14 @@ if __name__ == "__main__":
         search_upwork(progress)
         print("\n")
         search_insight(progress)
+    elif args.website == "selenium":
+        search_indeed(progress)
+        print("\n")
+        search_upwork(progress)
+        print("\n")
+        search_insight(progress)
+        print("\n")
+        search_ziprecruiter(progress)
     else:
         search = f"search_{args.website}({progress})"        
         eval(search)
