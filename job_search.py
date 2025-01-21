@@ -73,7 +73,9 @@ poor_fit_companies = [
     "geico",
     "atlassian",
     "oracle",
-    "nvidia"
+    "nvidia",
+    "apple",
+    "microsoft"
 ]
 
 software_role_indicatiors = [
@@ -161,7 +163,7 @@ def get_company_from_description(description):
     company=str(message.content[0].text)
     return company
 
-def get_fitness_rating(description, title):
+def get_fitness_rating(description, company, title):
     # Check title first as it's fastest
     for keyword in poor_fit_titles:
         if keyword in title.lower():
@@ -170,7 +172,7 @@ def get_fitness_rating(description, title):
     
     # Check company name if we can identify it
     for company in poor_fit_companies:
-        if company in description.lower():
+        if company in company.lower():
             logging.info(f"Job filtered out due to company {company}")
             return 0
 
@@ -1122,7 +1124,8 @@ def search_linkedin(progress=None):
             awsutils.dynamodb_put_item('linkedin_jobs', 'job_id', id)
             metrics["salary_count"] += 1
         else:
-            fitness=get_fitness_rating(description,title)
+            company = job_details.get('company', {}).get('name') or get_company_from_description(description)
+            fitness=get_fitness_rating(description, company, title)
             if fitness is None:
                 continue
             if fitness < fitness_threshold:
@@ -1130,7 +1133,6 @@ def search_linkedin(progress=None):
                 awsutils.dynamodb_put_item('linkedin_jobs', 'job_id', id)
                 metrics["fitness_count"] += 1
                 continue
-            company = job_details.get('company', {}).get('name') or get_company_from_description(description)
             email_body=f"{company} - {title}\n{url}\nsalary: {highest_salary}/yr\nfitness: {fitness}"
             logging.info(email_body)
             cover_letter_path=get_cover_letter(company, title, description)
@@ -1179,7 +1181,8 @@ def search_indeed(progress=None):
             awsutils.dynamodb_put_item('indeed_jobs', 'job_id', id)
             metrics["salary_count"] += 1
         else:
-            fitness=get_fitness_rating(description,title)
+            company = job['company'] or get_company_from_description(description)
+            fitness=get_fitness_rating(description, company, title)
             if fitness is None:
                 continue
             if fitness < fitness_threshold:
@@ -1187,7 +1190,6 @@ def search_indeed(progress=None):
                 awsutils.dynamodb_put_item('indeed_jobs', 'job_id', id)
                 metrics["fitness_count"] += 1
                 continue
-            company = job['company'] or get_company_from_description(description)
             email_body=f"{company} - {title}\n{url}\nsalary: {highest_salary}/yr\nfitness: {fitness}"
             logging.info(email_body)
             cover_letter_path=get_cover_letter(company, title, description)
@@ -1239,7 +1241,8 @@ def search_upwork(progress=None):
             awsutils.dynamodb_put_item('upwork_jobs', 'job_id', id)
             metrics["salary_count"] += 1
         else:
-            fitness=get_fitness_rating(description,title)
+            company = get_company_from_description(description) or "Unknown Company"
+            fitness=get_fitness_rating(description, company, title)
             if fitness is None:
                 continue
             if fitness < fitness_threshold:
@@ -1247,7 +1250,6 @@ def search_upwork(progress=None):
                 awsutils.dynamodb_put_item('upwork_jobs', 'job_id', id)
                 metrics["fitness_count"] += 1
                 continue
-            company = get_company_from_description(description) or "Unknown Company"
             email_body=f"{company} - {title}\n{url}\nrate: {highest_rate}/hr\nfitness: {fitness}"
             logging.info(email_body)
             cover_letter_path=get_cover_letter(company, title, description)
@@ -1296,7 +1298,8 @@ def search_insight(progress=None):
             awsutils.dynamodb_put_item('insight_global_jobs', 'job_id', id)
             metrics["salary_count"] += 1
         else:
-            fitness=get_fitness_rating(description,title)
+            company = job['company'] or get_company_from_description(description)
+            fitness=get_fitness_rating(description, company, title)
             if fitness is None:
                 continue
             if fitness < fitness_threshold:
@@ -1304,7 +1307,6 @@ def search_insight(progress=None):
                 awsutils.dynamodb_put_item('insight_global_jobs', 'job_id', id)
                 metrics["fitness_count"] += 1
                 continue
-            company = job['company'] or get_company_from_description(description)
             email_body=f"{company} - {title}\n{url}\nsalary: {highest_salary}/yr\nfitness: {fitness}"
             logging.info(email_body)
             cover_letter_path=get_cover_letter(company, title, description)
@@ -1353,7 +1355,8 @@ def search_ziprecruiter(progress=None):
             awsutils.dynamodb_put_item('ziprecruiter_jobs', 'job_id', id)
             metrics["salary_count"] += 1
         else:
-            fitness=get_fitness_rating(description,title)
+            company = job['company'] or get_company_from_description(description)
+            fitness=get_fitness_rating(description, company, title)
             if fitness is None:
                 continue
             if fitness < fitness_threshold:
@@ -1361,7 +1364,6 @@ def search_ziprecruiter(progress=None):
                 awsutils.dynamodb_put_item('ziprecruiter_jobs', 'job_id', id)
                 metrics["fitness_count"] += 1
                 continue
-            company = job['company'] or get_company_from_description(description)
             email_body=f"{company} - {title}\n{url}\nsalary: {highest_salary}/yr\nfitness: {fitness}"
             logging.info(email_body)
             cover_letter_path=get_cover_letter(company, title, description)
