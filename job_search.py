@@ -311,7 +311,7 @@ Job Description:
         paragraph_format = p.paragraph_format
         paragraph_format.space_after = Pt(12) 
     
-    cover_letter_path = f"/tmp/{company} Cover Letter.docx"
+    cover_letter_path = f"/tmp/{company.replace('/', '')} Cover Letter.docx"
     doc.save(cover_letter_path)
     return(cover_letter_path)
 
