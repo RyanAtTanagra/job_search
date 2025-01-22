@@ -304,7 +304,9 @@ Job Description:
 
     for paragraph in cover_letter.split('\n\n'):
         p = doc.add_paragraph()
-        p.add_run(paragraph)
+        run = p.add_run(paragraph)
+        run.font.name = 'Calibri'
+        run.font.size = Pt(11)
         # Add extra spacing after paragraph
         paragraph_format = p.paragraph_format
         paragraph_format.space_after = Pt(12) 
