@@ -27,7 +27,7 @@ salary_threshold = 180
 hourly_threshold = 80
 
 # Job fitness score threshold
-fitness_threshold = 60
+fitness_threshold = 75
 
 # Search URLs and terms
 linkedin_search_keywords = "cloud engineer"
