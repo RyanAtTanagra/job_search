@@ -64,7 +64,7 @@ poor_fit_titles = [
     "marketing manager",
     "director",
     "vp of ",
-    "vice president of ",
+    "vice president ",
     "senior manager",
     "sr. manager"
 ]
