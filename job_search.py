@@ -35,6 +35,7 @@ indeed_search_url = 'https://www.indeed.com/jobs?q=aws&l=San+Francisco%2C+CA&fro
 upwork_search_url = 'https://www.upwork.com/nx/search/jobs/?q=aws%20cloud&sort=recency&per_page=50'
 insight_global_search_url = 'https://jobs.insightglobal.com/jobs/find_a_job/?rd=Distance&remote=true&miles=False&srch=AWS+Cloud+Engineer'
 ziprecruiter_search_url = 'https://www.ziprecruiter.com/jobs-search?search=aws+cloud+engineer&location=Grass+Valley%2C+CA&refine_by_location_type=only_remote&radius=5000&days=3&refine_by_employment=employment_type%3Aall&refine_by_salary=180000&refine_by_salary_ceil=295000'
+cybercoders_search_url = 'https://www.cybercoders.com/search/cloud?days=14&locationtype=3&sortType=relevance'
 
 # Constants for job filtering
 poor_fit_titles = [
@@ -138,6 +139,10 @@ def setup_chrome_driver():
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--enable-cookies')
+
+    # To use my existing logged in sessions
+    options.add_argument('--user-data-dir=/Users/link/Library/Application Support/Google/Chrome')
+    options.add_argument('--profile-directory=Default')
     
     # Add a realistic user agent
     options.add_argument('--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36')
@@ -980,6 +985,148 @@ def get_ziprecruiter_job_description(url):
     finally:
         driver.quit()
 
+def scrape_cybercoders(base_url):
+    try:
+        driver = setup_chrome_driver()
+    except Exception as e:
+        print(f"Error loading Chrome: {e}")
+        return None
+    jobs = []
+    current_page = 1
+
+    try:
+        while True:
+            # Construct the URL for the current page
+            page_url = f"{base_url}&page={current_page}"
+
+            # Navigate to the page
+            logging.info(f"Scraping CyberCoders page {current_page}: {page_url}")
+            driver.get(page_url)
+            wait = WebDriverWait(driver, 10)
+            with open("cybercoders_last.html", "w", encoding="utf-8") as file:
+                file.write(driver.page_source)
+
+            # Wait for job listings to load
+            try:
+                job_cards = wait.until(EC.presence_of_all_elements_located(
+                    (By.CLASS_NAME, "result-box")
+                ))
+                
+                if not job_cards:
+                    break
+                    
+                logging.info(f"Found {len(job_cards)} CyberCoders jobs")
+                
+            except Exception as e:
+                logging.info(f"Error finding job cards: {e}")
+                break
+
+            # Process each job listing
+            for card in job_cards:
+                try:
+                    # Click the job card to load details
+                    card.click()
+                    sleep(1)  # Wait for details to load
+                    
+                    # Wait for and get job details link
+                    job_link = wait.until(EC.presence_of_element_located(
+                        (By.CSS_SELECTOR, ".job-details-header a")
+                    ))
+                    
+                    job_url = job_link.get_attribute("href")
+                    job_id = int(job_url.split('/')[-1])
+                    title = job_link.text.strip()
+
+                    # Get salary text
+                    salary_block = wait.until(EC.presence_of_element_located(
+                        (By.CSS_SELECTOR, ".job-details-header .info-block.tertiary")
+                    ))
+                    salary_text = salary_block.text if salary_block else None
+
+                    company = "Unknown Company"  # Default since all jobs are from CyberCoders
+
+                    # Parse salary
+                    highest_salary = None
+                    if salary_text:
+                        try:
+                            # Remove /yr and split range
+                            salary_clean = salary_text.replace('/yr', '').strip()
+                            if ' - ' in salary_clean:
+                                # Get higher value from range
+                                salary_val = salary_clean.split(' - ')[1]
+                            else:
+                                salary_val = salary_clean
+
+                            # Convert to float
+                            salary_val = salary_val.replace('$', '').replace(',', '')
+                            highest_salary = float(salary_val) / 1000  # Convert to thousands
+
+                            # If hourly, convert to annual
+                            if '/hr' in salary_text:
+                                highest_salary = highest_salary * 2080 / 1000
+
+                        except Exception as e:
+                            logging.info(f"Error parsing salary {salary_text}: {e}")
+                            highest_salary = None
+
+                    jobs.append({
+                        'job_id': job_id,
+                        'url': job_url,
+                        'company': company,
+                        'title': title,
+                        'salary': highest_salary
+                    })
+
+                except Exception as e:
+                    logging.info(f"Error processing job card: {e}")
+                    continue
+
+            if len(job_cards) == 0:
+                break
+                
+            current_page += 1
+                
+            if current_page > 50:  # Sanity check
+                break
+
+    except Exception as e:
+        logging.info(f"Error scraping CyberCoders: {e}")
+
+    finally:
+        driver.quit()
+
+    return jobs
+
+def get_cybercoders_job_description(url):
+    try:
+        driver = setup_chrome_driver()
+    except Exception as e:
+        print(f"Error loading Chrome: {e}")
+        return None
+        
+    try:
+        driver.get(url)
+        wait = WebDriverWait(driver, 10)
+        
+        try:
+            desc_div = wait.until(EC.presence_of_element_located(
+                (By.CLASS_NAME, "job-details-description")
+            ))
+            if desc_div:
+                return desc_div.text
+        except Exception as e:
+            logging.info(f"Error finding description div: {e}")
+            return None
+                
+    except Exception as e:
+        logging.info(f"Error loading page: {e}")
+        return None
+        
+    finally:
+        driver.quit()
+        
+    return None
+
 # For Upwork jobs
 def parse_duration_hours(duration_text):
     """
@@ -1374,12 +1521,69 @@ def search_ziprecruiter(progress=None):
     print_metrics(metrics, progress)
     return None
 
+def search_cybercoders(progress=None):
+    jobs = scrape_cybercoders(cybercoders_search_url)
+    if not jobs:
+        print("No CyberCoders search results")
+        return
+    print("Found", len(jobs), "CyberCoders jobs")
+    # Reset metric counters to zero
+    global metrics
+    metrics = {key: 0 for key in metrics}
+    for idx, job in enumerate(jobs):
+        if progress:
+            print(f"Processing {idx}/{len(jobs)}", end="\r")
+        id = job['job_id']
+        if not id:
+            logging.info(f"No job id: {id}")
+            continue
+        if awsutils.dynamodb_check_if_value_exists('cybercoders_jobs', 'job_id', id):
+            logging.info(f"CyberCoders job {id} already seen")
+            metrics["seen_count"] += 1
+            continue
+        url = job['url']
+        logging.info(url)
+        title = job['title']
+        description = get_cybercoders_job_description(url)
+        highest_salary = job['salary'] or get_salary_from_description(description)
+        if description is None:
+            logging.info("Couldn't find job description")
+            metrics["description_count"] += 1
+            continue
+        if highest_salary is None:
+            logging.info("No salary information found")
+            awsutils.dynamodb_put_item('cybercoders_jobs', 'job_id', id)
+            metrics["salary_count"] += 1
+            continue
+        if highest_salary < salary_threshold:
+            logging.info(f"Salary below threshold: {highest_salary}")
+            awsutils.dynamodb_put_item('cybercoders_jobs', 'job_id', id)
+            metrics["salary_count"] += 1
+        else:
+            company = job['company'] or get_company_from_description(description)
+            fitness=get_fitness_rating(description, company, title)
+            if fitness is None:
+                continue
+            if fitness < fitness_threshold:
+                logging.info(f"Fitness score below threshold: {fitness}")
+                awsutils.dynamodb_put_item('cybercoders_jobs', 'job_id', id)
+                metrics["fitness_count"] += 1
+                continue
+            email_body=f"{company} - {title}\n{url}\nsalary: {highest_salary}/yr\nfitness: {fitness}"
+            logging.info(email_body)
+            cover_letter_path=get_cover_letter(company, title, description)
+            awsutils.send_email('Python CyberCoders Search <python@twistedslinky.org>', mail_to, company + " - " + title, email_body, cover_letter_path)
+            awsutils.dynamodb_put_item('cybercoders_jobs', 'job_id', id)
+            metrics["valid_count"] += 1
+    print_metrics(metrics, progress)
+    return None
+
 if __name__ == "__main__":
     start_time = time()
     parser = argparse.ArgumentParser(description="Run a search on job postings and email details and cover letter to myself",formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument(
         "website",
-        choices=['linkedin','indeed','upwork','insight','ziprecruiter', 'all', 'selenium'],
+        choices=['linkedin','indeed','upwork','insight','ziprecruiter', 'cybercoders', 'all', 'selenium'],
         help="Website to search, or all, or those requiring selenium"
     )
     parser.add_argument(
