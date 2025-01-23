@@ -395,6 +395,7 @@ def scrape_indeed_jobs(url):
                 return jobs
         except Exception as e:
             logging.info(f"Error finding job cards: {e}")
+            driver.quit()
             return []
 
         for idx,card in enumerate(job_cards):
@@ -481,6 +482,7 @@ def get_indeed_job_description(url):
                 return description
         except Exception as e:
             logging.info(f"Error finding job description: {e}")
+            driver.quit()
             return None
     except Exception as e:
         logging.info(f"Error loading page: {e}")
@@ -617,6 +619,8 @@ def scrape_upwork_jobs(url):
     except Exception as e:
         logging.error(f"Error scraping Upwork jobs: {e}")
         return []
+    finally:
+        driver.quit()
 
 def get_upwork_job_description(url):
     try:
@@ -629,6 +633,7 @@ def get_upwork_job_description(url):
         # First check to see if it's a private listing
         private_check = soup.find('h4', string='This job is a private listing.')
         if private_check:
+            driver.quit()
             return "private"
         description_element = soup.find('p', class_='text-body-sm')
 
@@ -642,8 +647,9 @@ def get_upwork_job_description(url):
 
     except Exception as e:
         logging.error(f"Error extracting job description: {e}")
-        driver.quit()
         return None
+    finally:
+        driver.quit()
 
 def scrape_insight_global(base_url):
     try:
@@ -964,6 +970,7 @@ def get_ziprecruiter_job_description(url):
         # Find job description div
         job_desc_div = soup.find('div', class_='job_description')
         if not job_desc_div:
+            driver.quit()
             return None
 
         # Get the text content of the description
@@ -976,6 +983,7 @@ def get_ziprecruiter_job_description(url):
             if text:  # Only add non-empty strings
                 description += text + "\n"
 
+        driver.quit()
         return description.strip()
 
     except Exception as e:
@@ -1113,9 +1121,11 @@ def get_cybercoders_job_description(url):
                 (By.CLASS_NAME, "job-details-description")
             ))
             if desc_div:
-                return desc_div.text
+                driver.quit()
+                return desc_div.text if desc_div.text.strip() else None
         except Exception as e:
             logging.info(f"Error finding description div: {e}")
+            driver.quit()
             return None
                 
     except Exception as e:
@@ -1602,6 +1612,10 @@ if __name__ == "__main__":
         search_upwork(progress)
         print("\n")
         search_insight(progress)
+        print("\n")
+        search_ziprecruiter(progress)
+        print("\n")
+        search_cybercoders(progress)
     elif args.website == "selenium":
         search_indeed(progress)
         print("\n")
@@ -1610,6 +1624,8 @@ if __name__ == "__main__":
         search_insight(progress)
         print("\n")
         search_ziprecruiter(progress)
+        print("\n")
+        search_cybercoders(progress)
     else:
         search = f"search_{args.website}({progress})"        
         eval(search)
