@@ -36,6 +36,7 @@ upwork_search_url = 'https://www.upwork.com/nx/search/jobs/?q=aws%20cloud&sort=r
 insight_global_search_url = 'https://jobs.insightglobal.com/jobs/find_a_job/?rd=Distance&remote=true&miles=False&srch=AWS+Cloud+Engineer'
 ziprecruiter_search_url = 'https://www.ziprecruiter.com/jobs-search?search=aws+cloud+engineer&location=Grass+Valley%2C+CA&refine_by_location_type=only_remote&radius=5000&days=3&refine_by_employment=employment_type%3Aall&refine_by_salary=180000&refine_by_salary_ceil=295000'
 cybercoders_search_url = 'https://www.cybercoders.com/search/cloud?days=14&locationtype=3&sortType=relevance'
+dice_search_url = 'https://www.dice.com/jobs?q=aws%20cloud%20engineer&countryCode=US&radius=30&radiusUnit=mi&pageSize=100&filters.postedDate=THREE&filters.workplaceTypes=Remote&language=en'
 
 # Constants for job filtering
 poor_fit_titles = [
@@ -1137,6 +1138,144 @@ def get_cybercoders_job_description(url):
         
     return None
 
+def scrape_dice_jobs(base_url):
+    try:
+        driver = setup_chrome_driver()
+    except Exception as e:
+        print(f"Error loading Chrome: {e}")
+        return None
+    jobs = []
+    current_page = 1
+    while True:
+        # Construct the URL for the current page
+        page_url = f"{base_url}&page={current_page}"
+
+        # Navigate to the page
+        logging.info(f"Scraping Dice page {current_page}: {page_url}")
+        driver.get(page_url)
+        wait = WebDriverWait(driver, 10)
+        with open("dice_last.html", "w", encoding="utf-8") as file:
+            file.write(driver.page_source)
+        job_cards = wait.until(EC.presence_of_all_elements_located(
+            (By.CSS_SELECTOR, "dhi-search-card")))
+
+        # Break if no jobs found
+        if len(job_cards) == 0:
+            break
+
+        # Process each job card
+        for card in job_cards:
+            try:
+                # Find the title link element which contains both title and URL
+                title_link = card.find_element(By.CSS_SELECTOR, "a[data-cy='card-title-link']")
+                    
+                # Get company element
+                company_element = card.find_element(By.CSS_SELECTOR, "a[data-cy='search-result-company-name']")
+                    
+                # Extract job details
+                job_id = title_link.get_attribute('id').strip('()').strip(',').strip()
+                job_url = f"https://www.dice.com/job-detail/{job_id}"
+                title = title_link.text.strip().strip('()').strip(',').strip()
+                company = company_element.text.strip()
+                    
+                jobs.append({
+                    'job_id': job_id,
+                    'url': job_url,
+                    'company': company,
+                    'title': title,
+                })
+                    
+            except Exception as e:
+                print(f"Error processing job card: {e}")
+                continue
+            
+        # Increment page counter
+        current_page += 1
+        sleep(2)
+
+    driver.quit()
+        
+    return jobs
+
+def get_dice_job_description(url):
+    try:
+        driver = setup_chrome_driver()
+    except Exception as e:
+        print(f"Error loading Chrome: {e}")
+        return None
+
+    try:
+        driver.get(url)
+        wait = WebDriverWait(driver, 10)
+        try:
+            salary_element = wait.until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, "div[data-cy='payDetails'] span"))
+            )
+            salary_text = salary_element.text
+            # Standardize format and remove currency
+            salary_clean = salary_text.replace('USD', '').replace('$', '').strip()
+    
+            # Remove various forms of annual/hourly indicators
+            salary_clean = salary_clean.replace('per year', '').replace('/year', '').replace('/yr', '')
+            salary_clean = salary_clean.replace('per hour', '').replace('/hour', '').replace('/hr', '')
+
+            # Split range and get higher value
+            if ' - ' in salary_clean:
+                salary_val = salary_clean.split(' - ')[1]
+            else:
+                salary_val = salary_clean
+
+            # Convert to float (remove commas)
+            salary_val = float(salary_val.replace(',', ''))
+    
+            # Convert to thousands
+            highest_salary = salary_val / 1000
+
+            # Check if it's hourly based on explicit indicators or amount
+            is_hourly = any(term in salary_text.lower() for term in ['/hr', '/hour', 'per hour'])
+
+            # If no explicit hourly indicator, check if the amount suggests hourly rate
+            # Assuming anything less than $200 is likely an hourly rate
+            if not is_hourly and highest_salary < 0.2:  # $200 in thousands
+                is_hourly = True
+
+            # Convert hourly to annual salary
+            if is_hourly:
+                highest_salary = highest_salary * 2080 / 1000
+    
+            # If original text indicates hourly rate, convert to annual
+            if any(term in salary_text.lower() for term in ['/hr', '/hour', 'per hour']):
+                highest_salary = highest_salary * 2080 / 1000
+        except:
+            highest_salary = None
+
+        expand_button = wait.until(
+            EC.presence_of_element_located((By.ID, "descriptionToggle"))
+        )
+        if "Read Full Job Description" in expand_button.text:
+            # Try scrolling to button first to ensure it's in view
+            driver.execute_script("arguments[0].scrollIntoView(true);", expand_button)
+            sleep(0.5)  # Brief pause to let scroll complete
+            try:
+                expand_button.click()
+            except:
+                # If direct click fails, try JavaScript click
+                driver.execute_script("arguments[0].click();", expand_button) 
+        description_element = wait.until(
+            EC.presence_of_element_located((By.ID, "jobDescription"))
+        )
+        description = description_element.text
+        
+        return highest_salary, description
+        driver.quit()
+        
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+        return None, None
+        
+    finally:
+        driver.quit()
+
 # For Upwork jobs
 def parse_duration_hours(duration_text):
     """
@@ -1588,12 +1727,70 @@ def search_cybercoders(progress=None):
     print_metrics(metrics, progress)
     return None
 
+def search_dice(progress=None):
+    jobs = scrape_dice_jobs(dice_search_url)
+    if not jobs:
+        print("No Dice search results")
+        return
+    print("Found", len(jobs), "Dice jobs")
+    # Reset metric counters to zero
+    global metrics
+    metrics = {key: 0 for key in metrics}
+    for idx, job in enumerate(jobs):
+        if progress:
+            print(f"Processing {idx}/{len(jobs)}", end="\r")
+        id = job['job_id']
+        if not id:
+            logging.info(f"No job id: {id}")
+            continue
+        if awsutils.dynamodb_check_if_value_exists('dice_jobs', 'job_id', id):
+            logging.info(f"Dice job {id} already seen")
+            metrics["seen_count"] += 1
+            continue
+        url = job['url']
+        logging.info(url)
+        title = job['title']
+        highest_salary, description = get_dice_job_description(url)
+        if description is None:
+            logging.info("Couldn't find job description")
+            metrics["description_count"] += 1
+            continue
+        if highest_salary is None:
+            highest_salary = get_salary_from_description(description)
+        if highest_salary is None:
+            logging.info("No salary information found")
+            awsutils.dynamodb_put_item('dice_jobs', 'job_id', id)
+            metrics["salary_count"] += 1
+            continue
+        if highest_salary < salary_threshold:
+            logging.info(f"Salary below threshold: {highest_salary}")
+            awsutils.dynamodb_put_item('dice_jobs', 'job_id', id)
+            metrics["salary_count"] += 1
+        else:
+            company = job['company'] or get_company_from_description(description)
+            fitness=get_fitness_rating(description, company, title)
+            if fitness is None:
+                continue
+            if fitness < fitness_threshold:
+                logging.info(f"Fitness score below threshold: {fitness}")
+                awsutils.dynamodb_put_item('dice_jobs', 'job_id', id)
+                metrics["fitness_count"] += 1
+                continue
+            email_body=f"{company} - {title}\n{url}\nsalary: {highest_salary}/yr\nfitness: {fitness}"
+            logging.info(email_body)
+            cover_letter_path=get_cover_letter(company, title, description)
+            awsutils.send_email('Python Dice Search <python@twistedslinky.org>', mail_to, company + " - " + title, email_body, cover_letter_path)
+            awsutils.dynamodb_put_item('dice_jobs', 'job_id', id)
+            metrics["valid_count"] += 1
+    print_metrics(metrics, progress)
+    return None
+
 if __name__ == "__main__":
     start_time = time()
     parser = argparse.ArgumentParser(description="Run a search on job postings and email details and cover letter to myself",formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument(
         "website",
-        choices=['linkedin','indeed','upwork','insight','ziprecruiter', 'cybercoders', 'all', 'selenium'],
+        choices=['linkedin','indeed','upwork','insight','ziprecruiter', 'cybercoders', 'dice', 'all', 'selenium'],
         help="Website to search, or all, or those requiring selenium"
     )
     parser.add_argument(
