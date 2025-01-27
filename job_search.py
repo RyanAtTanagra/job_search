@@ -37,6 +37,7 @@ insight_global_search_url = 'https://jobs.insightglobal.com/jobs/find_a_job/?rd=
 ziprecruiter_search_url = 'https://www.ziprecruiter.com/jobs-search?search=aws+cloud+engineer&location=Grass+Valley%2C+CA&refine_by_location_type=only_remote&radius=5000&days=3&refine_by_employment=employment_type%3Aall&refine_by_salary=180000&refine_by_salary_ceil=295000'
 cybercoders_search_url = 'https://www.cybercoders.com/search/cloud?days=14&locationtype=3&sortType=relevance'
 dice_search_url = 'https://www.dice.com/jobs?q=aws%20cloud%20engineer&countryCode=US&radius=30&radiusUnit=mi&pageSize=100&filters.postedDate=THREE&filters.workplaceTypes=Remote&language=en'
+weworkremotely_search_url = 'https://weworkremotely.com/remote-jobs/search?search_uuid=&term=&sort=past_week&categories%5B%5D=6&region%5B%5D=1'
 
 # Constants for job filtering
 poor_fit_titles = [
@@ -1156,8 +1157,12 @@ def scrape_dice_jobs(base_url):
         wait = WebDriverWait(driver, 10)
         with open("dice_last.html", "w", encoding="utf-8") as file:
             file.write(driver.page_source)
-        job_cards = wait.until(EC.presence_of_all_elements_located(
-            (By.CSS_SELECTOR, "dhi-search-card")))
+        try:
+            job_cards = wait.until(EC.presence_of_all_elements_located(
+                (By.CSS_SELECTOR, "dhi-search-card")))
+        except:
+            logging.info("No job cards")
+            break
 
         # Break if no jobs found
         if len(job_cards) == 0:
@@ -1241,11 +1246,8 @@ def get_dice_job_description(url):
 
             # Convert hourly to annual salary
             if is_hourly:
-                highest_salary = highest_salary * 2080 / 1000
+                highest_salary = highest_salary * 2080
     
-            # If original text indicates hourly rate, convert to annual
-            if any(term in salary_text.lower() for term in ['/hr', '/hour', 'per hour']):
-                highest_salary = highest_salary * 2080 / 1000
         except:
             highest_salary = None
 
@@ -1275,6 +1277,86 @@ def get_dice_job_description(url):
         
     finally:
         driver.quit()
+
+def scrape_wwr_jobs(url):
+    try:
+        driver = setup_chrome_driver()
+    except Exception as e:
+        print(f"Error loading Chrome: {e}")
+        return None
+    jobs = []
+
+    # Navigate to the page
+    logging.info(f"Scraping WWR page {url}")
+    driver.get(url)
+    wait = WebDriverWait(driver, 10)
+    with open("wwr_last.html", "w", encoding="utf-8") as file:
+        file.write(driver.page_source)
+    jobs_section = wait.until(EC.presence_of_element_located(
+        (By.CSS_SELECTOR, "section.jobs article ul")
+    ))
+    job_cards = jobs_section.find_elements(By.CSS_SELECTOR, "li:not(.feature--ad):not(.view-all)")
+
+    # Break if no jobs found
+    if len(job_cards) == 0:
+        return None
+
+    # Process each job card
+    for card in job_cards:
+        try:
+            job_link = card.find_element(By.CSS_SELECTOR, "a:has(span.title)")
+            # Extract job URL and ID
+            job_url = job_link.get_attribute("href")
+            job_id = job_url.split("/")[-1].strip() if job_url else None
+
+            # Extract company and title
+            company = card.find_element(By.CSS_SELECTOR, "span.company").text
+            title = card.find_element(By.CSS_SELECTOR, "span.title").text
+                    
+            jobs.append({
+                "company": company,
+                "title": title,
+                "url": job_url,
+                "job_id": job_id
+            })
+                    
+        except Exception as e:
+            print(f"Error processing job card: {e}")
+            continue
+            
+    driver.quit()
+        
+    return jobs
+
+def get_wwr_job_description(url):
+    try:
+        driver = setup_chrome_driver()
+    except Exception as e:
+        print(f"Error loading Chrome: {e}")
+        return None
+
+    try:
+        driver.get(url)
+        wait = WebDriverWait(driver, 10)
+        sleep(5)
+
+        try:
+            desc_div = wait.until(EC.presence_of_element_located(
+            (By.CSS_SELECTOR, "div#job-listing-show-container")
+        ))
+            return desc_div.text if desc_div.text.strip() else None
+        except Exception as e:
+            logging.info(f"Error finding description div: {e}")
+            return None
+
+    except Exception as e:
+        logging.info(f"Error loading page: {e}")
+        return None
+
+    finally:
+        driver.quit()
+
+    return None
 
 # For Upwork jobs
 def parse_duration_hours(duration_text):
@@ -1315,6 +1397,7 @@ def get_salary_from_description(description):
         r'\$([0-9,]+)K(?:—|-)\$?([0-9,]+)K/yr',  # $120K-$150K/yr
         r'\$([0-9,]+)K/(?:yr|year)',  # $120K/yr
         r'\$(\d+)[-—](\d+),\d{3}/yr',  # $120-150,000/yr
+        r'\$([0-9,]+)K(?:—|-)\$?([0-9,]+)K/Annum',  # $140K-$150K/Annum
     
         # Hourly patterns
         r'\$([0-9,.]+)(?:\s+USD)?(?:\s+per\s+|\/)(?:hour|hr)',  # $20.00 USD per hour, $48/hr
@@ -1785,12 +1868,70 @@ def search_dice(progress=None):
     print_metrics(metrics, progress)
     return None
 
+def search_wwr(progress=None):
+    jobs = scrape_wwr_jobs(weworkremotely_search_url)
+    if not jobs:
+        print("No WWR search results")
+        return
+    print("Found", len(jobs), "WWR jobs")
+    # Reset metric counters to zero
+    global metrics
+    metrics = {key: 0 for key in metrics}
+    for idx, job in enumerate(jobs):
+        if progress:
+            print(f"Processing {idx}/{len(jobs)}", end="\r")
+        id = job['job_id']
+        if not id:
+            logging.info(f"No job id: {id}")
+            continue
+        if awsutils.dynamodb_check_if_value_exists('wwr_jobs', 'job_id', id):
+            logging.info(f"WWR job {id} already seen")
+            metrics["seen_count"] += 1
+            continue
+        url = job['url']
+        logging.info(url)
+        title = job['title']
+        company = job['company']
+        description = get_wwr_job_description(url)
+        if description is None:
+            logging.info("Couldn't find job description")
+            metrics["description_count"] += 1
+            continue
+        highest_salary = get_salary_from_description(description)
+        if highest_salary is None:
+            logging.info("No salary information found")
+            awsutils.dynamodb_put_item('wwr_jobs', 'job_id', id)
+            metrics["salary_count"] += 1
+            continue
+        if highest_salary < salary_threshold:
+            logging.info(f"Salary below threshold: {highest_salary}")
+            awsutils.dynamodb_put_item('wwr_jobs', 'job_id', id)
+            metrics["salary_count"] += 1
+        else:
+            company = job['company'] or get_company_from_description(description)
+            fitness=get_fitness_rating(description, company, title)
+            if fitness is None:
+                continue
+            if fitness < fitness_threshold:
+                logging.info(f"Fitness score below threshold: {fitness}")
+                awsutils.dynamodb_put_item('wwr_jobs', 'job_id', id)
+                metrics["fitness_count"] += 1
+                continue
+            email_body=f"{company} - {title}\n{url}\nsalary: {highest_salary}/yr\nfitness: {fitness}"
+            logging.info(email_body)
+            cover_letter_path=get_cover_letter(company, title, description)
+            awsutils.send_email('Python WeWorkRemotely Search <python@twistedslinky.org>', mail_to, company + " - " + title, email_body, cover_letter_path)
+            awsutils.dynamodb_put_item('wwr_jobs', 'job_id', id)
+            metrics["valid_count"] += 1
+    print_metrics(metrics, progress)
+    return None
+
 if __name__ == "__main__":
     start_time = time()
     parser = argparse.ArgumentParser(description="Run a search on job postings and email details and cover letter to myself",formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument(
         "website",
-        choices=['linkedin','indeed','upwork','insight','ziprecruiter', 'cybercoders', 'dice', 'all', 'selenium'],
+        choices=['linkedin','indeed','upwork','insight','ziprecruiter', 'cybercoders', 'dice', 'wwr', 'all', 'selenium'],
         help="Website to search, or all, or those requiring selenium"
     )
     parser.add_argument(
@@ -1820,9 +1961,11 @@ if __name__ == "__main__":
         print("\n")
         search_insight(progress)
         print("\n")
-        search_ziprecruiter(progress)
-        print("\n")
         search_cybercoders(progress)
+        print("\n")
+        search_wwr(progress)
+        print("\n")
+        search_dice(progress)
     else:
         search = f"search_{args.website}({progress})"        
         eval(search)
