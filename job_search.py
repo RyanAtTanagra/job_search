@@ -1123,11 +1123,9 @@ def get_cybercoders_job_description(url):
                 (By.CLASS_NAME, "job-details-description")
             ))
             if desc_div:
-                driver.quit()
                 return desc_div.text if desc_div.text.strip() else None
         except Exception as e:
             logging.info(f"Error finding description div: {e}")
-            driver.quit()
             return None
                 
     except Exception as e:
@@ -1274,10 +1272,14 @@ def get_dice_job_description(url):
     except Exception as e:
         print(f"An error occurred: {str(e)}")
         return None, None
-        
-    finally:
-        driver.quit()
 
+    finally:
+        if driver:
+            try:
+                driver.quit()
+            except Exception as e:
+                logging.error(f"Error closing driver: {e}")
+        
 def scrape_wwr_jobs(url):
     try:
         driver = setup_chrome_driver()
