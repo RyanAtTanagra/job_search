@@ -1215,12 +1215,18 @@ def get_dice_job_description(url):
                 EC.presence_of_element_located((By.CSS_SELECTOR, "div[data-cy='payDetails'] span"))
             )
             salary_text = salary_element.text
+            logging.info(f"Found salary_text: {salary_text}")
             # Standardize format and remove currency
             salary_clean = salary_text.replace('USD', '').replace('$', '').strip()
     
             # Remove various forms of annual/hourly indicators
             salary_clean = salary_clean.replace('per year', '').replace('/year', '').replace('/yr', '')
             salary_clean = salary_clean.replace('per hour', '').replace('/hour', '').replace('/hr', '')
+
+            # Handle "Up to X" pattern
+            if salary_clean.lower().startswith('up to'):
+                salary_clean = salary_clean.lower().replace('up to', '').strip()
+                salary_val = salary_clean
 
             # Split range and get higher value
             if ' - ' in salary_clean:
