@@ -1255,22 +1255,31 @@ def get_dice_job_description(url):
         except:
             highest_salary = None
 
-        expand_button = wait.until(
-            EC.presence_of_element_located((By.ID, "descriptionToggle"))
-        )
-        if "Read Full Job Description" in expand_button.text:
-            # Try scrolling to button first to ensure it's in view
-            driver.execute_script("arguments[0].scrollIntoView(true);", expand_button)
-            sleep(0.5)  # Brief pause to let scroll complete
-            try:
-                expand_button.click()
-            except:
-                # If direct click fails, try JavaScript click
-                driver.execute_script("arguments[0].click();", expand_button) 
-        description_element = wait.until(
-            EC.presence_of_element_located((By.ID, "jobDescription"))
-        )
-        description = description_element.text
+        try:
+            expand_button = wait.until(
+                EC.presence_of_element_located((By.ID, "descriptionToggle"))
+            )
+            if "Read Full Job Description" in expand_button.text:
+                # Try scrolling to button first to ensure it's in view
+                driver.execute_script("arguments[0].scrollIntoView(true);", expand_button)
+                sleep(0.5)  # Brief pause to let scroll complete
+                try:
+                    expand_button.click()
+                except:
+                    # If direct click fails, try JavaScript click
+                    driver.execute_script("arguments[0].click();", expand_button) 
+        except:
+            # If expand button isn't found, assume description is already expanded
+            # or doesn't need expanding - continue with rest of script
+            pass 
+        
+        try:
+            description_element = wait.until(
+                EC.presence_of_element_located((By.ID, "jobDescription"))
+            )
+            description = description_element.text
+        except:
+            description = None
         
         return highest_salary, description
         driver.quit()
