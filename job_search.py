@@ -1180,9 +1180,11 @@ def scrape_dice_jobs(base_url):
                 job_url = f"https://www.dice.com/job-detail/{job_id}"
                 title = title_link.text.strip().strip('()').strip(',').strip()
                 company = company_element.text.strip()
+                # Different job_id because Dice is so fucking noisy due to companies spamming the same position over and over
+                spam_job_id = f"{company}_{title}".lower().strip()
                     
                 jobs.append({
-                    'job_id': job_id,
+                    'job_id': spam_job_id,
                     'url': job_url,
                     'company': company,
                     'title': title,
