@@ -1243,7 +1243,7 @@ def get_dice_job_description(url):
             highest_salary = salary_val / 1000
 
             # Check if it's hourly based on explicit indicators or amount
-            is_hourly = any(term in salary_text.lower() for term in ['/hr', '/hour', 'per hour'])
+            is_hourly = any(term in salary_text.lower() for term in ['/hr', '/hour', 'per hour', 'hourly'])
 
             # If no explicit hourly indicator, check if the amount suggests hourly rate
             # Assuming anything less than $200 is likely an hourly rate
