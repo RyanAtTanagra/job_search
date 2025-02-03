@@ -1222,8 +1222,8 @@ def get_dice_job_description(url):
             salary_clean = salary_text.replace('USD', '').replace('$', '').strip()
     
             # Remove various forms of annual/hourly indicators
-            salary_clean = salary_clean.replace('per year', '').replace('/year', '').replace('/yr', '')
-            salary_clean = salary_clean.replace('per hour', '').replace('/hour', '').replace('/hr', '')
+            salary_clean = salary_clean.replace('per year', '').replace('/year', '').replace('/yr', '').replace('yearly', '')
+            salary_clean = salary_clean.replace('per hour', '').replace('/hour', '').replace('/hr', '').replace('hourly', '')
 
             # Handle "Up to X" pattern
             if salary_clean.lower().startswith('up to'):
