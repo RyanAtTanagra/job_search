@@ -1233,6 +1233,8 @@ def get_dice_job_description(url):
             # Split range and get higher value
             if ' - ' in salary_clean:
                 salary_val = salary_clean.split(' - ')[1]
+            elif '-' in salary_clean:  # Add this case
+                salary_val = salary_clean.split('-')[1]
             else:
                 salary_val = salary_clean
 
