@@ -34,9 +34,9 @@ linkedin_search_keywords = "cloud engineer"
 indeed_search_url = 'https://www.indeed.com/jobs?q=aws&l=San+Francisco%2C+CA&fromage=7&salaryType=%24185%2C000&radius=100&from=searchOnDesktopSerp'
 upwork_search_url = 'https://www.upwork.com/nx/search/jobs/?q=aws%20cloud&sort=recency&per_page=50'
 insight_global_search_url = 'https://jobs.insightglobal.com/jobs/find_a_job/?rd=Distance&remote=true&miles=False&srch=AWS+Cloud+Engineer'
-ziprecruiter_search_url = 'https://www.ziprecruiter.com/jobs-search?search=aws+cloud+engineer&location=Grass+Valley%2C+CA&refine_by_location_type=only_remote&radius=5000&days=3&refine_by_employment=employment_type%3Aall&refine_by_salary=180000&refine_by_salary_ceil=295000'
-cybercoders_search_url = 'https://www.cybercoders.com/search/cloud?days=14&locationtype=3&sortType=relevance'
-dice_search_url = 'https://www.dice.com/jobs?q=aws%20cloud%20engineer&countryCode=US&radius=30&radiusUnit=mi&pageSize=100&filters.postedDate=THREE&filters.workplaceTypes=Remote&language=en'
+ziprecruiter_search_url = 'https://www.ziprecruiter.com/jobs-search?search=aws+cloud+engineer&location=Grass+Valley%2C+CA&refine_by_location_type=only_remote&radius=5000&days=7&refine_by_employment=employment_type%3Aall&refine_by_salary=180000&refine_by_salary_ceil=295000'
+cybercoders_search_url = 'https://www.cybercoders.com/search/cloud?days=7&locationtype=3&sortType=relevance'
+dice_search_url = 'https://www.dice.com/jobs?q=aws%20cloud%20engineer&countryCode=US&radius=30&radiusUnit=mi&pageSize=100&filters.postedDate=SEVEN&filters.workplaceTypes=Remote&language=en'
 weworkremotely_search_url = 'https://weworkremotely.com/remote-jobs/search?search_uuid=&term=&sort=past_week&categories%5B%5D=6&region%5B%5D=1'
 
 # Constants for job filtering
@@ -1309,17 +1309,21 @@ def scrape_wwr_jobs(url):
 
     # Navigate to the page
     logging.info(f"Scraping WWR page {url}")
-    driver.get(url)
-    wait = WebDriverWait(driver, 10)
-    with open("wwr_last.html", "w", encoding="utf-8") as file:
-        file.write(driver.page_source)
-    jobs_section = wait.until(EC.presence_of_element_located(
-        (By.CSS_SELECTOR, "section.jobs article ul")
-    ))
-    job_cards = jobs_section.find_elements(By.CSS_SELECTOR, "li:not(.feature--ad):not(.view-all)")
+    try:
+        driver.get(url)
+        wait = WebDriverWait(driver, 10)
+        with open("wwr_last.html", "w", encoding="utf-8") as file:
+            file.write(driver.page_source)
+        jobs_section = wait.until(EC.presence_of_element_located(
+            (By.CSS_SELECTOR, "section.jobs article ul")
+        ))
+        job_cards = jobs_section.find_elements(By.CSS_SELECTOR, "li:not(.feature--ad):not(.view-all)")
 
-    # Break if no jobs found
-    if len(job_cards) == 0:
+        # Break if no jobs found
+        if len(job_cards) == 0:
+            return None
+    except:
+        logging.info("Error loading job cards")
         return None
 
     # Process each job card
