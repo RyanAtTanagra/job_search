@@ -413,19 +413,25 @@ def scrape_indeed_jobs(url):
                 if job['salary_text'] is None:
                     job['highest_salary'] = None
                 else:
-                    # If there is a salary range, it's probably separated by '-'
-                    if ' - ' in job['salary_text']:
-                        # So grab the part after the dash (the highest value)
-                        salary_part = job['salary_text'].split(' - ')[1]
-                        # Split between salary value and 'a year' or 'an hour'
-                        salary_parts = re.split(' a | an ', salary_part)
+                    cleaned_text = job['salary_text'].replace('$', '').replace(',', '')
+                    if cleaned_text.startswith('From '):
+                        salary_part = cleaned_text.replace('From ', '')
+                    elif cleaned_text.startswith('Up to '):
+                        salary_part = cleaned_text.replace('Up to ', '')
                     else:
-                        salary_parts = re.split(' a | an ', job['salary_text'])
-                    # Clean and convert to float
+                        # If there is a salary range, it's probably separated by '-'
+                        if ' - ' in cleaned_text:
+                            # So grab the part after the dash (the highest value)
+                            salary_part = cleaned_text.split(' - ')[1]
+                        else:
+                            salary_part = cleaned_text
+                            
+                    # Split between salary value and 'a year' or 'an hour'
+                    salary_parts = re.split(' a | an ', salary_part)
+                    # Clean and get the value part
                     salary_clean = salary_parts[0]
                     # If 'hour' exists in the salary, flag it as hourly to be converted to salary
                     is_hourly = len(salary_parts) > 1 and 'hour' in salary_parts[1]
-                    salary_clean = salary_clean.replace('$', '').replace(',', '')
                     salary_value = float(salary_clean)
                     if is_hourly:
                         salary_value = salary_value * 2080
