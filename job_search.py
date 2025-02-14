@@ -149,7 +149,7 @@ def setup_chrome_driver():
     # Add a realistic user agent
     options.add_argument('--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36')
     
-    driver = uc.Chrome(options=options, version_main=131)
+    driver = uc.Chrome(options=options, version_main=133)
     return driver
 
 def get_company_from_description(description):
@@ -1285,11 +1285,12 @@ def get_dice_job_description(url):
         except:
             description = None
         
-        return highest_salary, description
         driver.quit()
+        return highest_salary, description
         
     except Exception as e:
         print(f"An error occurred: {str(e)}")
+        driver.quit()
         return None, None
 
     finally:
