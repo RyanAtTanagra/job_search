@@ -3,6 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import NoSuchElementException,TimeoutException
 from docx import Document
 from docx.shared import Pt
 import re
@@ -17,8 +18,8 @@ import logging
 from dotenv import load_dotenv
 from urllib.parse import urlparse, parse_qs, urljoin, urlencode
 from bs4 import BeautifulSoup
-
-DEBUG = 1
+from typing import Optional
+from dataclasses import dataclass, field
 
 # Annual salary threshold
 salary_threshold = 180
@@ -38,6 +39,8 @@ ziprecruiter_search_url = 'https://www.ziprecruiter.com/jobs-search?search=aws+c
 cybercoders_search_url = 'https://www.cybercoders.com/search/cloud?days=7&locationtype=3&sortType=relevance'
 dice_search_url = 'https://www.dice.com/jobs?q=aws%20cloud%20engineer&countryCode=US&radius=30&radiusUnit=mi&pageSize=100&filters.postedDate=SEVEN&filters.workplaceTypes=Remote&language=en'
 weworkremotely_search_url = 'https://weworkremotely.com/remote-jobs/search?search_uuid=&term=&sort=past_week&categories%5B%5D=6&region%5B%5D=1'
+monster_search_url = 'https://www.monster.com/jobs/search?q=Aws+Cloud&where=San+Francisco%2C+CA&page=1&recency=last+week&rd=100'
+kforce_search_url = 'https://www.kforce.com/find-work/search-jobs/#/?t=cloud'
 
 # Constants for job filtering
 poor_fit_titles = [
@@ -78,7 +81,8 @@ poor_fit_companies = [
     "oracle",
     "nvidia",
     "apple",
-    "microsoft"
+    "microsoft",
+    "peraton" # Always requires active security clearance
 ]
 
 software_role_indicatiors = [
@@ -128,8 +132,17 @@ linkedin_password = os.getenv("LINKEDIN_PASSWORD")
 if not linkedin_email or not linkedin_password:
     raise ValueError("LinkedIn email or password is not set in the .env file!")
 
-logging.basicConfig(level=logging.INFO, filename='job_processing.log')
-logging.getLogger("botocore").setLevel(logging.WARNING)
+@dataclass
+class Job:
+    id: str
+    url: Optional[str] = None
+    title: Optional[str] = None
+    company: Optional[str] = None
+    description: Optional[str] = None
+    salary_text: Optional[str] = None
+    highest_salary: Optional[float] = None
+    fitness: Optional[float] = None
+    source: Optional[str] = None  # e.g., "LinkedIn", "Indeed"
 
 # Used for general web scrapers
 def setup_chrome_driver():
@@ -137,19 +150,136 @@ def setup_chrome_driver():
     options.add_argument('--headless=new')
     options.add_argument('--window-size=1920,1080')
     options.add_argument('--enable-javascript')
+    options.add_argument('--disable-blink-features=AutomationControlled')  # Hide automation
     options.add_argument('--disable-gpu')
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--enable-cookies')
-
     # To use my existing logged in sessions
     options.add_argument('--user-data-dir=/Users/link/Library/Application Support/Google/Chrome')
     options.add_argument('--profile-directory=Default')
-    
     # Add a realistic user agent
     options.add_argument('--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36')
-    
+    options.add_argument('--lang=en-US,en;q=0.9')
+    options.add_argument('--enable-cookies')
     driver = uc.Chrome(options=options, version_main=133)
+    return driver
+
+def load_page(url, skip_cloudflare_detection=False, load_more=False):
+    try:
+        driver = setup_chrome_driver()
+    except Exception as e:
+        print(f"Error loading Chrome: {e}")
+        return None
+    driver.get(url)
+    wait = WebDriverWait(driver, 10)
+    domain = urlparse(url).netloc.replace('www.', '')
+    if skip_cloudflare_detection == False:
+        try:
+            # Look for multiple possible selectors that might indicate the challenge
+            turnstile_frame = wait.until(
+                EC.presence_of_element_located((
+                    By.CSS_SELECTOR,
+                    "iframe[src*='challenges.cloudflare.com'], iframe[src*='turnstile'], #challenge-form iframe"
+                ))
+            )
+
+            logging.warning("Found verification iframe, switching to it...")
+            driver.switch_to.frame(turnstile_frame)
+
+            # Try to find and interact with the challenge
+            try:
+                checkbox = wait.until(
+                    EC.element_to_be_clickable((
+                        By.CSS_SELECTOR,
+                        ".turnstile-checkbox, .challenge-checkbox"
+                   ))
+                )
+                checkbox.click()
+                logging.warning("Clicked verification checkbox")
+            except Exception as e:
+                logging.warning(f"Could not find checkbox: {e}")
+
+            # Switch back to main content
+            driver.switch_to.default_content()
+
+            # Wait for page to load after verification
+            sleep(5)
+        except Exception as e:
+            logging.warning(f"Error handling verification or none found")
+
+    if load_more:
+        try:
+            # Scroll down and load more if needed
+            while True:
+                last_height = driver.execute_script("return document.body.scrollHeight")
+                driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                sleep(1)
+
+                # Try clicking "Load More" buttons first
+                button_clicked = False
+                load_more_buttons = [
+                    (By.CLASS_NAME, "btn-line-darkCerulean"),  # Kforce button
+                    (By.ID, "job-search-load-more")  # Monster button
+                ]
+                for by, value in load_more_buttons:
+                    try:
+                        load_more_button = wait.until(
+                            EC.element_to_be_clickable((by, value))
+                        )
+                        driver.execute_script("arguments[0].scrollIntoView();", load_more_button)
+                        load_more_button.click()
+                        sleep(1)
+
+                        # Scroll again after clicking the button to trigger dynamic loading
+                        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                        sleep(1)
+
+                        button_clicked = True
+                        break  # If one button is clicked, don't check the other in this loop iteration
+                    except (TimeoutException, NoSuchElementException):
+                        continue  # Try the next button if this one isn't found
+
+                new_height = driver.execute_script("return document.body.scrollHeight")
+
+                # Only exit if height hasn't changed AND no button was clicked
+                if new_height == last_height and not button_clicked:
+                    break
+
+                logging.warning(f"Scrolling from {last_height} to {new_height}")
+        except:
+            logging.warning("Couldn't find load more buttons")
+    try:
+        job_selectors = [
+                ".job_seen_beacon",
+                "article.job-tile",
+                ".paging-container",
+                "div.job_result_two_pane",
+                ".result-box",
+                "dhi-search-card",
+                "section.jobs article ul",
+                ".job-details-description",
+                "article[data-testid='JobCard']",
+                "#__NEXT_DATA__",
+                "ul.data-jobs li",
+                ".data-job-desc",
+                "#react-job-wrapper",
+                "div.page-meta",
+                "h1.col-xs-12.col-sm-8",
+                ".page-box-shadow.fake-tab-content"
+                ]
+
+        wait.until(
+            EC.presence_of_element_located((
+                By.CSS_SELECTOR, ", ".join(job_selectors)
+                ))
+            )
+
+    except Exception:
+        logging.warning("Page loaded but job info not found!")
+
+    with open(f"{domain}_debug.html", "w", encoding="utf-8") as file:
+        file.write(driver.page_source)
     return driver
 
 def get_company_from_description(description):
@@ -173,13 +303,13 @@ def get_fitness_rating(description, company, title):
     # Check title first as it's fastest
     for keyword in poor_fit_titles:
         if keyword in title.lower():
-            logging.info(f"Job filtered out due to title containing '{keyword}'")
+            logging.warning(f"Job filtered out due to title containing '{keyword}'")
             return 0  # Return 0 for poor fit jobs
     
     # Check company name if we can identify it
     for poor_company in poor_fit_companies:
         if poor_company in company.lower():
-            logging.info(f"Job filtered out due to company {poor_company}")
+            logging.warning(f"Job filtered out due to company {poor_company}")
             return 0
 
 
@@ -188,7 +318,7 @@ def get_fitness_rating(description, company, title):
                                  if indicator in description.lower())
     # If we find multiple software indicators, it's likely a dev role
     if software_indicator_count >= 3:
-        logging.info(f"Job filtered out due to {software_indicator_count} software development indicators")
+        logging.warning(f"Job filtered out due to {software_indicator_count} software development indicators")
         return 0
 
     # If we passed the above tests, pass the description and our resume to anthropic for a fitness score
@@ -247,12 +377,12 @@ Job Description:
             }]
         )
     except Exception as e:
-        logging.info(f"Error connecting to Claude for fitness score: {e}")
+        logging.warning(f"Error connecting to Claude for fitness score: {e}")
         return None
     try:
         fitness=int(str(message.content[0].text))
     except Exception as e:
-        logging.info(f"Response for fitness score isn't only a number: {e}")
+        logging.warning(f"Response for fitness score isn't only a number: {e}")
         return None
     return fitness
 
@@ -299,7 +429,7 @@ Job Description:
             }]
         )
     except Exception as e:
-        logging.info(f"Error connecting to Claude for cover letter: {e}")
+        logging.warning(f"Error connecting to Claude for cover letter: {e}")
         return None
     cover_letter=str(message.content[0].text)
     # Clean up unecessary AI text before the letter
@@ -326,7 +456,7 @@ def get_linkedin_job_details(id):
     try:
         api = Linkedin(linkedin_email, linkedin_password)
     except Exception as e:
-        logging.info(f"Error connecting to LinkedIn to get job description")
+        logging.warning(f"Error connecting to LinkedIn to get job description")
         return None
     result = api.get_job_description(id)
     return(result)
@@ -339,7 +469,7 @@ def scrape_indeed_jobs(url):
         print(f"Error loading Chrome: {e}")
         return None
     paginated_url = f"{url}&start={offset}"
-    logging.info(f"Loading URL: {paginated_url}")
+    logging.warning(f"Loading URL: {paginated_url}")
     driver.get(paginated_url)
 
     # Wait for Turnstile iframe
@@ -355,7 +485,7 @@ def scrape_indeed_jobs(url):
             ))
         )
             
-        logging.info("Found verification iframe, switching to it...")
+        logging.warning("Found verification iframe, switching to it...")
         driver.switch_to.frame(turnstile_frame)
         
         # Try to find and interact with the challenge
@@ -367,9 +497,9 @@ def scrape_indeed_jobs(url):
                ))
             )
             checkbox.click()
-            logging.info("Clicked verification checkbox")
+            logging.warning("Clicked verification checkbox")
         except Exception as e:
-            logging.info(f"Could not find checkbox: {e}")
+            logging.warning(f"Could not find checkbox: {e}")
             
         # Switch back to main content
         driver.switch_to.default_content()
@@ -378,25 +508,25 @@ def scrape_indeed_jobs(url):
         sleep(5)
             
     except Exception as e:
-        logging.info(f"Error handling verification: {e}")
+        logging.warning(f"Error handling verification: {e}")
 
     jobs = []
     while True:
         if offset > 0:
             # Adjust URL for pagination
             paginated_url = f"{url}&start={offset}"
-            logging.info(f"Loading URL: {paginated_url}")
+            logging.warning(f"Loading URL: {paginated_url}")
             driver.get(paginated_url)
 
         #print("Waiting for job cards...")
         try:
             wait = WebDriverWait(driver, 10)
             job_cards = driver.find_elements(By.CLASS_NAME, "job_seen_beacon")
-            logging.info(f"Found {len(job_cards)} Indeed jobs")
+            logging.warning(f"Found {len(job_cards)} Indeed jobs")
             if len(job_cards) == 0:
                 return jobs
         except Exception as e:
-            logging.info(f"Error finding job cards: {e}")
+            logging.warning(f"Error finding job cards: {e}")
             driver.quit()
             return []
 
@@ -444,16 +574,16 @@ def scrape_indeed_jobs(url):
                         query_params = parse_qs(parsed_url.query)
                         job['job_id'] = query_params.get('jk', [None])[0]                            
                     except Exception as e:
-                        logging.info(f"Error parsing job URL for {job.get('title', 'Unknown title')}: {e}")
+                        logging.warning(f"Error parsing job URL for {job.get('title', 'Unknown title')}: {e}")
                         job['job_id'] = None
                 except:
-                    logging.info(f"Error getting job_url for {job.get('title', 'Unknown title')}: {e}")
+                    logging.warning(f"Error getting job_url for {job.get('title', 'Unknown title')}: {e}")
                     job['url'] = None
                     job['job_id'] = None
                 jobs.append(job)
             
             except Exception as e:
-                logging.info(f"Error processing job card: {e}")
+                logging.warning(f"Error processing job card: {e}")
                 continue
 
         offset += 10
@@ -489,11 +619,11 @@ def get_indeed_job_description(url):
                 description = description_div.text.strip()
                 return description
         except Exception as e:
-            logging.info(f"Error finding job description: {e}")
+            logging.warning(f"Error finding job description: {e}")
             driver.quit()
             return None
     except Exception as e:
-        logging.info(f"Error loading page: {e}")
+        logging.warning(f"Error loading page: {e}")
         return None
     finally:
         driver.quit()
@@ -600,7 +730,7 @@ def scrape_upwork_jobs(url):
             try:
                 next_button = soup.find('button', {'data-test': 'next-page'})
                 if not next_button or 'disabled' in next_button.attrs:
-                    logging.info("No next_button")
+                    logging.warning("No next_button")
                     break
                     
                 next_page = next_button.get('data-ev-page_index')
@@ -674,7 +804,7 @@ def scrape_insight_global(base_url):
             page_url = base_url.replace('/find_a_job/', f'/find_a_job/{current_page}/')
  
             # Navigate to the page
-            logging.info(f"Scraping insight global page {current_page}: {page_url}")
+            logging.warning(f"Scraping insight global page {current_page}: {page_url}")
             driver.get(page_url)
             with open("insight_last_html.html", "w", encoding="utf-8") as file:
                 file.write(driver.page_source)
@@ -695,16 +825,16 @@ def scrape_insight_global(base_url):
                         total_jobs = int(match.group(1))
                         # If we've processed more than total jobs, we're done
                         if len(jobs) >= total_jobs:
-                            logging.info(f"Reached end of listings (processed {len(jobs)} of {total_jobs} jobs)")
+                            logging.warning(f"Reached end of listings (processed {len(jobs)} of {total_jobs} jobs)")
                             break
                 
                 # Get job listings
                 job_listings = driver.find_elements(By.CLASS_NAME, "result")
                 if not job_listings:
-                    logging.info("No job listings found on page")
+                    logging.warning("No job listings found on page")
                     break 
             except:
-                logging.info(f"Problem getting content for page: {current_page}")
+                logging.warning(f"Problem getting content for page: {current_page}")
                 break
 
             # Process each job listing
@@ -743,7 +873,7 @@ def scrape_insight_global(base_url):
                     })
                     
                 except Exception as e:
-                    logging.info(f"Error processing job listing: {str(e)}")
+                    logging.warning(f"Error processing job listing: {str(e)}")
                     continue
             
             # Check if there's a next page by looking for the navigation
@@ -754,12 +884,12 @@ def scrape_insight_global(base_url):
                 next_page = active_page.find_element(By.XPATH, "following-sibling::li[1]/a")
                 
                 if not next_page.get_attribute("href"):
-                    logging.info("No link to next page found")
+                    logging.warning("No link to next page found")
                     break
                     
                 current_page += 1
             except:
-                logging.info("No more pages available")
+                logging.warning("No more pages available")
                 break
                 
     except Exception as e:
@@ -812,7 +942,7 @@ def scrape_ziprecruiter(url):
     except Exception as e:
         print(f"Error loading Chrome: {e}")
         return None
-    logging.info(f"Scraping page {current_page}...")
+    logging.warning(f"Scraping page {current_page}...")
 
     # Modify URL for pagination
     parsed_url = urlparse(url)
@@ -820,7 +950,7 @@ def scrape_ziprecruiter(url):
     query_params['page'] = [str(current_page)]
     new_query = urlencode(query_params, doseq=True)
     paginated_url = parsed_url._replace(query=new_query).geturl()
-    logging.info(paginated_url)
+    logging.warning(paginated_url)
 
     # Load the page and look for a cloudflare challenge
     driver.get(paginated_url)
@@ -834,7 +964,7 @@ def scrape_ziprecruiter(url):
             ))
         )
 
-        logging.info("Found verification iframe, switching to it...")
+        logging.warning("Found verification iframe, switching to it...")
         driver.switch_to.frame(turnstile_frame)
 
         # Try to find and interact with the challenge
@@ -846,9 +976,9 @@ def scrape_ziprecruiter(url):
                ))
             )
             checkbox.click()
-            logging.info("Clicked verification checkbox")
+            logging.warning("Clicked verification checkbox")
         except Exception as e:
-            logging.info(f"Could not find checkbox: {e}")
+            logging.warning(f"Could not find checkbox: {e}")
 
         # Switch back to main content
         driver.switch_to.default_content()
@@ -857,10 +987,10 @@ def scrape_ziprecruiter(url):
         wait.until(EC.presence_of_element_located((By.CLASS_NAME, "job_result_two_pane")))
 
     except Exception as e:
-        logging.info(f"Error handling verification: {e}")
+        logging.warning(f"Error handling verification: {e}")
     try:
         while True:
-            logging.info(f"Scraping page {current_page}...")
+            logging.warning(f"Scraping page {current_page}...")
 
             # Modify URL for pagination
             parsed_url = urlparse(url)
@@ -868,7 +998,7 @@ def scrape_ziprecruiter(url):
             query_params['page'] = [str(current_page)]
             new_query = urlencode(query_params, doseq=True)
             paginated_url = parsed_url._replace(query=new_query).geturl()
-            logging.info(paginated_url)
+            logging.warning(paginated_url)
 
             # Load the page
             driver.get(paginated_url)
@@ -882,7 +1012,7 @@ def scrape_ziprecruiter(url):
 
             # Find all job result containers
             job_containers = soup.find_all("div", class_="job_result_two_pane")
-            logging.info(f"Found {len(job_containers)} jobs")
+            logging.warning(f"Found {len(job_containers)} jobs")
 
             # If no jobs found, we've reached the end
             if not job_containers:
@@ -894,7 +1024,7 @@ def scrape_ziprecruiter(url):
                     job_link = job.find("h2").find("a")
                     job_title = job_link.get_text(strip=True).replace("NEW!", "").strip()
                     job_url = job_link.get("href")
-                    logging.info(job_url)
+                    logging.warning(job_url)
                     
                     # Find company name
                     company_elem = job.find("a", attrs={"data-testid": "job-card-company"})
@@ -927,7 +1057,7 @@ def scrape_ziprecruiter(url):
                             salary_value = salary_value * 2080 / 1000
                         salary = salary_value
 
-                    logging.info(f"{job_id}\n{company} - {job_title} - {salary}")
+                    logging.warning(f"{job_id}\n{company} - {job_title} - {salary}")
 
                     # Add job details to list
                     jobs.append({
@@ -939,7 +1069,7 @@ def scrape_ziprecruiter(url):
                     })
 
                 except Exception as e:
-                    logging.info(f"Error parsing job listing: {str(e)}")
+                    logging.warning(f"Error parsing job listing: {str(e)}")
                     continue
 
             # Check for next page button
@@ -952,7 +1082,7 @@ def scrape_ziprecruiter(url):
                 break
 
     except Exception as e:
-        logging.info(f"Error scraping ZipRecruiter: {str(e)}")
+        logging.warning(f"Error scraping ZipRecruiter: {str(e)}")
 
     finally:
         driver.quit()
@@ -1002,11 +1132,6 @@ def get_ziprecruiter_job_description(url):
         driver.quit()
 
 def scrape_cybercoders(base_url):
-    try:
-        driver = setup_chrome_driver()
-    except Exception as e:
-        print(f"Error loading Chrome: {e}")
-        return None
     jobs = []
     current_page = 1
 
@@ -1015,26 +1140,15 @@ def scrape_cybercoders(base_url):
             # Construct the URL for the current page
             page_url = f"{base_url}&page={current_page}"
 
-            # Navigate to the page
-            logging.info(f"Scraping CyberCoders page {current_page}: {page_url}")
-            driver.get(page_url)
-            wait = WebDriverWait(driver, 10)
-            with open("cybercoders_last.html", "w", encoding="utf-8") as file:
-                file.write(driver.page_source)
-
-            # Wait for job listings to load
+            logging.warning(f"Scraping CyberCoders page {current_page}: {page_url}")
+            driver = load_page(page_url)
             try:
-                job_cards = wait.until(EC.presence_of_all_elements_located(
-                    (By.CLASS_NAME, "result-box")
-                ))
-                
+                job_cards = driver.find_elements(By.CLASS_NAME, "result-box")
                 if not job_cards:
                     break
-                    
-                logging.info(f"Found {len(job_cards)} CyberCoders jobs")
-                
+                logging.warning(f"Found {len(job_cards)} CyberCoders jobs")
             except Exception as e:
-                logging.info(f"Error finding job cards: {e}")
+                logging.warning(f"Error finding job cards: {e}")
                 break
 
             # Process each job listing
@@ -1044,58 +1158,28 @@ def scrape_cybercoders(base_url):
                     card.click()
                     sleep(1)  # Wait for details to load
                     
-                    # Wait for and get job details link
-                    job_link = wait.until(EC.presence_of_element_located(
-                        (By.CSS_SELECTOR, ".job-details-header a")
-                    ))
-                    
+                    job_link = driver.find_element(By.CSS_SELECTOR, ".job-details-header a")
                     job_url = job_link.get_attribute("href")
-                    job_id = int(job_url.split('/')[-1])
-                    title = job_link.text.strip()
+                    job = Job(
+                        id = job_url.split('/')[-1],
+                        url = job_url,
+                        title = job_link.text.strip()
+                    )
 
                     # Get salary text
-                    salary_block = wait.until(EC.presence_of_element_located(
-                        (By.CSS_SELECTOR, ".job-details-header .info-block.tertiary")
-                    ))
-                    salary_text = salary_block.text if salary_block else None
+                    salary_block = driver.find_element(By.CSS_SELECTOR, ".job-details-header .info-block.tertiary")
+                    job.salary_text = salary_block.text if salary_block else None
+                    job.highest_salary = get_salary_from_text(job.salary_text) or None
 
-                    company = "Unknown Company"  # Default since all jobs are from CyberCoders
+                    job.company = "Unknown Company"  # Default since all jobs are from CyberCoders
 
-                    # Parse salary
-                    highest_salary = None
-                    if salary_text:
-                        try:
-                            # Remove /yr and split range
-                            salary_clean = salary_text.replace('/yr', '').strip()
-                            if ' - ' in salary_clean:
-                                # Get higher value from range
-                                salary_val = salary_clean.split(' - ')[1]
-                            else:
-                                salary_val = salary_clean
-
-                            # Convert to float
-                            salary_val = salary_val.replace('$', '').replace(',', '')
-                            highest_salary = float(salary_val) / 1000  # Convert to thousands
-
-                            # If hourly, convert to annual
-                            if '/hr' in salary_text:
-                                highest_salary = highest_salary * 2080 / 1000
-
-                        except Exception as e:
-                            logging.info(f"Error parsing salary {salary_text}: {e}")
-                            highest_salary = None
-
-                    jobs.append({
-                        'job_id': job_id,
-                        'url': job_url,
-                        'company': company,
-                        'title': title,
-                        'salary': highest_salary
-                    })
+                    jobs.append(job)
 
                 except Exception as e:
-                    logging.info(f"Error processing job card: {e}")
+                    logging.warning(f"Error processing job card: {e}")
                     continue
+
+            driver.quit()
 
             if len(job_cards) == 0:
                 break
@@ -1106,7 +1190,7 @@ def scrape_cybercoders(base_url):
                 break
 
     except Exception as e:
-        logging.info(f"Error scraping CyberCoders: {e}")
+        logging.warning(f"Error scraping CyberCoders: {e}")
 
     finally:
         driver.quit()
@@ -1115,27 +1199,18 @@ def scrape_cybercoders(base_url):
 
 def get_cybercoders_job_description(url):
     try:
-        driver = setup_chrome_driver()
-    except Exception as e:
-        print(f"Error loading Chrome: {e}")
-        return None
-        
-    try:
-        driver.get(url)
-        wait = WebDriverWait(driver, 10)
+        driver = load_page(url, skip_cloudflare_detection=True)
         
         try:
-            desc_div = wait.until(EC.presence_of_element_located(
-                (By.CLASS_NAME, "job-details-description")
-            ))
+            desc_div = driver.find_element(By.CLASS_NAME, "job-details-description")
             if desc_div:
                 return desc_div.text if desc_div.text.strip() else None
         except Exception as e:
-            logging.info(f"Error finding description div: {e}")
+            logging.warning(f"Error finding description div: {e}")
             return None
                 
     except Exception as e:
-        logging.info(f"Error loading page: {e}")
+        logging.warning(f"Error loading page: {e}")
         return None
         
     finally:
@@ -1156,7 +1231,7 @@ def scrape_dice_jobs(base_url):
         page_url = f"{base_url}&page={current_page}"
 
         # Navigate to the page
-        logging.info(f"Scraping Dice page {current_page}: {page_url}")
+        logging.warning(f"Scraping Dice page {current_page}: {page_url}")
         driver.get(page_url)
         wait = WebDriverWait(driver, 10)
         with open("dice_last.html", "w", encoding="utf-8") as file:
@@ -1165,7 +1240,7 @@ def scrape_dice_jobs(base_url):
             job_cards = wait.until(EC.presence_of_all_elements_located(
                 (By.CSS_SELECTOR, "dhi-search-card")))
         except:
-            logging.info("No job cards")
+            logging.warning("No job cards")
             break
 
         # Break if no jobs found
@@ -1223,7 +1298,7 @@ def get_dice_job_description(url):
                 EC.presence_of_element_located((By.CSS_SELECTOR, "div[data-cy='payDetails'] span"))
             )
             salary_text = salary_element.text
-            logging.info(f"Found salary_text: {salary_text}")
+            logging.warning(f"Found salary_text: {salary_text}")
             # Standardize format and remove currency
             salary_clean = salary_text.replace('USD', '').replace('$', '').strip()
     
@@ -1315,7 +1390,7 @@ def scrape_wwr_jobs(url):
     jobs = []
 
     # Navigate to the page
-    logging.info(f"Scraping WWR page {url}")
+    logging.warning(f"Scraping WWR page {url}")
     try:
         driver.get(url)
         wait = WebDriverWait(driver, 10)
@@ -1330,7 +1405,7 @@ def scrape_wwr_jobs(url):
         if len(job_cards) == 0:
             return None
     except:
-        logging.info("Error loading job cards")
+        logging.warning("Error loading job cards")
         return None
 
     # Process each job card
@@ -1378,17 +1453,161 @@ def get_wwr_job_description(url):
         ))
             return desc_div.text if desc_div.text.strip() else None
         except Exception as e:
-            logging.info(f"Error finding description div: {e}")
+            logging.warning(f"Error finding description div: {e}")
             return None
 
     except Exception as e:
-        logging.info(f"Error loading page: {e}")
+        logging.warning(f"Error loading page: {e}")
         return None
 
     finally:
         driver.quit()
 
     return None
+
+def scrape_monster(url):
+    jobs = []
+    
+    try:
+        while True:
+            logging.warning(f"Scraping Monster page: {url}")
+            driver = load_page(url)
+            try:
+                job_cards = driver.find_elements(By.CSS_SELECTOR, "article[data-testid='JobCard']")
+                if not job_cards:
+                    break
+                logging.warning(f"Found {len(job_cards)} Monster jobs")
+            except Exception as e:
+                logging.warning(f"Error finding job cards: {e}")
+                break
+
+            # Process each job listing
+            for card in job_cards:
+                try:
+                    job = Job(
+                        id = card.find_element(By.CSS_SELECTOR, "button[data-job-id]").get_attribute("data-job-id"),
+                        url = card.find_element(By.CSS_SELECTOR, "a[data-testid='jobTitle']").get_attribute('href'),
+                        title = card.find_element(By.CSS_SELECTOR, "a[data-testid='jobTitle']").text,
+                        company = card.find_element(By.CSS_SELECTOR, "span[data-testid='company']").text
+                    )
+                    logging.warning(job.url)
+                    # Get salary text
+                    salary_block = (card.find_elements(By.CSS_SELECTOR, "div[data-tagtype-testid='payTag']") or [None])[0]
+                    job.salary_text = salary_block.text if salary_block else None
+                    job.highest_salary = get_salary_from_text(job.salary_text) if job.salary_text else None
+
+                    jobs.append(job)
+
+                except Exception as e:
+                    logging.warning(f"Error processing job card: {e}")
+                    continue
+
+            try:
+                load_more = WebDriverWait(driver, 5).until(
+                    EC.element_to_be_clickable((By.ID, "job-search-load-more"))
+                )
+                driver.execute_script("arguments[0].scrollIntoView();", load_more)
+                time.sleep(1)  # Small delay to let the page settle
+                load_more.click()
+                time.sleep(2)  # Wait for new results to load
+            except Exception as e:
+                # No more results to load
+                break
+
+    except Exception as e:
+        logging.warning(f"Error scraping Monster: {e}")
+
+    finally:
+        driver.quit()
+
+    return jobs
+
+def get_monster_job_description(url):
+    try:
+        driver = load_page(url, skip_cloudflare_detection=True)
+
+        try:
+            json_data = driver.execute_script('return JSON.parse(document.getElementById("__NEXT_DATA__").textContent)')
+            description = json_data['props']['pageProps']['jobViewResultsData']['jobPosting']['description']
+            description = BeautifulSoup(description, 'html.parser').get_text()
+            if description:
+                return description
+        except Exception as e:
+            logging.warning(f"Error finding description div: {e}")
+            return None
+
+    except Exception as e:
+        logging.warning(f"Error loading page: {e}")
+        return None
+
+    finally:
+        driver.quit()
+
+def scrape_kforce(url):
+    jobs = []
+
+    try:
+        logging.warning(f"Scraping Kforce page: {url}")
+        driver = load_page(url, load_more=True)
+        try:
+            job_cards = driver.find_elements(By.CSS_SELECTOR, "ul.data-jobs li")
+            logging.warning(f"Found {len(job_cards)} Kforce jobs")
+        except Exception as e:
+            logging.warning(f"Error finding job cards: {e}")
+            return
+
+        # Process each job listing
+        for card in job_cards:
+            try:
+                job_link = card.find_element(By.CSS_SELECTOR, "h2 a.linkForJob")
+                job = Job(
+                    id = job_link.get_attribute("href").split("/detail/")[1].rstrip("/") if "/detail/" in job_link.get_attribute("href") else None,
+                    url = job_link.get_attribute("href"),
+                    title = job_link.text.strip(),
+                    company = "Kforce"
+                )
+
+                jobs.append(job)
+
+            except Exception as e:
+                logging.warning(f"Error processing job card: {e}")
+                continue
+
+    except Exception as e:
+        logging.warning(f"Error scraping Kforce: {e}")
+
+    finally:
+        driver.quit()
+
+    return jobs
+
+def get_kforce_job_description(url):
+    try:
+        driver = load_page(url, skip_cloudflare_detection=True, load_more=False)
+        sleep(2)
+
+        try:
+            try:
+                salary_block = driver.find_element(By.XPATH, "//span[contains(@class, 'c-orange') and contains(text(), 'Compensation:')]/parent::h4")
+            except NoSuchElementException:
+                salary_block = None
+            salary_text = salary_block.text if salary_block else None
+            highest_salary = get_salary_from_text(salary_text) if salary_text else None
+
+            description = driver.find_element(By.CSS_SELECTOR, "div.data-job-desc").text if driver.find_elements(By.CSS_SELECTOR, "div.data-job-desc") else None
+
+            return highest_salary, description
+        
+        except Exception as e:
+            logging.warning(f"Error finding description div: {e}")
+            return None,None
+
+    except Exception as e:
+        logging.warning(f"Error loading page: {e}")
+        return None,None
+
+    finally:
+        driver.quit()
 
 # For Upwork jobs
 def parse_duration_hours(duration_text):
@@ -1421,6 +1640,17 @@ def parse_duration_hours(duration_text):
     except Exception as e:
         logging.error(f"Error parsing duration: {e}")
         return None, None, None, None
+
+def get_salary_from_text(salary_text):
+    cleaned_text = salary_text.replace('$', '').replace(',', '')
+    # Get all the numbers, and take the last one
+    salary_numbers = re.findall(r'\d+', cleaned_text)  # Extract all numbers
+    highest_salary = float(salary_numbers[-1])
+    # If 'hour' exists in the salary, flag it as hourly to be converted to salary
+    is_hourly = any(term in cleaned_text.lower() for term in ["hour", "hr", "hourly"])
+    if is_hourly:
+        highest_salary *= 2080
+    return highest_salary / 1000
 
 # If a job post doesn't have the salary in the normal job details, see if they say it in the description
 def get_salary_from_description(description):
@@ -1504,21 +1734,21 @@ def search_linkedin(progress=None):
             print(f"Processing {idx}/{len(jobs)}", end="\r")
         id = int(job['trackingUrn'].split(":")[-1])
         if awsutils.dynamodb_check_if_value_exists('linkedin_jobs', 'job_id', id):
-            logging.info(f"LinkedIn job {id} already seen")
+            logging.warning(f"LinkedIn job {id} already seen")
             metrics["seen_count"] += 1
             continue
         url = f"https://www.linkedin.com/jobs/view/{id}"
-        logging.info(url)
+        logging.warning(url)
         job_details = get_linkedin_job_details(id)
         if job_details is None:
-            logging.info(f"Error getting job details, skipping")
+            logging.warning(f"Error getting job details, skipping")
             continue
         description = job_details.get('description', None)
         title = job_details.get('title', None)
         salary = int(float(job_details.get('salary') or 0))
         salary_period = job_details.get('salary_period') or None
         if description is None or title is None:
-            logging.info("Couldn't find job description or title")
+            logging.warning("Couldn't find job description or title")
             metrics["description_count"] += 1
             continue
         if salary_period == "YEARLY":
@@ -1528,12 +1758,12 @@ def search_linkedin(progress=None):
         else:
             highest_salary = get_salary_from_description(description)
             if highest_salary is None:
-                logging.info("No salary information found")
+                logging.warning("No salary information found")
                 awsutils.dynamodb_put_item('linkedin_jobs', 'job_id', id)
                 metrics["salary_count"] += 1
                 continue
         if highest_salary < salary_threshold:
-            logging.info(f"Salary below threshold: {highest_salary}")
+            logging.warning(f"Salary below threshold: {highest_salary}")
             awsutils.dynamodb_put_item('linkedin_jobs', 'job_id', id)
             metrics["salary_count"] += 1
         else:
@@ -1542,12 +1772,12 @@ def search_linkedin(progress=None):
             if fitness is None:
                 continue
             if fitness < fitness_threshold:
-                logging.info(f"Fitness score below threshold: {fitness}")
+                logging.warning(f"Fitness score below threshold: {fitness}")
                 awsutils.dynamodb_put_item('linkedin_jobs', 'job_id', id)
                 metrics["fitness_count"] += 1
                 continue
             email_body=f"{company} - {title}\n{url}\nsalary: {highest_salary}/yr\nfitness: {fitness}"
-            logging.info(email_body)
+            logging.warning(email_body)
             cover_letter_path=get_cover_letter(company, title, description)
             awsutils.send_email('Python LinkedIn Search <python@twistedslinky.org>', mail_to, company + " - " + title, email_body, cover_letter_path)
             awsutils.dynamodb_put_item('linkedin_jobs', 'job_id', id)
@@ -1569,28 +1799,28 @@ def search_indeed(progress=None):
             print(f"Processing {idx}/{len(jobs)}", end="\r")
         id = job['job_id']
         if not id:
-            logging.info(f"No job id: {id}")
+            logging.warning(f"No job id: {id}")
             continue
         if awsutils.dynamodb_check_if_value_exists('indeed_jobs', 'job_id', id):
-            logging.info(f"Indeed job {id} already seen")
+            logging.warning(f"Indeed job {id} already seen")
             metrics["seen_count"] += 1
             continue
         url = job['url']
-        logging.info(url)
+        logging.warning(url)
         description = get_indeed_job_description(url)
         if description is None:
-            logging.info("Couldn't find job description")
+            logging.warning("Couldn't find job description")
             metrics["description_count"] += 1
             continue
         title = job['title']
         highest_salary = job['highest_salary'] or get_salary_from_description(description)
         if highest_salary is None:
-            logging.info("No salary information found")
+            logging.warning("No salary information found")
             awsutils.dynamodb_put_item('indeed_jobs', 'job_id', id)
             metrics["salary_count"] += 1
             continue
         if highest_salary < salary_threshold:
-            logging.info(f"Salary below threshold: {highest_salary}")
+            logging.warning(f"Salary below threshold: {highest_salary}")
             awsutils.dynamodb_put_item('indeed_jobs', 'job_id', id)
             metrics["salary_count"] += 1
         else:
@@ -1599,12 +1829,12 @@ def search_indeed(progress=None):
             if fitness is None:
                 continue
             if fitness < fitness_threshold:
-                logging.info(f"Fitness score below threshold: {fitness}")
+                logging.warning(f"Fitness score below threshold: {fitness}")
                 awsutils.dynamodb_put_item('indeed_jobs', 'job_id', id)
                 metrics["fitness_count"] += 1
                 continue
             email_body=f"{company} - {title}\n{url}\nsalary: {highest_salary}/yr\nfitness: {fitness}"
-            logging.info(email_body)
+            logging.warning(email_body)
             cover_letter_path=get_cover_letter(company, title, description)
             awsutils.send_email('Python Indeed Search <python@twistedslinky.org>', mail_to, company + " - " + title, email_body, cover_letter_path)
             awsutils.dynamodb_put_item('indeed_jobs', 'job_id', id)
@@ -1626,31 +1856,31 @@ def search_upwork(progress=None):
             print(f"Processing {idx}/{len(jobs)}", end="\r")
         id = job['job_id']
         if not id:
-            logging.info(f"No job id: {id}")
+            logging.warning(f"No job id: {id}")
             continue
         if awsutils.dynamodb_check_if_value_exists('upwork_jobs', 'job_id', id):
-            logging.info(f"Upwork job {id} already seen")
+            logging.warning(f"Upwork job {id} already seen")
             metrics["seen_count"] += 1
             continue
         url = job['url']
-        logging.info(url)
+        logging.warning(url)
         description = get_upwork_job_description(url)
         title = job['title']
         highest_rate = job['max_amount']
         if description in (None, "private"):
-            logging.info("Couldn't find job description, possibly private, emailing URL")
+            logging.warning("Couldn't find job description, possibly private, emailing URL")
             email_body=f"Private Upwork listing:\n{url}"
             awsutils.send_email('Python Upwork Search <python@twistedslinky.org>', mail_to, 'Private Upwork listing', email_body)
             awsutils.dynamodb_put_item('upwork_jobs', 'job_id', id)
             metrics["description_count"] += 1
             continue
         if highest_rate is None:
-            logging.info("No rate information found")
+            logging.warning("No rate information found")
             awsutils.dynamodb_put_item('upwork_jobs', 'job_id', id)
             metrics["salary_count"] += 1
             continue
         if highest_rate < hourly_threshold:
-            logging.info(f"Rate below threshold: {highest_rate}")
+            logging.warning(f"Rate below threshold: {highest_rate}")
             awsutils.dynamodb_put_item('upwork_jobs', 'job_id', id)
             metrics["salary_count"] += 1
         else:
@@ -1659,12 +1889,12 @@ def search_upwork(progress=None):
             if fitness is None:
                 continue
             if fitness < fitness_threshold:
-                logging.info(f"Fitness score below threshold: {fitness}")
+                logging.warning(f"Fitness score below threshold: {fitness}")
                 awsutils.dynamodb_put_item('upwork_jobs', 'job_id', id)
                 metrics["fitness_count"] += 1
                 continue
             email_body=f"{company} - {title}\n{url}\nrate: {highest_rate}/hr\nfitness: {fitness}"
-            logging.info(email_body)
+            logging.warning(email_body)
             cover_letter_path=get_cover_letter(company, title, description)
             awsutils.send_email('Python Upwork Search <python@twistedslinky.org>', 'ryan@twistedslinky.org', company + " - " + title, email_body, cover_letter_path)
             awsutils.dynamodb_put_item('upwork_jobs', 'job_id', id)
@@ -1686,28 +1916,28 @@ def search_insight(progress=None):
             print(f"Processing {idx}/{len(jobs)}", end="\r")
         id = job['job_id']
         if not id:
-            logging.info(f"No job id: {id}")
+            logging.warning(f"No job id: {id}")
             continue
         if awsutils.dynamodb_check_if_value_exists('insight_global_jobs', 'job_id', id):
-            logging.info(f"Insight Global job {id} already seen")
+            logging.warning(f"Insight Global job {id} already seen")
             metrics["seen_count"] += 1
             continue
         url = job['url']
-        logging.info(url)
+        logging.warning(url)
         title = job['title']
         highest_salary = job['salary']
         description = get_insight_global_job_description(url)
         if description is None:
-            logging.info("Couldn't find job description")
+            logging.warning("Couldn't find job description")
             metrics["description_count"] += 1
             continue
         if highest_salary is None:
-            logging.info("No salary information found")
+            logging.warning("No salary information found")
             awsutils.dynamodb_put_item('insight_global_jobs', 'job_id', id)
             metrics["salary_count"] += 1
             continue
         if highest_salary < salary_threshold:
-            logging.info(f"Salary below threshold: {highest_salary}")
+            logging.warning(f"Salary below threshold: {highest_salary}")
             awsutils.dynamodb_put_item('insight_global_jobs', 'job_id', id)
             metrics["salary_count"] += 1
         else:
@@ -1716,12 +1946,12 @@ def search_insight(progress=None):
             if fitness is None:
                 continue
             if fitness < fitness_threshold:
-                logging.info(f"Fitness score below threshold: {fitness}")
+                logging.warning(f"Fitness score below threshold: {fitness}")
                 awsutils.dynamodb_put_item('insight_global_jobs', 'job_id', id)
                 metrics["fitness_count"] += 1
                 continue
             email_body=f"{company} - {title}\n{url}\nsalary: {highest_salary}/yr\nfitness: {fitness}"
-            logging.info(email_body)
+            logging.warning(email_body)
             cover_letter_path=get_cover_letter(company, title, description)
             awsutils.send_email('Python Insight Global Search <python@twistedslinky.org>', mail_to, company + " - " + title, email_body, cover_letter_path)
             awsutils.dynamodb_put_item('insight_global_jobs', 'job_id', id)
@@ -1743,28 +1973,28 @@ def search_ziprecruiter(progress=None):
             print(f"Processing {idx}/{len(jobs)}", end="\r")
         id = job['job_id']
         if not id:
-            logging.info(f"No job id: {id}")
+            logging.warning(f"No job id: {id}")
             continue
         if awsutils.dynamodb_check_if_value_exists('ziprecruiter_jobs', 'job_id', id):
-            logging.info(f"Zip Recruiter job {id} already seen")
+            logging.warning(f"Zip Recruiter job {id} already seen")
             metrics["seen_count"] += 1
             continue
         url = job['url']
-        logging.info(url)
+        logging.warning(url)
         title = job['title']
         description = get_ziprecruiter_job_description(url)
         highest_salary = job['salary'] or get_salary_from_description(description)
         if description is None:
-            logging.info("Couldn't find job description")
+            logging.warning("Couldn't find job description")
             metrics["description_count"] += 1
             continue
         if highest_salary is None:
-            logging.info("No salary information found")
+            logging.warning("No salary information found")
             awsutils.dynamodb_put_item('ziprecruiter_jobs', 'job_id', id)
             metrics["salary_count"] += 1
             continue
         if highest_salary < salary_threshold:
-            logging.info(f"Salary below threshold: {highest_salary}")
+            logging.warning(f"Salary below threshold: {highest_salary}")
             awsutils.dynamodb_put_item('ziprecruiter_jobs', 'job_id', id)
             metrics["salary_count"] += 1
         else:
@@ -1773,12 +2003,12 @@ def search_ziprecruiter(progress=None):
             if fitness is None:
                 continue
             if fitness < fitness_threshold:
-                logging.info(f"Fitness score below threshold: {fitness}")
+                logging.warning(f"Fitness score below threshold: {fitness}")
                 awsutils.dynamodb_put_item('ziprecruiter_jobs', 'job_id', id)
                 metrics["fitness_count"] += 1
                 continue
             email_body=f"{company} - {title}\n{url}\nsalary: {highest_salary}/yr\nfitness: {fitness}"
-            logging.info(email_body)
+            logging.warning(email_body)
             cover_letter_path=get_cover_letter(company, title, description)
             awsutils.send_email('Python Zip Recruiter Search <python@twistedslinky.org>', mail_to, company + " - " + title, email_body, cover_letter_path)
             awsutils.dynamodb_put_item('ziprecruiter_jobs', 'job_id', id)
@@ -1798,47 +2028,46 @@ def search_cybercoders(progress=None):
     for idx, job in enumerate(jobs):
         if progress:
             print(f"Processing {idx}/{len(jobs)}", end="\r")
-        id = job['job_id']
-        if not id:
-            logging.info(f"No job id: {id}")
+        if not job.id:
+            logging.warning(f"No job id: {job.id}")
             continue
-        if awsutils.dynamodb_check_if_value_exists('cybercoders_jobs', 'job_id', id):
-            logging.info(f"CyberCoders job {id} already seen")
+        if awsutils.dynamodb_check_if_value_exists('cybercoders_jobs', 'job_id', job.id):
+            logging.warning(f"CyberCoders job {job.id} already seen")
             metrics["seen_count"] += 1
             continue
-        url = job['url']
-        logging.info(url)
-        title = job['title']
-        description = get_cybercoders_job_description(url)
-        highest_salary = job['salary'] or get_salary_from_description(description)
-        if description is None:
-            logging.info("Couldn't find job description")
+        logging.warning(job.url)
+        job.description = get_cybercoders_job_description(job.url)
+        if job.description is None:
+            logging.warning("Couldn't find job description")
             metrics["description_count"] += 1
             continue
-        if highest_salary is None:
-            logging.info("No salary information found")
-            awsutils.dynamodb_put_item('cybercoders_jobs', 'job_id', id)
+        if not job.highest_salary:
+            job.highest_salary = get_salary_from_description(job.description)
+        if job.highest_salary is None:
+            logging.warning("No salary information found")
+            awsutils.dynamodb_put_item('cybercoders_jobs', 'job_id', job.id)
             metrics["salary_count"] += 1
             continue
-        if highest_salary < salary_threshold:
-            logging.info(f"Salary below threshold: {highest_salary}")
-            awsutils.dynamodb_put_item('cybercoders_jobs', 'job_id', id)
+        if job.highest_salary < salary_threshold:
+            logging.warning(f"Salary below threshold: {job.highest_salary}")
+            awsutils.dynamodb_put_item('cybercoders_jobs', 'job_id', job.id)
             metrics["salary_count"] += 1
         else:
-            company = job['company'] or get_company_from_description(description)
-            fitness=get_fitness_rating(description, company, title)
-            if fitness is None:
+            if not job.company:
+                job.company = get_company_from_description(job.description)
+            job.fitness = get_fitness_rating(job.description, job.company, job.title)
+            if job.fitness is None:
                 continue
-            if fitness < fitness_threshold:
-                logging.info(f"Fitness score below threshold: {fitness}")
-                awsutils.dynamodb_put_item('cybercoders_jobs', 'job_id', id)
+            if job.fitness < fitness_threshold:
+                logging.warning(f"Fitness score below threshold: {job.fitness}")
+                awsutils.dynamodb_put_item('cybercoders_jobs', 'job_id', job.id)
                 metrics["fitness_count"] += 1
                 continue
-            email_body=f"{company} - {title}\n{url}\nsalary: {highest_salary}/yr\nfitness: {fitness}"
-            logging.info(email_body)
-            cover_letter_path=get_cover_letter(company, title, description)
-            awsutils.send_email('Python CyberCoders Search <python@twistedslinky.org>', mail_to, company + " - " + title, email_body, cover_letter_path)
-            awsutils.dynamodb_put_item('cybercoders_jobs', 'job_id', id)
+            email_body=f"{job.company} - {job.title}\n{job.url}\nsalary: {job.highest_salary}/yr\nfitness: {job.fitness}"
+            logging.warning(email_body)
+            cover_letter_path=get_cover_letter(job.company, job.title, job.description)
+            awsutils.send_email('Python CyberCoders Search <python@twistedslinky.org>', mail_to, job.company + " - " + job.title, email_body, cover_letter_path)
+            awsutils.dynamodb_put_item('cybercoders_jobs', 'job_id', job.id)
             metrics["valid_count"] += 1
     print_metrics(metrics, progress)
     return None
@@ -1857,29 +2086,29 @@ def search_dice(progress=None):
             print(f"Processing {idx}/{len(jobs)}", end="\r")
         id = job['job_id']
         if not id:
-            logging.info(f"No job id: {id}")
+            logging.warning(f"No job id: {id}")
             continue
         if awsutils.dynamodb_check_if_value_exists('dice_jobs', 'job_id', id):
-            logging.info(f"Dice job {id} already seen")
+            logging.warning(f"Dice job {id} already seen")
             metrics["seen_count"] += 1
             continue
         url = job['url']
-        logging.info(url)
+        logging.warning(url)
         title = job['title']
         highest_salary, description = get_dice_job_description(url)
         if description is None:
-            logging.info("Couldn't find job description")
+            logging.warning("Couldn't find job description")
             metrics["description_count"] += 1
             continue
         if highest_salary is None:
             highest_salary = get_salary_from_description(description)
         if highest_salary is None:
-            logging.info("No salary information found")
+            logging.warning("No salary information found")
             awsutils.dynamodb_put_item('dice_jobs', 'job_id', id)
             metrics["salary_count"] += 1
             continue
         if highest_salary < salary_threshold:
-            logging.info(f"Salary below threshold: {highest_salary}")
+            logging.warning(f"Salary below threshold: {highest_salary}")
             awsutils.dynamodb_put_item('dice_jobs', 'job_id', id)
             metrics["salary_count"] += 1
         else:
@@ -1888,12 +2117,12 @@ def search_dice(progress=None):
             if fitness is None:
                 continue
             if fitness < fitness_threshold:
-                logging.info(f"Fitness score below threshold: {fitness}")
+                logging.warning(f"Fitness score below threshold: {fitness}")
                 awsutils.dynamodb_put_item('dice_jobs', 'job_id', id)
                 metrics["fitness_count"] += 1
                 continue
             email_body=f"{company} - {title}\n{url}\nsalary: {highest_salary}/yr\nfitness: {fitness}"
-            logging.info(email_body)
+            logging.warning(email_body)
             cover_letter_path=get_cover_letter(company, title, description)
             awsutils.send_email('Python Dice Search <python@twistedslinky.org>', mail_to, company + " - " + title, email_body, cover_letter_path)
             awsutils.dynamodb_put_item('dice_jobs', 'job_id', id)
@@ -1915,29 +2144,29 @@ def search_wwr(progress=None):
             print(f"Processing {idx}/{len(jobs)}", end="\r")
         id = job['job_id']
         if not id:
-            logging.info(f"No job id: {id}")
+            logging.warning(f"No job id: {id}")
             continue
         if awsutils.dynamodb_check_if_value_exists('wwr_jobs', 'job_id', id):
-            logging.info(f"WWR job {id} already seen")
+            logging.warning(f"WWR job {id} already seen")
             metrics["seen_count"] += 1
             continue
         url = job['url']
-        logging.info(url)
+        logging.warning(url)
         title = job['title']
         company = job['company']
         description = get_wwr_job_description(url)
         if description is None:
-            logging.info("Couldn't find job description")
+            logging.warning("Couldn't find job description")
             metrics["description_count"] += 1
             continue
         highest_salary = get_salary_from_description(description)
         if highest_salary is None:
-            logging.info("No salary information found")
+            logging.warning("No salary information found")
             awsutils.dynamodb_put_item('wwr_jobs', 'job_id', id)
             metrics["salary_count"] += 1
             continue
         if highest_salary < salary_threshold:
-            logging.info(f"Salary below threshold: {highest_salary}")
+            logging.warning(f"Salary below threshold: {highest_salary}")
             awsutils.dynamodb_put_item('wwr_jobs', 'job_id', id)
             metrics["salary_count"] += 1
         else:
@@ -1946,15 +2175,129 @@ def search_wwr(progress=None):
             if fitness is None:
                 continue
             if fitness < fitness_threshold:
-                logging.info(f"Fitness score below threshold: {fitness}")
+                logging.warning(f"Fitness score below threshold: {fitness}")
                 awsutils.dynamodb_put_item('wwr_jobs', 'job_id', id)
                 metrics["fitness_count"] += 1
                 continue
             email_body=f"{company} - {title}\n{url}\nsalary: {highest_salary}/yr\nfitness: {fitness}"
-            logging.info(email_body)
+            logging.warning(email_body)
             cover_letter_path=get_cover_letter(company, title, description)
             awsutils.send_email('Python WeWorkRemotely Search <python@twistedslinky.org>', mail_to, company + " - " + title, email_body, cover_letter_path)
             awsutils.dynamodb_put_item('wwr_jobs', 'job_id', id)
+            metrics["valid_count"] += 1
+    print_metrics(metrics, progress)
+    return None
+
+def search_monster(progress=None):
+    jobs = scrape_monster(monster_search_url, load_mode=True)
+    if not jobs:
+        print("No Monster search results")
+        return
+    print("Found", len(jobs), "Monster jobs")
+    # Reset metric counters to zero
+    global metrics
+    metrics = {key: 0 for key in metrics}
+    for idx, job in enumerate(jobs):
+        if progress:
+            print(f"Processing {idx}/{len(jobs)}", end="\r")
+        if not job.id:
+            logging.warning(f"No job id: {job.id}")
+            continue
+        job.description = get_monster_job_description(job.url)
+        if awsutils.dynamodb_check_if_value_exists('monster_jobs', 'job_id', job.id):
+            logging.warning(f"Monster job {job.id} already seen")
+            metrics["seen_count"] += 1
+            continue
+        logging.warning(job.url)
+        job.description = get_monster_job_description(job.url)
+        if job.description is None:
+            logging.warning("Couldn't find job description")
+            metrics["description_count"] += 1
+            continue
+        if not job.highest_salary:
+            job.highest_salary = get_salary_from_description(job.description)
+        if job.highest_salary is None:
+            logging.warning("No salary information found")
+            awsutils.dynamodb_put_item('monster_jobs', 'job_id', job.id)
+            metrics["salary_count"] += 1
+            continue
+        if job.highest_salary < salary_threshold:
+            logging.warning(f"Salary below threshold: {job.highest_salary}")
+            awsutils.dynamodb_put_item('monster_jobs', 'job_id', job.id)
+            metrics["salary_count"] += 1
+        else:
+            if not job.company:
+                job.company = get_company_from_description(job.description)
+            job.fitness = get_fitness_rating(job.description, job.company, job.title)
+            if job.fitness is None:
+                continue
+            if job.fitness < fitness_threshold:
+                logging.warning(f"Fitness score below threshold: {job.fitness}")
+                awsutils.dynamodb_put_item('monster_jobs', 'job_id', job.id)
+                metrics["fitness_count"] += 1
+                continue
+            email_body=f"{job.company} - {job.title}\n{job.url}\nsalary: {job.highest_salary}/yr\nfitness: {job.fitness}"
+            logging.warning(email_body)
+            cover_letter_path=get_cover_letter(job.company, job.title, job.description)
+            awsutils.send_email('Python Monster Search <python@twistedslinky.org>', mail_to, job.company + " - " + job.title, email_body, cover_letter_path)
+            awsutils.dynamodb_put_item('monster_jobs', 'job_id', job.id)
+            metrics["valid_count"] += 1
+    print_metrics(metrics, progress)
+    return None
+
+def search_kforce(progress=None):
+    jobs = scrape_kforce(kforce_search_url)
+    if not jobs:
+        print("No Kforce search results")
+        return
+    print("Found", len(jobs), "Kforce jobs")
+    # Reset metric counters to zero
+    global metrics
+    metrics = {key: 0 for key in metrics}
+    for idx, job in enumerate(jobs):
+        if progress:
+            print(f"Processing {idx}/{len(jobs)}", end="\r")
+        if not job.id:
+            logging.warning(f"No job id: {job.id}")
+            continue
+        if awsutils.dynamodb_check_if_value_exists('kforce_jobs', 'job_id', job.id):
+            logging.warning(f"Kforce job {job.id} already seen")
+            metrics["seen_count"] += 1
+            continue
+        logging.warning(job.url)
+        sleep(1)
+        job.highest_salary, job.description = get_kforce_job_description(job.url)
+        if job.description is None:
+            logging.warning("Couldn't find job description")
+            metrics["description_count"] += 1
+            continue
+        if not job.highest_salary:
+            job.highest_salary = get_salary_from_description(job.description)
+        if job.highest_salary is None:
+            logging.warning("No salary information found")
+            awsutils.dynamodb_put_item('kforce_jobs', 'job_id', job.id)
+            metrics["salary_count"] += 1
+            continue
+        if job.highest_salary < salary_threshold:
+            logging.warning(f"Salary below threshold: {job.highest_salary}")
+            awsutils.dynamodb_put_item('kforce_jobs', 'job_id', job.id)
+            metrics["salary_count"] += 1
+        else:
+            if not job.company:
+                job.company = get_company_from_description(job.description)
+            job.fitness = get_fitness_rating(job.description, job.company, job.title)
+            if job.fitness is None:
+                continue
+            if job.fitness < fitness_threshold:
+                logging.warning(f"Fitness score below threshold: {job.fitness}")
+                awsutils.dynamodb_put_item('kforce_jobs', 'job_id', job.id)
+                metrics["fitness_count"] += 1
+                continue
+            email_body=f"{job.company} - {job.title}\n{job.url}\nsalary: {job.highest_salary}/yr\nfitness: {job.fitness}"
+            logging.warning(email_body)
+            cover_letter_path=get_cover_letter(job.company, job.title, job.description)
+            awsutils.send_email('Python Kforce Search <python@twistedslinky.org>', mail_to, job.company + " - " + job.title, email_body, cover_letter_path)
+            awsutils.dynamodb_put_item('kforce_jobs', 'job_id', job.id)
             metrics["valid_count"] += 1
     print_metrics(metrics, progress)
     return None
@@ -1964,17 +2307,20 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run a search on job postings and email details and cover letter to myself",formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument(
         "website",
-        choices=['linkedin','indeed','upwork','insight','ziprecruiter', 'cybercoders', 'dice', 'wwr', 'all', 'selenium'],
+        choices=['linkedin','indeed','upwork','insight','ziprecruiter', 'cybercoders', 'dice', 'wwr', 'monster', 'kforce', 'all', 'selenium'],
         help="Website to search, or all, or those requiring selenium"
     )
-    parser.add_argument(
-        "--cron",
-        action="store_true",
-        help="If set, suppress progress output for cron jobs"
-    )
+    parser.add_argument("--cron", action="store_true", help="If set, suppress progress output for cron jobs")
+    parser.add_argument("--debug", action="store_true", help="Enable debug logging")
     args = parser.parse_args()
     # Determine if progress output should be included
     progress = not args.cron
+    # Log to debug.log if --debug
+    logging.basicConfig(
+        level=logging.WARN if args.debug else logging.INFO,
+        filename="debug.log",
+        format="%(asctime)s - %(levelname)s - %(message)s"
+    )
     if args.website == "all":
         search_linkedin(progress)
         print("\n")
@@ -1988,8 +2334,6 @@ if __name__ == "__main__":
         print("\n")
         search_cybercoders(progress)
     elif args.website == "selenium":
-        search_indeed(progress)
-        print("\n")
         search_upwork(progress)
         print("\n")
         search_insight(progress)
@@ -1999,6 +2343,8 @@ if __name__ == "__main__":
         search_wwr(progress)
         print("\n")
         search_dice(progress)
+        print("\n")
+        search_kforce(progress)
     else:
         search = f"search_{args.website}({progress})"        
         eval(search)
