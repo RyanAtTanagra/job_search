@@ -38,11 +38,11 @@ fitness_threshold = 75
 linkedin_search_keywords = "cloud engineer"
 indeed_search_url = 'https://www.indeed.com/jobs?q=aws&l=San+Francisco%2C+CA&fromage=7&salaryType=%24185%2C000&radius=100&from=searchOnDesktopSerp'
 upwork_search_url = 'https://www.upwork.com/nx/search/jobs/?q=aws%20cloud&sort=recency&per_page=50&&user_location_match=1'
-insight_global_search_url = 'https://jobs.insightglobal.com/jobs/find_a_job/?rd=Distance&remote=true&miles=False&srch=AWS+Cloud+Engineer'
+insight_search_url = 'https://jobs.insightglobal.com/jobs/find_a_job/?rd=Distance&remote=true&miles=False&srch=AWS+Cloud+Engineer'
 ziprecruiter_search_url = 'https://www.ziprecruiter.com/jobs-search?search=aws+cloud+engineer&location=Grass+Valley%2C+CA&refine_by_location_type=only_remote&radius=5000&days=7&refine_by_employment=employment_type%3Aall&refine_by_salary=180000&refine_by_salary_ceil=295000'
 cybercoders_search_url = 'https://www.cybercoders.com/search/cloud?days=7&locationtype=3&sortType=relevance'
 dice_search_url = 'https://www.dice.com/jobs?q=aws%20cloud%20engineer&countryCode=US&radius=30&radiusUnit=mi&pageSize=100&filters.postedDate=SEVEN&filters.workplaceTypes=Remote&language=en'
-weworkremotely_search_url = 'https://weworkremotely.com/remote-jobs/search?search_uuid=&term=&sort=past_week&categories%5B%5D=6&region%5B%5D=1'
+wwr_search_url = 'https://weworkremotely.com/remote-jobs/search?search_uuid=&term=&sort=past_week&categories%5B%5D=6&region%5B%5D=1'
 monster_search_url = 'https://www.monster.com/jobs/search?q=Aws+Cloud&where=San+Francisco%2C+CA&page=1&recency=last+week&rd=100'
 kforce_search_url = 'https://www.kforce.com/find-work/search-jobs/#/?t=cloud'
 
@@ -547,7 +547,7 @@ def get_linkedin_job_details(id):
     result = api.get_job_description(id)
     return(result)
 
-def scrape_indeed_jobs(base_url):
+def scrape_indeed(base_url):
     jobs = []
     offset = 0
 
@@ -654,7 +654,7 @@ def get_indeed_job_description(url):
     finally:
         driver.quit()
 
-def scrape_upwork_jobs(base_url):
+def scrape_upwork(base_url):
     jobs = []
     current_page = 1
     try:
@@ -723,10 +723,13 @@ def get_upwork_job_description(url):
         driver = load_page(url, skip_cloudflare_detection=True)
 
         # First check to see if it's a private listing
-        private_check = driver.find_element(By.XPATH, "//h4[text()='This job is a private listing.']")
-        if private_check:
-            driver.quit()
-            return "private"
+        try:
+            private_check = driver.find_element(By.XPATH, "//h4[text()='This job is a private listing.']")
+            if private_check:
+                driver.quit()
+                return "private"
+        except:
+            pass
 
         description_element = driver.find_element(By.CSS_SELECTOR, "p.text-body-sm")
         if description_element:
@@ -744,7 +747,7 @@ def get_upwork_job_description(url):
     finally:
         driver.quit()
 
-def scrape_insight_global(base_url):
+def scrape_insight(base_url):
     jobs = []
     current_page = 1
 
@@ -829,7 +832,7 @@ def scrape_insight_global(base_url):
 
     return jobs
 
-def get_insight_global_job_description(url):
+def get_insight_job_description(url):
     try:
         driver = load_page(url, skip_cloudflare_detection=True)
         try:
@@ -1046,7 +1049,7 @@ def get_cybercoders_job_description(url):
 
     return None
 
-def scrape_dice_jobs(base_url):
+def scrape_dice(base_url):
     jobs = []
     current_page = 1
     try:
@@ -1153,7 +1156,7 @@ def get_dice_job_description(url):
 
     return None, None
 
-def scrape_wwr_jobs(url):
+def scrape_wwr(url):
     try:
         driver = setup_chrome_driver()
     except Exception as e:
@@ -1542,69 +1545,15 @@ def search_linkedin(progress=None):
     print_metrics(metrics, progress)
     return None
 
-def search_indeed(progress=None):
-    jobs = scrape_indeed_jobs(indeed_search_url)
-    if not jobs:
-        print("No Indeed search results")
+def search_board(board, progress=None):
+    if board == "linkedin":
+        search_linkedin(progress)
         return
-    print("Found", len(jobs), "Indeed jobs")
-    # Reset metric counters to zero
-    global metrics
-    metrics = {key: 0 for key in metrics}
-    for idx, job in enumerate(jobs):
-        if progress:
-            print(f"Processing {idx}/{len(jobs)}", end="\r")
-        id = job['job_id']
-        if not id:
-            logging.info(f"No job id: {id}")
-            continue
-        if awsutils.dynamodb_check_if_value_exists('indeed_jobs', 'job_id', id):
-            logging.info(f"Indeed job {id} already seen")
-            metrics["seen_count"] += 1
-            continue
-        url = job['url']
-        logging.info(url)
-        description = get_indeed_job_description(url)
-        if description is None:
-            logging.info("Couldn't find job description")
-            metrics["description_count"] += 1
-            continue
-        title = job['title']
-        highest_salary = job['highest_salary'] or get_salary_from_description(description)
-        if highest_salary is None:
-            logging.info("No salary information found")
-            awsutils.dynamodb_put_item('indeed_jobs', 'job_id', id)
-            metrics["salary_count"] += 1
-            continue
-        if highest_salary < salary_threshold:
-            logging.info(f"Salary below threshold: {highest_salary}")
-            awsutils.dynamodb_put_item('indeed_jobs', 'job_id', id)
-            metrics["salary_count"] += 1
-        else:
-            company = job['company'] or get_company_from_description(description)
-            fitness=get_fitness_rating(description, company, title)
-            if fitness is None:
-                continue
-            if fitness < fitness_threshold:
-                logging.info(f"Fitness score below threshold: {fitness}")
-                awsutils.dynamodb_put_item('indeed_jobs', 'job_id', id)
-                metrics["fitness_count"] += 1
-                continue
-            email_body=f"{company} - {title}\n{url}\nsalary: {highest_salary}/yr\nfitness: {fitness}"
-            logging.info(email_body)
-            cover_letter_path=get_cover_letter(company, title, description)
-            awsutils.send_email('Python Indeed Search <python@twistedslinky.org>', mail_to, company + " - " + title, email_body, cover_letter_path)
-            awsutils.dynamodb_put_item('indeed_jobs', 'job_id', id)
-            metrics["valid_count"] += 1
-    print_metrics(metrics, progress)
-    return None
-
-def search_upwork(progress=None):
-    jobs = scrape_upwork_jobs(upwork_search_url)
+    jobs = globals()[f"scrape_{board}"](globals()[f"{board}_search_url"])
     if not jobs:
-        print("No Upwork search results")
+        print(f"No {board} search results")
         return
-    print("Found", len(jobs), "Upwork jobs")
+    print("Found", len(jobs), board, "jobs")
     # Reset metric counters to zero
     global metrics
     metrics = {key: 0 for key in metrics}
@@ -1614,422 +1563,39 @@ def search_upwork(progress=None):
         if not job.id:
             logging.info(f"No job id: {job.id}")
             continue
-        if awsutils.dynamodb_check_if_value_exists('upwork_jobs', 'job_id', job.id):
-            logging.info(f"Upwork job {job.id} already seen")
-            metrics["seen_count"] += 1
-            continue
-        logging.info(job.url)
-        job.description = get_upwork_job_description(job.url)
-        if job.description in (None, "private"):
-            logging.info("Couldn't find job description, possibly private, emailing URL")
-            email_body=f"Private Upwork listing:\n{job.url}"
-            awsutils.send_email('Python Upwork Search <python@twistedslinky.org>', mail_to, 'Private Upwork listing', email_body)
-            awsutils.dynamodb_put_item('upwork_jobs', 'job_id', job.id)
-            metrics["description_count"] += 1
-            continue
-        if job.highest_salary is None:
-            logging.info("No rate information found")
-            awsutils.dynamodb_put_item('upwork_jobs', 'job_id', job.id)
-            metrics["salary_count"] += 1
-            continue
-        if job.highest_salary < salary_threshold:
-            logging.info(f"Rate below threshold: {job.highest_salary}")
-            awsutils.dynamodb_put_item('upwork_jobs', 'job_id', job.id)
-            metrics["salary_count"] += 1
-        else:
-            job.fitness=get_fitness_rating(job.description, job.company, job.title)
-            if job.fitness is None:
-                continue
-            if job.fitness < fitness_threshold:
-                logging.info(f"Fitness score below threshold: {job.fitness}")
-                awsutils.dynamodb_put_item('upwork_jobs', 'job_id', job.id)
-                metrics["fitness_count"] += 1
-                continue
-            email_body=f"{job.company} - {job.title}\n{job.url}\nrate: {job.highest_salary}/hr\nfitness: {job.fitness}"
-            logging.info(email_body)
-            cover_letter_path=get_cover_letter(job.company, job.title, job.description)
-            awsutils.send_email('Python Upwork Search <python@twistedslinky.org>', 'ryan@twistedslinky.org', job.company + " - " + job.title, email_body, cover_letter_path)
-            awsutils.dynamodb_put_item('upwork_jobs', 'job_id', job.id)
-            metrics["valid_count"] += 1
-    print_metrics(metrics, progress)
-    return None
-
-def search_insight(progress=None):
-    jobs = scrape_insight_global(insight_global_search_url)
-    if not jobs:
-        print("No Insight Global search results")
-        return
-    print("Found", len(jobs), "Insight Global jobs")
-    # Reset metric counters to zero
-    global metrics
-    metrics = {key: 0 for key in metrics}
-    for idx, job in enumerate(jobs):
-        if progress:
-            print(f"Processing {idx}/{len(jobs)}", end="\r")
-        if not job.id:
-            logging.info(f"No job id: {job.id}")
-            continue
-        if awsutils.dynamodb_check_if_value_exists('insight_global_jobs', 'job_id', job.id):
-            logging.info(f"Insight Global job {job.id} already seen")
-            metrics["seen_count"] += 1
-            continue
-        logging.info(job.url)
-        job.description = get_insight_global_job_description(job.url)
-        if job.description is None:
-            logging.info("Couldn't find job description")
-            metrics["description_count"] += 1
-            continue
-        if not job.highest_salary:
-            job.highest_salary = get_salary_from_description(job.description)
-        if job.highest_salary is None:
-            logging.info("No salary information found")
-            awsutils.dynamodb_put_item('insight_global_jobs', 'job_id', job.id)
-            metrics["salary_count"] += 1
-            continue
-        if job.highest_salary < salary_threshold:
-            logging.info(f"Salary below threshold: {job.highest_salary}")
-            awsutils.dynamodb_put_item('insight_global_jobs', 'job_id', job.id)
-            metrics["salary_count"] += 1
-        else:
-            if not job.company:
-                job.company = get_company_from_description(job.description)
-            job.fitness=get_fitness_rating(job.description, job.company, job.title)
-            if job.fitness is None:
-                continue
-            if job.fitness < fitness_threshold:
-                logging.info(f"Fitness score below threshold: {job.fitness}")
-                awsutils.dynamodb_put_item('insight_global_jobs', 'job_id', job.id)
-                metrics["fitness_count"] += 1
-                continue
-            email_body=f"{job.company} - {job.title}\n{job.url}\nsalary: {job.highest_salary}/yr\nfitness: {job.fitness}"
-            logging.info(email_body)
-            cover_letter_path=get_cover_letter(company, title, description)
-            awsutils.send_email('Python Insight Global Search <python@twistedslinky.org>', mail_to, company + " - " + title, email_body, cover_letter_path)
-            awsutils.dynamodb_put_item('insight_global_jobs', 'job_id', job.id)
-            metrics["valid_count"] += 1
-    print_metrics(metrics, progress)
-    return None
-
-def search_ziprecruiter(progress=None):
-    jobs = scrape_ziprecruiter(ziprecruiter_search_url)
-    if not jobs:
-        print("No Zip Recruiter search results")
-        return
-    print("Found", len(jobs), "Zip Recruiter jobs")
-    # Reset metric counters to zero
-    global metrics
-    metrics = {key: 0 for key in metrics}
-    for idx, job in enumerate(jobs):
-        if progress:
-            print(f"Processing {idx}/{len(jobs)}", end="\r")
-        if not job.id:
-            logging.info(f"No job id: {job.id}")
-            continue
-        if awsutils.dynamodb_check_if_value_exists('ziprecruiter_jobs', 'job_id', job.id):
-            logging.info(f"Zip Recruiter job {job.id} already seen")
-            metrics["seen_count"] += 1
-            continue
-        logging.info(job.url)
-        job.description = get_ziprecruiter_job_description(job.url)
-        if job.description is None:
-            logging.info("Couldn't find job description")
-            metrics["description_count"] += 1
-            continue
-        logging.info(f"Salary Text: {job.salary_text}")
-        if not job.highest_salary:
-            job.highest_salary = get_salary_from_description(job.description)
-        if job.highest_salary is None:
-            logging.info("No salary information found")
-            awsutils.dynamodb_put_item('ziprecruiter_jobs', 'job_id', job.id)
-            metrics["salary_count"] += 1
-            continue
-        if job.highest_salary < salary_threshold:
-            logging.info(f"Salary below threshold: {job.highest_salary}")
-            awsutils.dynamodb_put_item('ziprecruiter_jobs', 'job_id', job.id)
-            metrics["salary_count"] += 1
-        else:
-            if not job.company:
-                job.company = get_company_from_description(job.description)
-            job.fitness=get_fitness_rating(job.description, job.company, job.title)
-            if job.fitness is None:
-                continue
-            if job.fitness < fitness_threshold:
-                logging.info(f"Fitness score below threshold: {job.fitness}")
-                awsutils.dynamodb_put_item('ziprecruiter_jobs', 'job_id', job.id)
-                metrics["fitness_count"] += 1
-                continue
-            email_body=f"{job.company} - {job.title}\n{job.url}\nsalary: {job.highest_salary}/yr\nfitness: {job.fitness}"
-            logging.info(email_body)
-            cover_letter_path=get_cover_letter(job.company, job.title, job.description)
-            awsutils.send_email('Python Zip Recruiter Search <python@twistedslinky.org>', mail_to, job.company + " - " + job.title, email_body, cover_letter_path)
-            awsutils.dynamodb_put_item('ziprecruiter_jobs', 'job_id', job.id)
-            metrics["valid_count"] += 1
-    print_metrics(metrics, progress)
-    return None
-
-def search_cybercoders(progress=None):
-    jobs = scrape_cybercoders(cybercoders_search_url)
-    if not jobs:
-        print("No CyberCoders search results")
-        return
-    print("Found", len(jobs), "CyberCoders jobs")
-    # Reset metric counters to zero
-    global metrics
-    metrics = {key: 0 for key in metrics}
-    for idx, job in enumerate(jobs):
-        if progress:
-            print(f"Processing {idx}/{len(jobs)}", end="\r")
-        if not job.id:
-            logging.info(f"No job id: {job.id}")
-            continue
-        if awsutils.dynamodb_check_if_value_exists('cybercoders_jobs', 'job_id', job.id):
-            logging.info(f"CyberCoders job {job.id} already seen")
-            metrics["seen_count"] += 1
-            continue
-        logging.info(job.url)
-        job.description = get_cybercoders_job_description(job.url)
-        if job.description is None:
-            logging.info("Couldn't find job description")
-            metrics["description_count"] += 1
-            continue
-        if not job.highest_salary:
-            job.highest_salary = get_salary_from_description(job.description)
-        if job.highest_salary is None:
-            logging.info("No salary information found")
-            awsutils.dynamodb_put_item('cybercoders_jobs', 'job_id', job.id)
-            metrics["salary_count"] += 1
-            continue
-        if job.highest_salary < salary_threshold:
-            logging.info(f"Salary below threshold: {job.highest_salary}")
-            awsutils.dynamodb_put_item('cybercoders_jobs', 'job_id', job.id)
-            metrics["salary_count"] += 1
-        else:
-            if not job.company:
-                job.company = get_company_from_description(job.description)
-            job.fitness = get_fitness_rating(job.description, job.company, job.title)
-            if job.fitness is None:
-                continue
-            if job.fitness < fitness_threshold:
-                logging.info(f"Fitness score below threshold: {job.fitness}")
-                awsutils.dynamodb_put_item('cybercoders_jobs', 'job_id', job.id)
-                metrics["fitness_count"] += 1
-                continue
-            email_body=f"{job.company} - {job.title}\n{job.url}\nsalary: {job.highest_salary}/yr\nfitness: {job.fitness}"
-            logging.info(email_body)
-            cover_letter_path=get_cover_letter(job.company, job.title, job.description)
-            awsutils.send_email('Python CyberCoders Search <python@twistedslinky.org>', mail_to, job.company + " - " + job.title, email_body, cover_letter_path)
-            awsutils.dynamodb_put_item('cybercoders_jobs', 'job_id', job.id)
-            metrics["valid_count"] += 1
-    print_metrics(metrics, progress)
-    return None
-
-def search_dice(progress=None):
-    jobs = scrape_dice_jobs(dice_search_url)
-    if not jobs:
-        print("No Dice search results")
-        return
-    print("Found", len(jobs), "Dice jobs")
-    # Reset metric counters to zero
-    global metrics
-    metrics = {key: 0 for key in metrics}
-    for idx, job in enumerate(jobs):
-        if progress:
-            print(f"Processing {idx}/{len(jobs)}", end="\r")
-        if not job.id:
-            logging.info(f"No job id: {job.id}")
-            continue
-        if awsutils.dynamodb_check_if_value_exists('dice_jobs', 'job_id', job.id):
-            logging.info(f"Dice job {job.id} already seen")
-            metrics["seen_count"] += 1
-            continue
-        logging.info(job.url)
-        job.highest_salary, job.description = get_dice_job_description(job.url)
-        if job.description is None:
-            logging.info("Couldn't find job description")
-            metrics["description_count"] += 1
-            continue
-        if not job.highest_salary:
-            job.highest_salary = get_salary_from_description(job.description)
-        if job.highest_salary is None:
-            logging.info("No salary information found")
-            awsutils.dynamodb_put_item('dice_jobs', 'job_id', job.id)
-            metrics["salary_count"] += 1
-            continue
-        if job.highest_salary < salary_threshold:
-            logging.info(f"Salary below threshold: {job.highest_salary}")
-            awsutils.dynamodb_put_item('dice_jobs', 'job_id', job.id)
-            metrics["salary_count"] += 1
-        else:
-            if not job.company:
-                job.company = get_company_from_description(job.description)
-            job.fitness=get_fitness_rating(job.description, job.company, job.title)
-            if job.fitness is None:
-                continue
-            if job.fitness < fitness_threshold:
-                logging.info(f"Fitness score below threshold: {job.fitness}")
-                awsutils.dynamodb_put_item('dice_jobs', 'job_id', job.id)
-                metrics["fitness_count"] += 1
-                continue
-            email_body=f"{job.company} - {job.title}\n{job.url}\nsalary: {job.highest_salary}/yr\nfitness: {job.fitness}"
-            logging.info(email_body)
-            cover_letter_path=get_cover_letter(job.company, job.title, job.description)
-            awsutils.send_email('Python Dice Search <python@twistedslinky.org>', mail_to, job.company + " - " + job.title, email_body, cover_letter_path)
-            awsutils.dynamodb_put_item('dice_jobs', 'job_id', job.id)
-            metrics["valid_count"] += 1
-    print_metrics(metrics, progress)
-    return None
-
-def search_wwr(progress=None):
-    jobs = scrape_wwr_jobs(weworkremotely_search_url)
-    if not jobs:
-        print("No WWR search results")
-        return
-    print("Found", len(jobs), "WWR jobs")
-    # Reset metric counters to zero
-    global metrics
-    metrics = {key: 0 for key in metrics}
-    for idx, job in enumerate(jobs):
-        if progress:
-            print(f"Processing {idx}/{len(jobs)}", end="\r")
-        id = job['job_id']
-        if not id:
-            logging.info(f"No job id: {id}")
-            continue
-        if awsutils.dynamodb_check_if_value_exists('wwr_jobs', 'job_id', id):
-            logging.info(f"WWR job {id} already seen")
-            metrics["seen_count"] += 1
-            continue
-        url = job['url']
-        logging.info(url)
-        title = job['title']
-        company = job['company']
-        description = get_wwr_job_description(url)
-        if description is None:
-            logging.info("Couldn't find job description")
-            metrics["description_count"] += 1
-            continue
-        highest_salary = get_salary_from_description(description)
-        if highest_salary is None:
-            logging.info("No salary information found")
-            awsutils.dynamodb_put_item('wwr_jobs', 'job_id', id)
-            metrics["salary_count"] += 1
-            continue
-        if highest_salary < salary_threshold:
-            logging.info(f"Salary below threshold: {highest_salary}")
-            awsutils.dynamodb_put_item('wwr_jobs', 'job_id', id)
-            metrics["salary_count"] += 1
-        else:
-            company = job['company'] or get_company_from_description(description)
-            fitness=get_fitness_rating(description, company, title)
-            if fitness is None:
-                continue
-            if fitness < fitness_threshold:
-                logging.info(f"Fitness score below threshold: {fitness}")
-                awsutils.dynamodb_put_item('wwr_jobs', 'job_id', id)
-                metrics["fitness_count"] += 1
-                continue
-            email_body=f"{company} - {title}\n{url}\nsalary: {highest_salary}/yr\nfitness: {fitness}"
-            logging.info(email_body)
-            cover_letter_path=get_cover_letter(company, title, description)
-            awsutils.send_email('Python WeWorkRemotely Search <python@twistedslinky.org>', mail_to, company + " - " + title, email_body, cover_letter_path)
-            awsutils.dynamodb_put_item('wwr_jobs', 'job_id', id)
-            metrics["valid_count"] += 1
-    print_metrics(metrics, progress)
-    return None
-
-def search_monster(progress=None):
-    jobs = scrape_monster(monster_search_url)
-    if not jobs:
-        print("No Monster search results")
-        return
-    print("Found", len(jobs), "Monster jobs")
-    # Reset metric counters to zero
-    global metrics
-    metrics = {key: 0 for key in metrics}
-    for idx, job in enumerate(jobs):
-        if progress:
-            print(f"Processing {idx}/{len(jobs)}", end="\r")
-        if not job.id:
-            logging.info(f"No job id: {job.id}")
-            continue
-        job.description = get_monster_job_description(job.url)
-        if awsutils.dynamodb_check_if_value_exists('monster_jobs', 'job_id', job.id):
-            logging.info(f"Monster job {job.id} already seen")
-            metrics["seen_count"] += 1
-            continue
-        logging.info(job.url)
-        job.description = get_monster_job_description(job.url)
-        if job.description is None:
-            logging.info("Couldn't find job description")
-            metrics["description_count"] += 1
-            continue
-        if not job.highest_salary:
-            job.highest_salary = get_salary_from_description(job.description)
-        if job.highest_salary is None:
-            logging.info("No salary information found")
-            awsutils.dynamodb_put_item('monster_jobs', 'job_id', job.id)
-            metrics["salary_count"] += 1
-            continue
-        if job.highest_salary < salary_threshold:
-            logging.info(f"Salary below threshold: {job.highest_salary}")
-            awsutils.dynamodb_put_item('monster_jobs', 'job_id', job.id)
-            metrics["salary_count"] += 1
-        else:
-            if not job.company:
-                job.company = get_company_from_description(job.description)
-            job.fitness = get_fitness_rating(job.description, job.company, job.title)
-            if job.fitness is None:
-                continue
-            if job.fitness < fitness_threshold:
-                logging.info(f"Fitness score below threshold: {job.fitness}")
-                awsutils.dynamodb_put_item('monster_jobs', 'job_id', job.id)
-                metrics["fitness_count"] += 1
-                continue
-            email_body=f"{job.company} - {job.title}\n{job.url}\nsalary: {job.highest_salary}/yr\nfitness: {job.fitness}"
-            logging.info(email_body)
-            cover_letter_path=get_cover_letter(job.company, job.title, job.description)
-            awsutils.send_email('Python Monster Search <python@twistedslinky.org>', mail_to, job.company + " - " + job.title, email_body, cover_letter_path)
-            awsutils.dynamodb_put_item('monster_jobs', 'job_id', job.id)
-            metrics["valid_count"] += 1
-    print_metrics(metrics, progress)
-    return None
-
-def search_kforce(progress=None):
-    jobs = scrape_kforce(kforce_search_url)
-    if not jobs:
-        print("No Kforce search results")
-        return
-    print("Found", len(jobs), "Kforce jobs")
-    # Reset metric counters to zero
-    global metrics
-    metrics = {key: 0 for key in metrics}
-    for idx, job in enumerate(jobs):
-        if progress:
-            print(f"Processing {idx}/{len(jobs)}", end="\r")
-        if not job.id:
-            logging.info(f"No job id: {job.id}")
-            continue
-        if awsutils.dynamodb_check_if_value_exists('kforce_jobs', 'job_id', job.id):
-            logging.info(f"Kforce job {job.id} already seen")
+        if awsutils.dynamodb_check_if_value_exists(f"{board}_jobs", 'job_id', job.id):
+            logging.info(f"{board} job {job.id} already seen")
             metrics["seen_count"] += 1
             continue
         logging.info(job.url)
         sleep(1)
-        job.highest_salary, job.description = get_kforce_job_description(job.url)
+        result = globals()[f"get_{board}_job_description"](job.url)
+        if isinstance(result, tuple):
+            job.highest_salary, job.description = result
+        else:
+            job.description = result
         if job.description is None:
             logging.info("Couldn't find job description")
+            metrics["description_count"] += 1
+            continue
+        if job.description == "private":
+            # Possible an upwork private listing
+            logging.info("Couldn't find job description, possibly private, emailing URL")
+            email_body=f"Private {board} listing:\n{job.url}"
+            awsutils.send_email(f"Python {board} Search <python@twistedslinky.org>", mail_to, f"Private {board} listing", email_body)
+            awsutils.dynamodb_put_item(f"{board}_jobs", 'job_id', job.id)
             metrics["description_count"] += 1
             continue
         if not job.highest_salary:
             job.highest_salary = get_salary_from_description(job.description)
         if job.highest_salary is None:
             logging.info("No salary information found")
-            awsutils.dynamodb_put_item('kforce_jobs', 'job_id', job.id)
+            awsutils.dynamodb_put_item(f"{board}_jobs", 'job_id', job.id)
             metrics["salary_count"] += 1
             continue
         if job.highest_salary < salary_threshold:
             logging.info(f"Salary below threshold: {job.highest_salary}")
-            awsutils.dynamodb_put_item('kforce_jobs', 'job_id', job.id)
+            awsutils.dynamodb_put_item(f"{board}_jobs", 'job_id', job.id)
             metrics["salary_count"] += 1
         else:
             if not job.company:
@@ -2039,14 +1605,14 @@ def search_kforce(progress=None):
                 continue
             if job.fitness < fitness_threshold:
                 logging.info(f"Fitness score below threshold: {job.fitness}")
-                awsutils.dynamodb_put_item('kforce_jobs', 'job_id', job.id)
+                awsutils.dynamodb_put_item(f"{board}_jobs", 'job_id', job.id)
                 metrics["fitness_count"] += 1
                 continue
             email_body=f"{job.company} - {job.title}\n{job.url}\nsalary: {job.highest_salary}/yr\nfitness: {job.fitness}"
             logging.info(email_body)
             cover_letter_path=get_cover_letter(job.company, job.title, job.description)
-            awsutils.send_email('Python Kforce Search <python@twistedslinky.org>', mail_to, job.company + " - " + job.title, email_body, cover_letter_path)
-            awsutils.dynamodb_put_item('kforce_jobs', 'job_id', job.id)
+            awsutils.send_email(f"Python {board} Search <python@twistedslinky.org>", mail_to, job.company + " - " + job.title, email_body, cover_letter_path)
+            awsutils.dynamodb_put_item(f"{board}_jobs", 'job_id', job.id)
             metrics["valid_count"] += 1
     print_metrics(metrics, progress)
     return None
@@ -2056,7 +1622,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run a search on job postings and email details and cover letter to myself",formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument(
         "website",
-        choices=['linkedin','indeed','upwork','insight','ziprecruiter', 'cybercoders', 'dice', 'wwr', 'monster', 'kforce', 'all', 'selenium'],
+        choices=['linkedin', 'indeed', 'upwork', 'insight', 'ziprecruiter', 'cybercoders', 'dice', 'wwr', 'monster', 'kforce', 'all', 'selenium'],
         help="Website to search, or all, or those requiring selenium"
     )
     parser.add_argument("--cron", action="store_true", help="If set, suppress progress output for cron jobs")
@@ -2072,39 +1638,29 @@ if __name__ == "__main__":
         filename="debug.log",
         format="%(asctime)s - %(levelname)s - %(message)s"
     )
+    selenium_boards = [
+            "indeed",
+            "upwork",
+            "insight",
+            "cybercoders",
+            "wwr",
+            "ziprecruiter",
+            "kforce",
+            "monster",
+            "dice"
+        ]
     if args.website == "all":
-        search_linkedin(progress)
+        search_board("linkedin", progress)
         print("\n")
-        search_indeed(progress)
-        print("\n")
-        search_upwork(progress)
-        print("\n")
-        search_insight(progress)
-        print("\n")
-        search_ziprecruiter(progress)
-        print("\n")
-        search_cybercoders(progress)
+        for board in selenium_boards:
+            search_board(board, progress)
+            print("\n")
     elif args.website == "selenium":
-        search_indeed(progress)
-        print("\n")
-        search_upwork(progress)
-        print("\n")
-        search_insight(progress)
-        print("\n")
-        search_cybercoders(progress)
-        print("\n")
-        search_wwr(progress)
-        print("\n")
-        search_ziprecruiter(progress)
-        print("\n")
-        search_kforce(progress)
-        print("\n")
-        search_monster(progress)
-        print("\n")
-        search_dice(progress)
+        for board in selenium_boards:
+            search_board(board, progress)
+            print("\n")
     else:
-        search = f"search_{args.website}({progress})"        
-        eval(search)
+        search_board(args.website, progress)
     end_time = time()
     elapsed_time = end_time - start_time
     print(f"\nScript completed in {elapsed_time:.2f} seconds")
