@@ -18,13 +18,12 @@ from utils.linkedin_api import Linkedin
 import logging
 from dotenv import load_dotenv
 from urllib.parse import urlparse, parse_qs, urljoin, urlencode
-#from bs4 import BeautifulSoup
 from typing import Optional
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 # Modify ulimits because some sites return a lot of jobs and we run out of file descriptors
 soft, hard = resource.getrlimit(resource.RLIMIT_NOFILE)
-resource.setrlimit(resource.RLIMIT_NOFILE, (1024, hard))
+resource.setrlimit(resource.RLIMIT_NOFILE, (2048, hard))
 
 # Annual salary threshold
 salary_threshold = 180
@@ -161,7 +160,6 @@ def setup_chrome_driver():
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--enable-cookies')
     # Add some randomness to appear more human
-    import random
     random_width = random.randint(1200, 1600)
     random_height = random.randint(800, 1000)
     options.add_argument(f'--window-size={random_width},{random_height}')
@@ -351,7 +349,9 @@ def load_page(url, skip_cloudflare_detection=False, load_more=False):
                 "div.job_description",
                 "article.job-tile",
                 "div[data-test='job-description']",
-                ".visitor-page-container"
+                ".visitor-page-container",
+                "dhi-search-card",
+                "div[data-cy='payDetails'] span"
                 ]
 
         wait.until(
@@ -690,7 +690,6 @@ def scrape_upwork_jobs(base_url):
                     # Extract payment information
                     price_elem = card.find_element(By.CSS_SELECTOR, '[data-test="job-type-label"]')
                     job.salary_text = price_elem.text.strip() if price_elem else None
-                    logging.info(f"Price text: {job.salary_text}")
                     job.highest_salary = get_salary_from_text(job.salary_text) or None
 
                     jobs.append(job)
@@ -835,7 +834,7 @@ def get_insight_global_job_description(url):
         driver = load_page(url, skip_cloudflare_detection=True)
         try:
             # Get all description divs
-            desc_sections = driver.find_element(By.CLASS_NAME, "detailpage-desc")
+            desc_sections = driver.find_elements(By.CLASS_NAME, "detailpage-desc")
 
             # Combine all description sections into one string
             description_parts = []
@@ -1048,131 +1047,81 @@ def get_cybercoders_job_description(url):
     return None
 
 def scrape_dice_jobs(base_url):
-    try:
-        driver = setup_chrome_driver()
-    except Exception as e:
-        print(f"Error loading Chrome: {e}")
-        return None
     jobs = []
     current_page = 1
-    while True:
-        # Construct the URL for the current page
-        page_url = f"{base_url}&page={current_page}"
+    try:
+        while True:
+            # Construct the URL for the current page
+            page_url = f"{base_url}&page={current_page}"
 
-        # Navigate to the page
-        logging.info(f"Scraping Dice page {current_page}: {page_url}")
-        driver.get(page_url)
-        wait = WebDriverWait(driver, 10)
-        with open("dice_last.html", "w", encoding="utf-8") as file:
-            file.write(driver.page_source)
-        try:
-            job_cards = wait.until(EC.presence_of_all_elements_located(
-                (By.CSS_SELECTOR, "dhi-search-card")))
-        except:
-            logging.info("No job cards")
-            break
-
-        # Break if no jobs found
-        if len(job_cards) == 0:
-            break
-
-        # Process each job card
-        for card in job_cards:
+            # Navigate to the page
+            logging.info(f"Scraping Dice page {current_page}: {page_url}")
+            driver = load_page(page_url)
             try:
-                # Find the title link element which contains both title and URL
-                title_link = card.find_element(By.CSS_SELECTOR, "a[data-cy='card-title-link']")
-
-                # Get company element
-                company_element = card.find_element(By.CSS_SELECTOR, "a[data-cy='search-result-company-name']")
-
-                # Extract job details
-                job_id = title_link.get_attribute('id').strip('()').strip(',').strip()
-                job_url = f"https://www.dice.com/job-detail/{job_id}"
-                title = title_link.text.strip().strip('()').strip(',').strip()
-                company = company_element.text.strip()
-                # Different job_id because Dice is so fucking noisy due to companies spamming the same position over and over
-                spam_job_id = f"{company}_{title}".lower().strip()
-
-                jobs.append({
-                    'job_id': spam_job_id,
-                    'url': job_url,
-                    'company': company,
-                    'title': title,
-                    })
-
+                job_cards = driver.find_elements(By.CSS_SELECTOR, "dhi-search-card")
+                if not job_cards:
+                    break
+                logging.info(f"Found {len(job_cards)} Dice jobs")
             except Exception as e:
-                print(f"Error processing job card: {e}")
-                continue
+                logging.info(f"Error finding job cards: {e}")
+                break
 
-        # Increment page counter
-        current_page += 1
-        sleep(2)
+            # Process each job card
+            for card in job_cards:
+                try:
+                    # Find the title link element which contains both title and id
+                    title_link = card.find_element(By.CSS_SELECTOR, "a[data-cy='card-title-link']")
 
-    driver.quit()
+                    # Get company element
+                    company_element = card.find_element(By.CSS_SELECTOR, "a[data-cy='search-result-company-name']")
+
+                    # Extract job details
+                    job_id = title_link.get_attribute('id').strip('()').strip(',').strip()
+                    title = title_link.text.strip().strip('()').strip(',').strip()
+                    company = company_element.text.strip()
+                    job = Job(
+                            # Different job_id because Dice is so fucking noisy due to companies spamming the same position over and over
+                            id = f"{company}_{title}".lower().strip(),
+                            url = f"https://www.dice.com/job-detail/{job_id}",
+                            title = title,
+                            company = company
+                    )
+
+                    jobs.append(job)
+
+                except Exception as e:
+                    print(f"Error processing job card: {e}")
+                    continue
+
+            driver.quit()
+
+            if len(job_cards) == 0:
+                break
+
+            current_page += 1
+
+    except Exception as e:
+        logging.info(f"Error scraping Dice: {e}")
+
+    finally:
+        driver.quit()
 
     return jobs
 
 def get_dice_job_description(url):
     try:
-        driver = setup_chrome_driver()
-    except Exception as e:
-        print(f"Error loading Chrome: {e}")
-        return None
-
-    try:
-        driver.get(url)
-        wait = WebDriverWait(driver, 10)
+        driver = load_page(url, skip_cloudflare_detection=True)
+        
         try:
-            salary_element = wait.until(
-                    EC.presence_of_element_located((By.CSS_SELECTOR, "div[data-cy='payDetails'] span"))
-                    )
-            salary_text = salary_element.text
-            logging.info(f"Found salary_text: {salary_text}")
-            # Standardize format and remove currency
-            salary_clean = salary_text.replace('USD', '').replace('$', '').strip()
-
-            # Remove various forms of annual/hourly indicators
-            salary_clean = salary_clean.replace('per year', '').replace('/year', '').replace('/yr', '').replace('yearly', '')
-            salary_clean = salary_clean.replace('per hour', '').replace('/hour', '').replace('/hr', '').replace('hourly', '')
-
-            # Handle "Up to X" pattern
-            if salary_clean.lower().startswith('up to'):
-                salary_clean = salary_clean.lower().replace('up to', '').strip()
-                salary_val = salary_clean
-
-            # Split range and get higher value
-            if ' - ' in salary_clean:
-                salary_val = salary_clean.split(' - ')[1]
-            elif '-' in salary_clean:  # Add this case
-                salary_val = salary_clean.split('-')[1]
-            else:
-                salary_val = salary_clean
-
-            # Convert to float (remove commas)
-            salary_val = float(salary_val.replace(',', ''))
-
-            # Convert to thousands
-            highest_salary = salary_val / 1000
-
-            # Check if it's hourly based on explicit indicators or amount
-            is_hourly = any(term in salary_text.lower() for term in ['/hr', '/hour', 'per hour', 'hourly'])
-
-            # If no explicit hourly indicator, check if the amount suggests hourly rate
-            # Assuming anything less than $200 is likely an hourly rate
-            if not is_hourly and highest_salary < 0.2:  # $200 in thousands
-                is_hourly = True
-
-            # Convert hourly to annual salary
-            if is_hourly:
-                highest_salary = highest_salary * 2080
-
-        except:
+            salary_element = driver.find_element(By.CSS_SELECTOR, "div[data-cy='payDetails'] span")
+            salary_text = salary_element.text if salary_element else None
+            highest_salary = get_salary_from_text(salary_text) or None
+        except Exception as e:
+            logging.info(f"Error finding salary div: {e}")
             highest_salary = None
 
         try:
-            expand_button = wait.until(
-                    EC.presence_of_element_located((By.ID, "descriptionToggle"))
-                    )
+            expand_button = driver.find_element(By.ID, "descriptionToggle")
             if "Read Full Job Description" in expand_button.text:
                 # Try scrolling to button first to ensure it's in view
                 driver.execute_script("arguments[0].scrollIntoView(true);", expand_button)
@@ -1188,27 +1137,21 @@ def get_dice_job_description(url):
             pass 
 
         try:
-            description_element = wait.until(
-                    EC.presence_of_element_located((By.ID, "jobDescription"))
-                    )
+            description_element = driver.find_element(By.ID, "jobDescription")
             description = description_element.text
         except:
             description = None
 
-        driver.quit()
         return highest_salary, description
 
     except Exception as e:
-        print(f"An error occurred: {str(e)}")
-        driver.quit()
-        return None, None
+        logging.info(f"Error loading page: {e}")
+        return None
 
     finally:
-        if driver:
-            try:
-                driver.quit()
-            except Exception as e:
-                logging.error(f"Error closing driver: {e}")
+        driver.quit()
+
+    return None, None
 
 def scrape_wwr_jobs(url):
     try:
@@ -1334,8 +1277,8 @@ def scrape_monster(url):
 
             try:
                 load_more = WebDriverWait(driver, 5).until(
-                    EC.element_to_be_clickable((By.ID, "job-search-load-more"))
-                )
+                        EC.element_to_be_clickable((By.ID, "job-search-load-more"))
+                        )
                 driver.execute_script("arguments[0].scrollIntoView();", load_more)
                 sleep(1)  # Small delay to let the page settle
                 load_more.click()
@@ -1393,11 +1336,11 @@ def scrape_kforce(url):
             try:
                 job_link = card.find_element(By.CSS_SELECTOR, "h2 a.linkForJob")
                 job = Job(
-                    id = job_link.get_attribute("href").split("/detail/")[1].rstrip("/") if "/detail/" in job_link.get_attribute("href") else None,
-                    url = job_link.get_attribute("href"),
-                    title = job_link.text.strip(),
-                    company = "Kforce"
-                )
+                        id = job_link.get_attribute("href").split("/detail/")[1].rstrip("/") if "/detail/" in job_link.get_attribute("href") else None,
+                        url = job_link.get_attribute("href"),
+                        title = job_link.text.strip(),
+                        company = "Kforce"
+                        )
 
                 jobs.append(job)
 
@@ -1443,56 +1386,27 @@ def get_kforce_job_description(url):
         if driver:
             driver.quit()
 
-# For Upwork jobs
-def parse_duration_hours(duration_text):
-    """
-    Parse the duration and hours per week from text like "3 to 6 months, 30+ hrs/week"
-    Returns (min_months, max_months, min_hours, max_hours)
-    """
-    try:
-        # Extract months
-        months_match = re.search(r'(\d+)(?:\s+to\s+(\d+))?\s+months?', duration_text)
-        if months_match:
-            min_months = int(months_match.group(1))
-            max_months = int(months_match.group(2)) if months_match.group(2) else min_months
-        else:
-            min_months = max_months = None
-            
-        # Extract hours
-        hours_match = re.search(r'(\d+)\+?\s*hrs/week|Less than (\d+)\s*hrs/week', duration_text)
-        if hours_match:
-            if hours_match.group(1):  # matches "30+ hrs/week"
-                min_hours = int(hours_match.group(1))
-                max_hours = 40  # assume 40 as max for "X+" format
-            else:  # matches "Less than X hrs/week"
-                min_hours = 1
-                max_hours = int(hours_match.group(2))
-        else:
-            min_hours = max_hours = None
-            
-        return min_months, max_months, min_hours, max_hours
-    except Exception as e:
-        logging.error(f"Error parsing duration: {e}")
-        return None, None, None, None
-
 def get_salary_from_text(salary_text):
+    logging.info(f"salary_text: {salary_text}")
     cleaned_text = salary_text.replace('$', '').replace(',', '')
     # Get all the numbers, and take the last one
-    salary_numbers = re.findall(r'\d+', cleaned_text)  # Extract all numbers
+    salary_numbers = re.findall(r'\d+\.?\d*', cleaned_text)
     highest_salary = float(salary_numbers[-1])
     
-    # If 'hour' exists in the salary, flag it as hourly to be converted to salary
-    is_hourly = any(term in cleaned_text.lower() for term in ["hour", "hr", "hourly"])
-    if is_hourly:
-        highest_salary *= 2080
-
-    # Check if K/k is in the text (meaning the salary is already in thousands)
-    is_in_thousands = 'k' in cleaned_text.lower()
+    # Check if salary is already in thousands
+    is_in_thousands = any(term in cleaned_text.lower() for term in ["k"])
     
-    # Only divide by 1000 if not already expressed in thousands
+    # Check if salary is explicitly annual
+    is_explicitly_annual = any(term in cleaned_text.lower() for term in ["annual", "year", "per annum", "/year", "/yr"])
+
+    # If not explicitly annual and number is below 200, assume it's hourly
+    if not is_in_thousands and not is_explicitly_annual and highest_salary < 200:
+        highest_salary *= 2080  # Convert hourly wage to annual salary
+
+    # If salary is NOT already in thousands, convert it
     if not is_in_thousands:
-        highest_salary /= 1000
-        
+        highest_salary /= 1000  # Convert to thousands
+
     return highest_salary
 
 # If a job post doesn't have the salary in the normal job details, see if they say it in the description
@@ -1921,48 +1835,46 @@ def search_dice(progress=None):
     for idx, job in enumerate(jobs):
         if progress:
             print(f"Processing {idx}/{len(jobs)}", end="\r")
-        id = job['job_id']
-        if not id:
-            logging.info(f"No job id: {id}")
+        if not job.id:
+            logging.info(f"No job id: {job.id}")
             continue
-        if awsutils.dynamodb_check_if_value_exists('dice_jobs', 'job_id', id):
-            logging.info(f"Dice job {id} already seen")
+        if awsutils.dynamodb_check_if_value_exists('dice_jobs', 'job_id', job.id):
+            logging.info(f"Dice job {job.id} already seen")
             metrics["seen_count"] += 1
             continue
-        url = job['url']
-        logging.info(url)
-        title = job['title']
-        highest_salary, description = get_dice_job_description(url)
-        if description is None:
+        logging.info(job.url)
+        job.highest_salary, job.description = get_dice_job_description(job.url)
+        if job.description is None:
             logging.info("Couldn't find job description")
             metrics["description_count"] += 1
             continue
-        if highest_salary is None:
-            highest_salary = get_salary_from_description(description)
-        if highest_salary is None:
+        if not job.highest_salary:
+            job.highest_salary = get_salary_from_description(job.description)
+        if job.highest_salary is None:
             logging.info("No salary information found")
-            awsutils.dynamodb_put_item('dice_jobs', 'job_id', id)
+            awsutils.dynamodb_put_item('dice_jobs', 'job_id', job.id)
             metrics["salary_count"] += 1
             continue
-        if highest_salary < salary_threshold:
-            logging.info(f"Salary below threshold: {highest_salary}")
-            awsutils.dynamodb_put_item('dice_jobs', 'job_id', id)
+        if job.highest_salary < salary_threshold:
+            logging.info(f"Salary below threshold: {job.highest_salary}")
+            awsutils.dynamodb_put_item('dice_jobs', 'job_id', job.id)
             metrics["salary_count"] += 1
         else:
-            company = job['company'] or get_company_from_description(description)
-            fitness=get_fitness_rating(description, company, title)
-            if fitness is None:
+            if not job.company:
+                job.company = get_company_from_description(job.description)
+            job.fitness=get_fitness_rating(job.description, job.company, job.title)
+            if job.fitness is None:
                 continue
-            if fitness < fitness_threshold:
-                logging.info(f"Fitness score below threshold: {fitness}")
-                awsutils.dynamodb_put_item('dice_jobs', 'job_id', id)
+            if job.fitness < fitness_threshold:
+                logging.info(f"Fitness score below threshold: {job.fitness}")
+                awsutils.dynamodb_put_item('dice_jobs', 'job_id', job.id)
                 metrics["fitness_count"] += 1
                 continue
-            email_body=f"{company} - {title}\n{url}\nsalary: {highest_salary}/yr\nfitness: {fitness}"
+            email_body=f"{job.company} - {job.title}\n{job.url}\nsalary: {job.highest_salary}/yr\nfitness: {job.fitness}"
             logging.info(email_body)
-            cover_letter_path=get_cover_letter(company, title, description)
-            awsutils.send_email('Python Dice Search <python@twistedslinky.org>', mail_to, company + " - " + title, email_body, cover_letter_path)
-            awsutils.dynamodb_put_item('dice_jobs', 'job_id', id)
+            cover_letter_path=get_cover_letter(job.company, job.title, job.description)
+            awsutils.send_email('Python Dice Search <python@twistedslinky.org>', mail_to, job.company + " - " + job.title, email_body, cover_letter_path)
+            awsutils.dynamodb_put_item('dice_jobs', 'job_id', job.id)
             metrics["valid_count"] += 1
     print_metrics(metrics, progress)
     return None
