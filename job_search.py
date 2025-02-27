@@ -35,7 +35,7 @@ hourly_threshold = 80
 fitness_threshold = 75
 
 # Search URLs and terms
-linkedin_search_keywords = "cloud engineer"
+linkedin_search_url = "cloud engineer"
 indeed_search_url = 'https://www.indeed.com/jobs?q=aws&l=San+Francisco%2C+CA&fromage=7&salaryType=%24185%2C000&radius=100&from=searchOnDesktopSerp'
 upwork_search_url = 'https://www.upwork.com/nx/search/jobs/?q=aws%20cloud&sort=recency&per_page=50&&user_location_match=1'
 insight_search_url = 'https://jobs.insightglobal.com/jobs/find_a_job/?rd=Distance&remote=true&miles=False&srch=AWS+Cloud+Engineer'
@@ -538,6 +538,34 @@ Job Description:
     doc.save(cover_letter_path)
     return(cover_letter_path)
 
+def scrape_linkedin(search_term):
+    jobs = []
+    try:
+        api = Linkedin(linkedin_email, linkedin_password)
+    except Exception as e:
+        print(f"Error connecting to LinkedIn to get search results. Details: {e}")
+        return
+    job_cards = api.search_jobs(keywords=search_term, listed_at=86400, remote=['2'])
+    if len(job_cards) < 1:
+        print("No search results")
+        return None
+    logging.info(f"Found {len(job_cards)} LinkedIn jobs")
+    for card in job_cards:
+        try:
+            job_id = int(card['trackingUrn'].split(":")[-1])
+            job = Job(
+                id = job_id,
+                url = f"https://www.linkedin.com/jobs/view/{job_id}"
+            )
+
+            jobs.append(job)
+
+        except Exception as e:
+            logging.info(f"Error processing job card: {e}")
+            continue
+
+    return jobs
+
 def get_linkedin_job_details(id):
     try:
         api = Linkedin(linkedin_email, linkedin_password)
@@ -679,13 +707,13 @@ def scrape_upwork(base_url):
                     title_elem = card.find_element(By.CSS_SELECTOR, 'h2.job-tile-title a')
                     job_url = urljoin('https://www.upwork.com', title_elem.get_attribute('href'))
                     job_id_match = re.search(r'_~(\d+)', job_url)
- 
+
                     job = Job(
                             id = int(job_id_match.group(1)) if job_id_match else None,
                             url = job_url,
                             title = title_elem.text.strip(),
                             company = "Unkown Company"
-                    )
+                            )
 
                     # Extract payment information
                     price_elem = card.find_element(By.CSS_SELECTOR, '[data-test="job-type-label"]')
@@ -712,7 +740,7 @@ def scrape_upwork(base_url):
     except Exception as e:
         logging.error(f"Error scraping Upwork jobs: {e}")
         return []
-    
+
     finally:
         driver.quit()
 
@@ -889,13 +917,13 @@ def scrape_ziprecruiter(base_url):
                     title = job_link.text.strip()
 
                     job = Job(
-                        # Zip Recruiter is annoying and doesn't show the unique job id in the search results, so we'll fake one with company+title
-                        id = f"{company}_{title}".lower().strip(),
-                        url = job_link.get_attribute("href"),
-                        company = company,
-                        title = title
-                    )
-                    
+                            # Zip Recruiter is annoying and doesn't show the unique job id in the search results, so we'll fake one with company+title
+                            id = f"{company}_{title}".lower().strip(),
+                            url = job_link.get_attribute("href"),
+                            company = company,
+                            title = title
+                            )
+
                     # Find salary info
                     try:
                         salary_elem = card.find_element(By.CSS_SELECTOR, "div.flex.items-center")
@@ -933,7 +961,7 @@ def scrape_ziprecruiter(base_url):
 def get_ziprecruiter_job_description(url):
     try:
         driver = load_page(url)
-    
+
         try:
             job_desc_div = driver.find_element(By.CLASS_NAME, "job_description")
             if not job_desc_div:
@@ -1088,7 +1116,7 @@ def scrape_dice(base_url):
                             url = f"https://www.dice.com/job-detail/{job_id}",
                             title = title,
                             company = company
-                    )
+                            )
 
                     jobs.append(job)
 
@@ -1114,7 +1142,7 @@ def scrape_dice(base_url):
 def get_dice_job_description(url):
     try:
         driver = load_page(url, skip_cloudflare_detection=True)
-        
+
         try:
             salary_element = driver.find_element(By.CSS_SELECTOR, "div[data-cy='payDetails'] span")
             salary_text = salary_element.text if salary_element else None
@@ -1376,7 +1404,7 @@ def get_kforce_job_description(url):
             description = driver.find_element(By.CSS_SELECTOR, "div.data-job-desc").text if driver.find_elements(By.CSS_SELECTOR, "div.data-job-desc") else None
 
             return highest_salary, description
-        
+
         except Exception as e:
             logging.info(f"Error finding description div: {e}")
             return None,None
@@ -1395,10 +1423,10 @@ def get_salary_from_text(salary_text):
     # Get all the numbers, and take the last one
     salary_numbers = re.findall(r'\d+\.?\d*', cleaned_text)
     highest_salary = float(salary_numbers[-1])
-    
+
     # Check if salary is already in thousands
     is_in_thousands = any(term in cleaned_text.lower() for term in ["k"])
-    
+
     # Check if salary is explicitly annual
     is_explicitly_annual = any(term in cleaned_text.lower() for term in ["annual", "year", "per annum", "/year", "/yr"])
 
@@ -1415,29 +1443,29 @@ def get_salary_from_text(salary_text):
 # If a job post doesn't have the salary in the normal job details, see if they say it in the description
 def get_salary_from_description(description):
     patterns = [
-       # Specific formats first
-        r'\$([0-9,]+)K(?:—|-)\$?([0-9,]+)K/yr',  # $120K-$150K/yr
-        r'\$([0-9,]+)K/(?:yr|year)',  # $120K/yr
-        r'\$(\d+)[-—](\d+),\d{3}/yr',  # $120-150,000/yr
-        r'\$([0-9,]+)K(?:—|-)\$?([0-9,]+)K/Annum',  # $140K-$150K/Annum
-    
-        # Hourly patterns
-        r'\$([0-9,.]+)(?:\s+USD)?(?:\s+per\s+|\/)(?:hour|hr)',  # $20.00 USD per hour, $48/hr
-    
-        # Special cases
-        r'(?:up to)\s*\$([0-9,]+)(?:\s+per\s+(?:month|year|hr|hour))?',  # up to $X per month/year/hour
-    
-        # Standard ranges
-        r'\$([0-9,]+)(?:,\d{3})*\s*-\s*\$([0-9,]+)(?:,\d{3})*',  # $120,000 - $150,000
-        r'\$([0-9,]+)(?:—|-)\$([0-9,]+)\s+USD',  # $120,000-$150,000 USD
-        r'\$([0-9,]+)(?:—|-)\$?([0-9,]+)/yr',  # $120,000-$150,000/yr
-        r'\$([0-9,]+)\s+to\s+\$?([0-9,]+)(?:/(?:yr|year|hr|hour))?',  # $120,000 to $150,000/yr
-        r'between\s+\$([0-9,]+)(?:,\d{3})*\s+and\s+\$([0-9,]+)(?:,\d{3})*',  # between $190,700 and $329,600
-    
-        # Keyword-based patterns last
-        r'annual.*?\$([0-9,]+)(?:—|-)\$?([0-9,]+)',  # annual... $120,000-$150,000
-        r'salary.*?\$([0-9,]+)(?:—|-)\$?([0-9,]+)',  # salary... $120,000-$150,000
-    ]
+            # Specific formats first
+            r'\$([0-9,]+)K(?:—|-)\$?([0-9,]+)K/yr',  # $120K-$150K/yr
+            r'\$([0-9,]+)K/(?:yr|year)',  # $120K/yr
+            r'\$(\d+)[-—](\d+),\d{3}/yr',  # $120-150,000/yr
+            r'\$([0-9,]+)K(?:—|-)\$?([0-9,]+)K/Annum',  # $140K-$150K/Annum
+
+            # Hourly patterns
+            r'\$([0-9,.]+)(?:\s+USD)?(?:\s+per\s+|\/)(?:hour|hr)',  # $20.00 USD per hour, $48/hr
+
+            # Special cases
+            r'(?:up to)\s*\$([0-9,]+)(?:\s+per\s+(?:month|year|hr|hour))?',  # up to $X per month/year/hour
+
+            # Standard ranges
+            r'\$([0-9,]+)(?:,\d{3})*\s*-\s*\$([0-9,]+)(?:,\d{3})*',  # $120,000 - $150,000
+            r'\$([0-9,]+)(?:—|-)\$([0-9,]+)\s+USD',  # $120,000-$150,000 USD
+            r'\$([0-9,]+)(?:—|-)\$?([0-9,]+)/yr',  # $120,000-$150,000/yr
+            r'\$([0-9,]+)\s+to\s+\$?([0-9,]+)(?:/(?:yr|year|hr|hour))?',  # $120,000 to $150,000/yr
+            r'between\s+\$([0-9,]+)(?:,\d{3})*\s+and\s+\$([0-9,]+)(?:,\d{3})*',  # between $190,700 and $329,600
+
+            # Keyword-based patterns last
+            r'annual.*?\$([0-9,]+)(?:—|-)\$?([0-9,]+)',  # annual... $120,000-$150,000
+            r'salary.*?\$([0-9,]+)(?:—|-)\$?([0-9,]+)',  # salary... $120,000-$150,000
+            ]
     for pattern in patterns:
         match = re.search(pattern, description, re.IGNORECASE)
         if match:
@@ -1546,9 +1574,6 @@ def search_linkedin(progress=None):
     return None
 
 def search_board(board, progress=None):
-    if board == "linkedin":
-        search_linkedin(progress)
-        return
     jobs = globals()[f"scrape_{board}"](globals()[f"{board}_search_url"])
     if not jobs:
         print(f"No {board} search results")
@@ -1569,11 +1594,24 @@ def search_board(board, progress=None):
             continue
         logging.info(job.url)
         sleep(1)
-        result = globals()[f"get_{board}_job_description"](job.url)
-        if isinstance(result, tuple):
-            job.highest_salary, job.description = result
+        if board == "linkedin":
+            job_details = get_linkedin_job_details(job.id)
+            if job_details is None:
+                job.description = None
+            else:
+                job.description = job_details.get('description', None)
+                job.title = job_details.get('title', None)
+                salary = int(float(job_details.get('salary') or 0))
+                salary_period = job_details.get('salary_period') or None
+                job.salary_text = f"{salary} {salary_period}"
+                job.highest_salary = get_salary_from_text(job.salary_text) if job.salary_text else None
         else:
-            job.description = result
+            result = globals()[f"get_{board}_job_description"](job.url)
+            if isinstance(result, tuple):
+                job.highest_salary, job.description = result
+            else:
+                job.description = result
+                
         if job.description is None:
             logging.info("Couldn't find job description")
             metrics["description_count"] += 1
