@@ -1422,6 +1422,8 @@ def get_salary_from_text(salary_text):
     cleaned_text = salary_text.replace('$', '').replace(',', '')
     # Get all the numbers, and take the last one
     salary_numbers = re.findall(r'\d+\.?\d*', cleaned_text)
+    if not salary_numbers:
+        return None
     highest_salary = float(salary_numbers[-1])
 
     # Check if salary is already in thousands
@@ -1469,28 +1471,7 @@ def get_salary_from_description(description):
     for pattern in patterns:
         match = re.search(pattern, description, re.IGNORECASE)
         if match:
-            # Get the matched numbers
-            min_sal = match.group(1).replace(',', '')
-            max_sal = match.group(2).replace(',', '') if len(match.groups()) > 1 else min_sal
-
-            # Convert K notation if present
-            min_sal = float(min_sal) * 1000 if 'K' in match.group(0) else float(min_sal)
-            max_sal = float(max_sal) * 1000 if 'K' in match.group(0) else float(max_sal)
-
-            # Convert hourly to yearly if needed (assuming 2080 hours/year)
-            if '/hr' in match.group(0) or '/hour' in match.group(0) or 'per hour' in match.group(0):
-                min_sal *= 2080
-                max_sal *= 2080
-
-            # Convert monthly to yearly if needed (multiply by 12 months)
-            elif 'per month' in match.group(0) or '/month' in match.group(0):
-                min_sal *= 12
-                max_sal *= 12
-
-            # Convert to k
-            max_sal *= .001
-
-            return max_sal
+            return get_salary_from_text(match.group(0))
 
     return None
 
@@ -1502,76 +1483,6 @@ def print_metrics(metrics, progress=None):
     print(f"{metrics['fitness_count']} with a bad fit")
     print(f"{metrics['description_count']} failed to get description")
     print(f"{metrics['valid_count']} potential jobs sent")
-
-def search_linkedin(progress=None):
-    try:
-        api = Linkedin(linkedin_email, linkedin_password)
-    except Exception as e:
-        print(f"Error connecting to LinkedIn to get search results. Details: {e}")
-        return
-    jobs = api.search_jobs(keywords=linkedin_search_keywords, listed_at=86400, remote=['2'])
-    if len(jobs) < 1:
-        print("No search results")
-        return
-    print("Found", len(jobs), "LinkedIn jobs")
-    # Reset metric counters to zero
-    global metrics
-    metrics = {key: 0 for key in metrics}
-    for idx, job in enumerate(jobs):
-        if progress:
-            print(f"Processing {idx}/{len(jobs)}", end="\r")
-        id = int(job['trackingUrn'].split(":")[-1])
-        if awsutils.dynamodb_check_if_value_exists('linkedin_jobs', 'job_id', id):
-            logging.info(f"LinkedIn job {id} already seen")
-            metrics["seen_count"] += 1
-            continue
-        url = f"https://www.linkedin.com/jobs/view/{id}"
-        logging.info(url)
-        job_details = get_linkedin_job_details(id)
-        if job_details is None:
-            logging.info(f"Error getting job details, skipping")
-            continue
-        description = job_details.get('description', None)
-        title = job_details.get('title', None)
-        salary = int(float(job_details.get('salary') or 0))
-        salary_period = job_details.get('salary_period') or None
-        if description is None or title is None:
-            logging.info("Couldn't find job description or title")
-            metrics["description_count"] += 1
-            continue
-        if salary_period == "YEARLY":
-            highest_salary = salary / 1000
-        elif salary_period == "HOURLY":
-            highest_salary = salary * 2080 / 1000
-        else:
-            highest_salary = get_salary_from_description(description)
-            if highest_salary is None:
-                logging.info("No salary information found")
-                awsutils.dynamodb_put_item('linkedin_jobs', 'job_id', id)
-                metrics["salary_count"] += 1
-                continue
-        if highest_salary < salary_threshold:
-            logging.info(f"Salary below threshold: {highest_salary}")
-            awsutils.dynamodb_put_item('linkedin_jobs', 'job_id', id)
-            metrics["salary_count"] += 1
-        else:
-            company = job_details.get('company', {}).get('name') or get_company_from_description(description)
-            fitness=get_fitness_rating(description, company, title)
-            if fitness is None:
-                continue
-            if fitness < fitness_threshold:
-                logging.info(f"Fitness score below threshold: {fitness}")
-                awsutils.dynamodb_put_item('linkedin_jobs', 'job_id', id)
-                metrics["fitness_count"] += 1
-                continue
-            email_body=f"{company} - {title}\n{url}\nsalary: {highest_salary}/yr\nfitness: {fitness}"
-            logging.info(email_body)
-            cover_letter_path=get_cover_letter(company, title, description)
-            awsutils.send_email('Python LinkedIn Search <python@twistedslinky.org>', mail_to, company + " - " + title, email_body, cover_letter_path)
-            awsutils.dynamodb_put_item('linkedin_jobs', 'job_id', id)
-            metrics["valid_count"] += 1
-    print_metrics(metrics, progress)
-    return None
 
 def search_board(board, progress=None):
     jobs = globals()[f"scrape_{board}"](globals()[f"{board}_search_url"])
