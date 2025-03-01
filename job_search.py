@@ -4,6 +4,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException,TimeoutException
+from seleniumbase import SB
+from seleniumbase import Driver
 from docx import Document
 from docx.shared import Pt
 import re
@@ -180,193 +182,211 @@ def setup_chrome_driver():
     return driver
 
 def load_page(url, skip_cloudflare_detection=False, load_more=False):
-    try:
-        driver = setup_chrome_driver()
-    except Exception as e:
-        print(f"Error loading Chrome: {e}")
-        return None
-    driver.get(url)
-    wait = WebDriverWait(driver, 10)
     domain = urlparse(url).netloc.replace('www.', '')
-    if skip_cloudflare_detection == False:
-        try:
-            logging.info("Checking for Cloudflare verification")
-            # First, try to detect if we're on a verification page
+    driver = Driver(uc=True,headless=True)
+    
+    try:
+        # Open the URL
+        driver.get(url)
+        wait = WebDriverWait(driver, 15)
+        
+        if not skip_cloudflare_detection:
+            # Check if we're on a verification page
             verification_indicators = [
                 "Just a moment...",
-                "Additional Verification Required", 
+                "Additional Verification Required",
                 "challenge-form",
                 "/cdn-cgi/challenge-platform"
             ]
-            
+            logging.info("Checking for verification indicators")        
             is_verification_page = any(indicator in driver.page_source for indicator in verification_indicators)
-
+            
             if is_verification_page:
-                logging.info("Found a verification indicator")
-                '''
-                # Try the sign-in bypass first
+                logging.info("Cloudflare verification detected. Attempting to solve...")
+                
+                # SeleniumBase captcha clicker
+                # This function is from seleniumbase.basecase but we need to adapt it 
                 try:
-                    # Look for any sign-in link on the page
-                    sign_in_selectors = [
-                        ".link-signin a", 
-                        ".link-signin--mobile",
-                        "a[href*='login']",
-                        "a[href*='signin']",
-                        "a.sign-in-link"
+                    iframe_selectors = [
+                        'iframe[src*="captcha"]',
+                        'iframe[src*="challenge"]',
+                        'iframe[title*="Cloudflare"]',
+                        'iframe[name*="cfcaptcha"]',
+                        'iframe[src*="turnstile"]',
+                        'iframe[src*="cloudflare"]'
                     ]
-                    sign_in_clicked = False
-                    for selector in sign_in_selectors:
-                        if sign_in_clicked:
-                            break
-        
-                        signin_elements = driver.find_elements(By.CSS_SELECTOR, selector)
-                        if signin_elements:
-                            try:
-                                logging.info(f"Found sign-in element with selector: {selector}. Clicking it...")
-                                driver.execute_script("arguments[0].click();", signin_elements[0])
-                                sign_in_clicked = True
-            
-                                # Wait for page to change after login
-                                sleep(2)
-            
-                                # Check if verification page is gone
-                                if not any(indicator in driver.page_source for indicator in verification_indicators):
-                                    logging.info("Successfully bypassed verification using sign-in")
-                                    driver.get(url)
-                                    break
-                                else:
-                                    # If we're still on verification page, this click didn't work
-                                    sign_in_clicked = False
-                            except Exception as e:  # ADD THIS EXCEPT BLOCK
-                                logging.info(f"Error clicking sign-in element: {e}")
-                                sign_in_clicked = False
                     
-                except Exception as e:
-                    logging.info(f"Sign-in bypass failed: {e}")
-                '''
-                # If sign-in bypass didn't work, try the traditional Cloudflare handling
-                if any(indicator in driver.page_source for indicator in verification_indicators):
-                    logging.info("Found verification indicator on the page")
-                    # Look for multiple possible selectors that might indicate the challenge
-                    try:
-                        turnstile_frame = wait.until(
-                            EC.presence_of_element_located((
-                                By.CSS_SELECTOR,
-                                "iframe[src*='challenges.cloudflare.com'], iframe[src*='turnstile'], #challenge-form iframe"
-                            ))
-                        )
-
-                        logging.info("Found verification iframe, switching to it...")
-                        driver.switch_to.frame(turnstile_frame)
-
-                        # Try to find and interact with the challenge
+                    for selector in iframe_selectors:
                         try:
-                            checkbox = wait.until(
-                                EC.element_to_be_clickable((
-                                    By.CSS_SELECTOR,
-                                    ".turnstile-checkbox, .challenge-checkbox"
-                                ))
-                            )
-                            checkbox.click()
-                            logging.info("Clicked verification checkbox")
-                        except Exception as e:
-                            logging.info(f"Could not find checkbox: {e}")
-
-                        # Switch back to main content
-                        driver.switch_to.default_content()
-
-                        # Wait for page to load after verification
-                        sleep(5)
-                    except Exception as e:
-                        logging.info(f"Error handling verification iframe: {e}")
-                        driver.switch_to.default_content()
-            
-        except Exception as e:
-            logging.info(f"Error handling verification or none found: {e}")
-
-    if load_more:
-        try:
-            # Scroll down and load more if needed
-            while True:
-                last_height = driver.execute_script("return document.body.scrollHeight")
-                driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-                sleep(1)
-
-                # Try clicking "Load More" buttons first
-                button_clicked = False
-                load_more_buttons = [
-                        (By.CLASS_NAME, "btn-line-darkCerulean"),  # Kforce button
-                        (By.ID, "job-search-load-more")  # Monster button
-                        ]
-                for by, value in load_more_buttons:
+                            iframes = driver.find_elements(By.CSS_SELECTOR, selector)
+                            if iframes:
+                                logging.info(f"Found captcha iframe with selector: {selector}")
+                                for iframe in iframes:
+                                    try:
+                                        driver.switch_to.frame(iframe)
+                                        
+                                        # Try different checkbox selectors
+                                        checkbox_selectors = [
+                                            ".mark",
+                                            ".recaptcha-checkbox",
+                                            ".recaptcha-checkbox-border",
+                                            "[role='checkbox']",
+                                            "input[type='checkbox']"
+                                        ]
+                                        
+                                        for checkbox_selector in checkbox_selectors:
+                                            try:
+                                                checkboxes = driver.find_elements(By.CSS_SELECTOR, checkbox_selector)
+                                                for checkbox in checkboxes:
+                                                    if checkbox.is_displayed():
+                                                        logging.info(f"Clicking checkbox with selector: {checkbox_selector}")
+                                                        # Use JavaScript to click the checkbox
+                                                        driver.execute_script("arguments[0].click();", checkbox)
+                                                        break
+                                            except:
+                                                continue
+                                                
+                                        driver.switch_to.default_content()
+                                    except:
+                                        driver.switch_to.default_content()
+                                        continue
+                        except:
+                            continue
+                            
+                    # Wait for verification to complete
+                    max_wait = 5
+                    for _ in range(max_wait):
+                        if not any(indicator in driver.page_source for indicator in verification_indicators):
+                            logging.info("Successfully passed Cloudflare verification")
+                            break
+                        sleep(1)
+                        
+                except Exception as e:
+                    logging.info(f"Error clicking captcha: {e}")
+                    
+                # If we're still on the verification page, try the SeleniumBase's approach of switching
+                # to a visible iframe and clicking the first clickable element
+                if any(indicator in driver.page_source for indicator in verification_indicators):
                     try:
-                        load_more_button = wait.until(
-                                EC.element_to_be_clickable((by, value))
-                                )
-                        driver.execute_script("arguments[0].scrollIntoView();", load_more_button)
-                        load_more_button.click()
-                        sleep(1)
+                        # Get all iframes
+                        iframes = driver.find_elements(By.TAG_NAME, "iframe")
+                        for iframe in iframes:
+                            try:
+                                if iframe.is_displayed():
+                                    driver.switch_to.frame(iframe)
+                                    # Find and click on any clickable element in the iframe
+                                    clickable_elements = driver.find_elements(By.CSS_SELECTOR, 
+                                                                      "button, input[type='checkbox'], div[role='checkbox']")
+                                    for element in clickable_elements:
+                                        try:
+                                            if element.is_displayed():
+                                                driver.execute_script("arguments[0].click();", element)
+                                                logging.info("Clicked on a potential captcha element")
+                                                break
+                                        except:
+                                            continue
+                                    driver.switch_to.default_content()
+                            except:
+                                driver.switch_to.default_content()
+                                continue
+                    except Exception as e:
+                        logging.info(f"Error with alternate captcha clicking: {e}")
 
-                        # Scroll again after clicking the button to trigger dynamic loading
-                        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-                        sleep(1)
+        if load_more:
+            try:
+                # Scroll down and load more if needed
+                while True:
+                    last_height = driver.execute_script("return document.body.scrollHeight")
+                    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                    sleep(1)
 
-                        button_clicked = True
-                        break  # If one button is clicked, don't check the other in this loop iteration
-                    except (TimeoutException, NoSuchElementException):
-                        continue  # Try the next button if this one isn't found
+                    # Try clicking "Load More" buttons first
+                    button_clicked = False
+                    load_more_buttons = [
+                            (By.CLASS_NAME, "btn-line-darkCerulean"),  # Kforce button
+                            (By.ID, "job-search-load-more")  # Monster button
+                            ]
+                    for by, value in load_more_buttons:
+                        try:
+                            load_more_button = wait.until(
+                                    EC.element_to_be_clickable((by, value))
+                                    )
+                            driver.execute_script("arguments[0].scrollIntoView();", load_more_button)
+                            load_more_button.click()
+                            sleep(1)
 
-                new_height = driver.execute_script("return document.body.scrollHeight")
+                            # Scroll again after clicking the button to trigger dynamic loading
+                            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                            sleep(1)
 
-                # Only exit if height hasn't changed AND no button was clicked
-                if new_height == last_height and not button_clicked:
-                    break
+                            button_clicked = True
+                            break  # If one button is clicked, don't check the other in this loop iteration
+                        except (TimeoutException, NoSuchElementException):
+                            continue  # Try the next button if this one isn't found
 
-                logging.info(f"Scrolling from {last_height} to {new_height}")
-        except:
-            logging.info("Couldn't find load more jbuttons")
-    try:
-        job_selectors = [
-                ".job_seen_beacon",
-                "article.job-tile",
-                ".paging-container",
-                "div.job_result_two_pane",
-                ".result-box",
-                "dhi-search-card",
-                "section.jobs article ul",
-                ".job-details-description",
-                "article[data-testid='JobCard']",
-                "#__NEXT_DATA__",
-                "ul.data-jobs li",
-                ".data-job-desc",
-                "#react-job-wrapper",
-                "div.page-meta",
-                "h1.col-xs-12.col-sm-8",
-                ".page-box-shadow.fake-tab-content",
-                ".result",
-                ".detailpage-desc",
-                ".job_result_two_pane",
-                "div.job_description",
-                "article.job-tile",
-                "div[data-test='job-description']",
-                ".visitor-page-container",
-                "dhi-search-card",
-                "div[data-cy='payDetails'] span"
-                ]
+                    new_height = driver.execute_script("return document.body.scrollHeight")
 
-        wait.until(
-                EC.presence_of_element_located((
-                    By.CSS_SELECTOR, ", ".join(job_selectors)
-                    ))
-                )
+                    # Only exit if height hasn't changed AND no button was clicked
+                    if new_height == last_height and not button_clicked:
+                        break
 
-    except Exception:
-        logging.info("Page loaded but job info not found!")
+                    logging.info(f"Scrolling from {last_height} to {new_height}")
+            except:
+                logging.info("Couldn't find load more jbuttons")
+        try:
+            job_selectors = [
+                    ".job_seen_beacon",
+                    "article.job-tile",
+                    ".paging-container",
+                    "div.job_result_two_pane",
+                    ".result-box",
+                    "dhi-search-card",
+                    "section.jobs article ul",
+                    ".job-details-description",
+                    "article[data-testid='JobCard']",
+                    "#__NEXT_DATA__",
+                    "ul.data-jobs li",
+                    ".data-job-desc",
+                    "#react-job-wrapper",
+                    "div.page-meta",
+                    "h1.col-xs-12.col-sm-8",
+                    ".page-box-shadow.fake-tab-content",
+                    ".result",
+                    ".detailpage-desc",
+                    ".job_result_two_pane",
+                    "div.job_description",
+                    "article.job-tile",
+                    "div[data-test='job-description']",
+                    ".visitor-page-container",
+                    "dhi-search-card",
+                    "div[data-cy='payDetails'] span",
+                    "#jobDescriptionText"
+                    ]
 
-    if debug:
-        with open(f"{domain}_debug.html", "w", encoding="utf-8") as file:
-            file.write(driver.page_source)
-    return driver
+            wait.until(
+                    EC.presence_of_element_located((
+                        By.CSS_SELECTOR, ", ".join(job_selectors)
+                        ))
+                    )
+
+        except Exception:
+            logging.info("Page loaded but job info not found!")
+
+        if debug:
+            with open(f"{domain}_debug.html", "w", encoding="utf-8") as file:
+                file.write(driver.page_source)
+        return driver
+
+    except Exception as e:
+        logging.error(f"Error loading page: {e}")
+        if debug:
+            try:
+                with open(f"{domain}_error.html", "w", encoding="utf-8") as file:
+                    file.write(driver.page_source)
+            except:
+                pass
+        driver.quit()
+        return None
 
 def get_company_from_description(description):
     prompt = f"""Given this job description, what is the company name?  only respond with the company name.  if no company name is found, respond with "Unknown Company".
@@ -604,27 +624,24 @@ def scrape_indeed(base_url):
             # Process each job listing
             for card in job_cards:
                 try:
-                    job = {}
+                    job_url = next((elem.get_attribute('href') for elem in card.find_elements(By.CLASS_NAME, 'jcs-JobTitle')), None)
+                    if job_url:
+                        parsed_url = urlparse(job_url)
+                        query_params = parse_qs(parsed_url.query)
+                        job_id = query_params.get('jk', [None])[0]
+                    else:
+                        job_id = None
 
-                    job['title'] = next((elem.text.strip() for elem in card.find_elements(By.CSS_SELECTOR, 'span[id^="jobTitle"]')), None)
-                    job['company'] = next((elem.text.strip() for elem in card.find_elements(By.CSS_SELECTOR, '[data-testid="company-name"]')), None)
-                    job['description'] = next((elem.text.strip() for elem in card.find_elements(By.CSS_SELECTOR, '[data-testid="jobsnippet_footer"]')), None)
+                    job = Job(
+                            id = job_id,
+                            url = job_url,
+                            title = next((elem.text.strip() for elem in card.find_elements(By.CSS_SELECTOR, 'span[id^="jobTitle"]')), None),
+                            company = next((elem.text.strip() for elem in card.find_elements(By.CSS_SELECTOR, '[data-testid="company-name"]')), None),
+                            description = next((elem.text.strip() for elem in card.find_elements(By.CSS_SELECTOR, '[data-testid="jobsnippet_footer"]')), None),
+                            salary_text = next((elem.text.strip() for elem in card.find_elements(By.CSS_SELECTOR, '.metadata.salary-snippet-container')), None),
+                        )
 
-                    # Salary processing
-                    job['salary_text'] = next((elem.text.strip() for elem in card.find_elements(By.CSS_SELECTOR, '.metadata.salary-snippet-container')), None)
-                    job['highest_salary'] = get_salary_from_text(job['salary_text']) if job['salary_text'] else None
-
-                    try:
-                        job['url'] = next((elem.get_attribute('href') for elem in card.find_elements(By.CLASS_NAME, 'jcs-JobTitle')), None)
-                        if job['url']:
-                            parsed_url = urlparse(job['url'])
-                            query_params = parse_qs(parsed_url.query)
-                            job['job_id'] = query_params.get('jk', [None])[0]
-                        else:
-                            job['job_id'] = None
-                    except Exception as e:
-                        logging.info(f"Error parsing job URL for {job.get('title', 'Unknown title')}: {e}")
-                        job['job_id'] = None
+                    highest_salary = get_salary_from_text(job.salary_text) if job.salary_text else None
 
                     jobs.append(job)
 
@@ -651,18 +668,10 @@ def scrape_indeed(base_url):
     return jobs
 
 def get_indeed_job_description(url):
-    """Get job description from Indeed job posting using Selenium"""
     try:
-        driver = setup_chrome_driver()
-    except Exception as e:
-        print(f"Error loading Chrome: {e}")
-        return None
-    try:
-        #print(f"Loading job URL: {url}")
-        driver.get(url)
+        driver = load_page(url, skip_cloudflare_detection=True)
         # Wait for job description to load (up to 10 seconds)
         try:
-            wait = WebDriverWait(driver, 30)
             description_divs = driver.find_elements(By.ID, "jobDescriptionText")
             if description_divs:  # Check if we got anything back
                 if isinstance(description_divs, list):  # If it's a list
@@ -1148,7 +1157,7 @@ def get_dice_job_description(url):
             salary_text = salary_element.text if salary_element else None
             highest_salary = get_salary_from_text(salary_text) or None
         except Exception as e:
-            logging.info(f"Error finding salary div: {e}")
+            logging.info("Error finding salary div")
             highest_salary = None
 
         try:
@@ -1450,6 +1459,9 @@ def get_salary_from_description(description):
             r'\$([0-9,]+)K/(?:yr|year)',  # $120K/yr
             r'\$(\d+)[-—](\d+),\d{3}/yr',  # $120-150,000/yr
             r'\$([0-9,]+)K(?:—|-)\$?([0-9,]+)K/Annum',  # $140K-$150K/Annum
+            r'\$([0-9,.]+)K(?:—|-)\s*\$?([0-9,.]+)K',  # $160.3K - $299K
+            r'\$([0-9,.]+)(?:\.\d+)?\s*(?:—|-)\s*\$([0-9,.]+)(?:\.\d+)?',
+            r'\$([0-9,.]+)(?:\.\d+)?\s*(?:—|-{1,2})\s*\$([0-9,.]+)(?:\.\d+)?(?:\s+annually)?',
 
             # Hourly patterns
             r'\$([0-9,.]+)(?:\s+USD)?(?:\s+per\s+|\/)(?:hour|hr)',  # $20.00 USD per hour, $48/hr
@@ -1462,7 +1474,7 @@ def get_salary_from_description(description):
             r'\$([0-9,]+)(?:—|-)\$([0-9,]+)\s+USD',  # $120,000-$150,000 USD
             r'\$([0-9,]+)(?:—|-)\$?([0-9,]+)/yr',  # $120,000-$150,000/yr
             r'\$([0-9,]+)\s+to\s+\$?([0-9,]+)(?:/(?:yr|year|hr|hour))?',  # $120,000 to $150,000/yr
-            r'between\s+\$([0-9,]+)(?:,\d{3})*\s+and\s+\$([0-9,]+)(?:,\d{3})*',  # between $190,700 and $329,600
+            r'between\s+\$([0-9,.]+)\s+and\s+\$([0-9,.]+)(?:\s+annually)?',  # between $190,700 and $329,600
 
             # Keyword-based patterns last
             r'annual.*?\$([0-9,]+)(?:—|-)\$?([0-9,]+)',  # annual... $120,000-$150,000
