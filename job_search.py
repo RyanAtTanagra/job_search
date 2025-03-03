@@ -1462,6 +1462,7 @@ def get_salary_from_description(description):
             r'\$([0-9,.]+)K(?:—|-)\s*\$?([0-9,.]+)K',  # $160.3K - $299K
             r'\$([0-9,.]+)(?:\.\d+)?\s*(?:—|-)\s*\$([0-9,.]+)(?:\.\d+)?',
             r'\$([0-9,.]+)(?:\.\d+)?\s*(?:—|-{1,2})\s*\$([0-9,.]+)(?:\.\d+)?(?:\s+annually)?',
+            r'\$([0-9,]+)(?:/year|/yr)(?:.*?)to\s+\$([0-9,]+)(?:/year|/yr)',  # covers both /year and /yr formats
 
             # Hourly patterns
             r'\$([0-9,.]+)(?:\s+USD)?(?:\s+per\s+|\/)(?:hour|hr)',  # $20.00 USD per hour, $48/hr
