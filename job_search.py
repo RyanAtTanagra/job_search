@@ -47,6 +47,7 @@ dice_search_url = 'https://www.dice.com/jobs?q=aws%20cloud%20engineer&countryCod
 wwr_search_url = 'https://weworkremotely.com/remote-jobs/search?search_uuid=&term=&sort=past_week&categories%5B%5D=6&region%5B%5D=1'
 monster_search_url = 'https://www.monster.com/jobs/search?q=Aws+Cloud&where=San+Francisco%2C+CA&page=1&recency=last+week&rd=100'
 kforce_search_url = 'https://www.kforce.com/find-work/search-jobs/#/?t=cloud'
+caljobs_search_url = 'https://www.caljobs.ca.gov/vosnet/jobbanks/joblist.aspx?t=q&rtsrc=1&city=94701&geo=&radius=100&keyword=cloud&kwl=cloud&edul=&minsal=20&IncNoSal=0&occcode=15&ageindays=2&sources=VOS,CRP,EDU,GIG,GOV,HOS,JDI,NLX,NWS,NON,PJB,REC,SM,SJB,VOL&kt=2&SearchJobDesc=1&SearchJobTitle=1&SearchOnetDesc=0&SearchOnetTitle=0&SearchLayTitle=0&wfh=1&SearchVeteranJobsOnly=0&ShowVetPrefJobs=0&username=36802552&sp=jobsearchcriteriaquick.aspx&session=jobsearch'
 
 # Constants for job filtering
 poor_fit_titles = [
@@ -183,7 +184,7 @@ def setup_chrome_driver():
 
 def load_page(url, skip_cloudflare_detection=False, load_more=False):
     domain = urlparse(url).netloc.replace('www.', '')
-    driver = Driver(uc=True,headless=True)
+    driver = Driver(uc=True,headless=False)
     
     try:
         # Open the URL
@@ -761,8 +762,9 @@ def get_upwork_job_description(url):
 
         # First check to see if it's a private listing
         try:
-            private_check = driver.find_element(By.XPATH, "//h4[text()='This job is a private listing.']")
+            private_check = driver.find_element(By.XPATH, "//h4[contains(text(), 'This job is a private listing')]")
             if private_check:
+                logging.info("Found private listing")
                 driver.quit()
                 return "private"
         except:
