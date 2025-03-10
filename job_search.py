@@ -41,7 +41,8 @@ linkedin_search_url = "cloud engineer"
 indeed_search_url = 'https://www.indeed.com/jobs?q=aws&l=San+Francisco%2C+CA&fromage=7&salaryType=%24185%2C000&radius=100&from=searchOnDesktopSerp'
 upwork_search_url = 'https://www.upwork.com/nx/search/jobs/?q=aws%20cloud&sort=recency&per_page=50&&user_location_match=1'
 insight_search_url = 'https://jobs.insightglobal.com/jobs/find_a_job/?rd=Distance&remote=true&miles=False&srch=AWS+Cloud+Engineer'
-ziprecruiter_search_url = 'https://www.ziprecruiter.com/jobs-search?search=aws+cloud+engineer&location=Grass+Valley%2C+CA&refine_by_location_type=only_remote&radius=5000&days=7&refine_by_employment=employment_type%3Aall&refine_by_salary=180000&refine_by_salary_ceil=295000'
+ziprecruiter_search_url = 'https://www.ziprecruiter.com/jobs-search?search=aws+cloud+engineer&location=Remote+%28USA%29&refine_by_location_type=only_remote&radius=5000&days=7&refine_by_employment=employment_type%3Aall&refine_by_salary=180000&refine_by_salary_ceil=295000'
+#ziprecruiter_search_url = 'https://www.ziprecruiter.com/jobs-search?search=aws+cloud+engineer&location=Grass+Valley%2C+CA&refine_by_location_type=only_remote&radius=5000&days=7&refine_by_employment=employment_type%3Aall&refine_by_salary=180000&refine_by_salary_ceil=295000'
 cybercoders_search_url = 'https://www.cybercoders.com/search/cloud?days=7&locationtype=3&sortType=relevance'
 dice_search_url = 'https://www.dice.com/jobs?q=aws%20cloud%20engineer&countryCode=US&radius=30&radiusUnit=mi&pageSize=100&filters.postedDate=SEVEN&filters.workplaceTypes=Remote&language=en'
 wwr_search_url = 'https://weworkremotely.com/remote-jobs/search?search_uuid=&term=&sort=past_week&categories%5B%5D=6&region%5B%5D=1'
@@ -184,7 +185,7 @@ def setup_chrome_driver():
 
 def load_page(url, skip_cloudflare_detection=False, load_more=False):
     domain = urlparse(url).netloc.replace('www.', '')
-    driver = Driver(uc=True,headless=False)
+    driver = Driver(uc=True,headless=True)
     
     try:
         # Open the URL
