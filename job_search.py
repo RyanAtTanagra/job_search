@@ -174,7 +174,7 @@ def setup_chrome_driver():
     options.add_argument('--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36')
     options.add_argument('--lang=en-US,en;q=0.9')
     options.add_argument('--enable-cookies')
-    driver = uc.Chrome(options=options, version_main=133)
+    driver = uc.Chrome(options=options, version_main=134)
     # Execute stealth JS
     driver.execute_script("""
     Object.defineProperty(navigator, 'webdriver', {
@@ -926,7 +926,7 @@ def scrape_ziprecruiter(base_url):
                     job_link = card.find_element(By.TAG_NAME, "h2").find_element(By.TAG_NAME, "a")
                     company_elem = card.find_element(By.XPATH, ".//a[@data-testid='job-card-company']")
                     company = company_elem.text.strip() if company_elem else None
-                    title = job_link.text.strip()
+                    title = job_link.text.strip().replace("NEW!", "")
 
                     job = Job(
                             # Zip Recruiter is annoying and doesn't show the unique job id in the search results, so we'll fake one with company+title
@@ -1515,6 +1515,9 @@ def search_board(board, progress=None):
         if not job.id:
             logging.info(f"No job id: {job.id}")
             continue
+        if len(job.id) > 2048:
+            logging.info(f"Job id too long: {job.id}")
+            continue
         if awsutils.dynamodb_check_if_value_exists(f"{board}_jobs", 'job_id', job.id):
             logging.info(f"{board} job {job.id} already seen")
             metrics["seen_count"] += 1
@@ -1587,7 +1590,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run a search on job postings and email details and cover letter to myself",formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument(
         "website",
-        choices=['linkedin', 'indeed', 'upwork', 'insight', 'ziprecruiter', 'cybercoders', 'dice', 'wwr', 'monster', 'kforce', 'all', 'selenium'],
+        choices=['linkedin', 'indeed', 'upwork', 'insight', 'cybercoders', 'wwr', 'ziprecruiter', 'kforce', 'monster', 'dice', 'all', 'selenium'],
         help="Website to search, or all, or those requiring selenium"
     )
     parser.add_argument("--cron", action="store_true", help="If set, suppress progress output for cron jobs")
