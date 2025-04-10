@@ -1515,7 +1515,7 @@ def search_board(board, progress=None):
         if not job.id:
             logging.info(f"No job id: {job.id}")
             continue
-        if len(job.id) > 2048:
+        if isinstance(job.id, str) and len(job.id) > 2048:
             logging.info(f"Job id too long: {job.id}")
             continue
         if awsutils.dynamodb_check_if_value_exists(f"{board}_jobs", 'job_id', job.id):
