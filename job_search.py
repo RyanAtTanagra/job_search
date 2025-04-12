@@ -45,7 +45,8 @@ ziprecruiter_search_url = 'https://www.ziprecruiter.com/jobs-search?search=aws+c
 #ziprecruiter_search_url = 'https://www.ziprecruiter.com/jobs-search?search=aws+cloud+engineer&location=Grass+Valley%2C+CA&refine_by_location_type=only_remote&radius=5000&days=7&refine_by_employment=employment_type%3Aall&refine_by_salary=180000&refine_by_salary_ceil=295000'
 cybercoders_search_url = 'https://www.cybercoders.com/search/cloud?days=7&locationtype=3&sortType=relevance'
 dice_search_url = 'https://www.dice.com/jobs?q=aws%20cloud%20engineer&countryCode=US&radius=30&radiusUnit=mi&pageSize=100&filters.postedDate=SEVEN&filters.workplaceTypes=Remote&language=en'
-wwr_search_url = 'https://weworkremotely.com/remote-jobs/search?search_uuid=&term=&sort=past_week&categories%5B%5D=6&region%5B%5D=1'
+#wwr_search_url = 'https://weworkremotely.com/remote-jobs/search?search_uuid=&term=&sort=past_week&categories%5B%5D=6&region%5B%5D=1'
+wwr_search_url = 'https://weworkremotely.com/categories/remote-devops-sysadmin-jobs#job-listings'
 monster_search_url = 'https://www.monster.com/jobs/search?q=Aws+Cloud&where=San+Francisco%2C+CA&page=1&recency=last+week&rd=100'
 kforce_search_url = 'https://www.kforce.com/find-work/search-jobs/#/?t=cloud'
 caljobs_search_url = 'https://www.caljobs.ca.gov/vosnet/jobbanks/joblist.aspx?t=q&rtsrc=1&city=94701&geo=&radius=100&keyword=cloud&kwl=cloud&edul=&minsal=20&IncNoSal=0&occcode=15&ageindays=2&sources=VOS,CRP,EDU,GIG,GOV,HOS,JDI,NLX,NWS,NON,PJB,REC,SM,SJB,VOL&kt=2&SearchJobDesc=1&SearchJobTitle=1&SearchOnetDesc=0&SearchOnetTitle=0&SearchLayTitle=0&wfh=1&SearchVeteranJobsOnly=0&ShowVetPrefJobs=0&username=36802552&sp=jobsearchcriteriaquick.aspx&session=jobsearch'
@@ -152,37 +153,7 @@ class Job:
     fitness: Optional[float] = None
     source: Optional[str] = None  # e.g., "LinkedIn", "Indeed"
 
-# Used for general web scrapers
-def setup_chrome_driver():
-    options = uc.ChromeOptions()
-    options.add_argument('--headless=new')
-    options.add_argument('--window-size=1920,1080')
-    options.add_argument('--enable-javascript')
-    options.add_argument('--disable-blink-features=AutomationControlled')  # Hide automation
-    options.add_argument('--disable-gpu')
-    options.add_argument('--no-sandbox')
-    options.add_argument('--disable-dev-shm-usage')
-    options.add_argument('--enable-cookies')
-    # Add some randomness to appear more human
-    random_width = random.randint(1200, 1600)
-    random_height = random.randint(800, 1000)
-    options.add_argument(f'--window-size={random_width},{random_height}')
-    # To use my existing logged in sessions
-    options.add_argument('--user-data-dir=/Users/link/Library/Application Support/Google/Chrome')
-    options.add_argument('--profile-directory=Default')
-    # Add a realistic user agent
-    options.add_argument('--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36')
-    options.add_argument('--lang=en-US,en;q=0.9')
-    options.add_argument('--enable-cookies')
-    driver = uc.Chrome(options=options, version_main=134)
-    # Execute stealth JS
-    driver.execute_script("""
-    Object.defineProperty(navigator, 'webdriver', {
-      get: () => undefined
-    });
-    """)
-    return driver
-
+# Used for web scraping
 def load_page(url, skip_cloudflare_detection=False, load_more=False):
     domain = urlparse(url).netloc.replace('www.', '')
     driver = Driver(uc=True,headless=True)
@@ -362,7 +333,9 @@ def load_page(url, skip_cloudflare_detection=False, load_more=False):
                     ".visitor-page-container",
                     "dhi-search-card",
                     "div[data-cy='payDetails'] span",
-                    "#jobDescriptionText"
+                    "#jobDescriptionText",
+                    "div#job-listing-show-container",
+                    "li.new-listing-container",
                     ]
 
             wait.until(
@@ -1196,90 +1169,83 @@ def get_dice_job_description(url):
 
     return None, None
 
-def scrape_wwr(url):
-    try:
-        driver = setup_chrome_driver()
-    except Exception as e:
-        print(f"Error loading Chrome: {e}")
-        return None
+def scrape_wwr(base_url):
     jobs = []
-
-    # Navigate to the page
-    logging.info(f"Scraping WWR page {url}")
     try:
-        driver.get(url)
-        wait = WebDriverWait(driver, 10)
-        with open("wwr_last.html", "w", encoding="utf-8") as file:
-            file.write(driver.page_source)
-        jobs_section = wait.until(EC.presence_of_element_located(
-            (By.CSS_SELECTOR, "section.jobs article ul")
-            ))
-        job_cards = jobs_section.find_elements(By.CSS_SELECTOR, "li:not(.feature--ad):not(.view-all)")
-
-        # Break if no jobs found
-        if len(job_cards) == 0:
-            return None
-    except:
-        logging.info("Error loading job cards")
-        driver.quit()
-        return None
-
-    # Process each job card
-    for card in job_cards:
+        logging.info(f"Scraping WWR page {base_url}")
+        driver = load_page(base_url)
         try:
-            job_link = card.find_element(By.CSS_SELECTOR, "a:has(span.title)")
-            # Extract job URL and ID
-            job_url = job_link.get_attribute("href")
-            job_id = job_url.split("/")[-1].strip() if job_url else None
-
-            # Extract company and title
-            company = card.find_element(By.CSS_SELECTOR, "span.company").text
-            title = card.find_element(By.CSS_SELECTOR, "span.title").text
-
-            jobs.append({
-                "company": company,
-                "title": title,
-                "url": job_url,
-                "job_id": job_id
-                })
-
+            job_cards = driver.find_elements(By.CSS_SELECTOR, "li.new-listing-container:not(.metana-ad):not(.view-all)")
+            # Return if no jobs found
+            if not job_cards:
+                return None
         except Exception as e:
-            print(f"Error processing job card: {e}")
-            continue
+            logging.info(f"Error finding job cards: {e}")
+            return None
+    
+        # Process each job card
+        for card in job_cards:
+            try:
+                job_link = card.find_element(By.CSS_SELECTOR, "a[href^='/remote-jobs/']")
+                # Extract job URL and ID
+                job_url = job_link.get_attribute("href")
+                job_id = job_url.split("/")[-1].strip() if job_url else None
 
-    driver.quit()
+                # Extract company and title
+                title_element = card.find_element(By.CSS_SELECTOR, ".new-listing__header__title")
+                title = title_element.text.strip() if title_element else "Unknown Title"
+                company_element = card.find_element(By.CSS_SELECTOR, ".new-listing__company-name")
+                company = company_element.text.strip().split('\n')[0] if company_element else "Unknown Company"
+
+                job = Job(
+                        id = job_id,
+                        url = job_url,
+                        title = title,
+                        company = company
+                        )
+
+                jobs.append(job)
+
+            except Exception as e:
+                print(f"Error processing job card: {e}")
+                continue
+    
+        driver.quit()
+
+    except Exception as e:
+        logging.info(f"Error scraping WWR: {e}")
 
     return jobs
 
 def get_wwr_job_description(url):
     try:
-        driver = setup_chrome_driver()
-    except Exception as e:
-        print(f"Error loading Chrome: {e}")
-        return None
-
-    try:
-        driver.get(url)
-        wait = WebDriverWait(driver, 10)
-        sleep(5)
+        driver = load_page(url, skip_cloudflare_detection=True)
+        
+        try:
+            salary_element = driver.find_element(By.CSS_SELECTOR, "li.lis-container__job__sidebar__job-about__list__item a span.box.box--blue")
+            salary_text = salary_element.text if salary_element else None
+            highest_salary = get_salary_from_text(salary_text) or None
+        except Exception as e:
+            logging.info("Error finding salary div")
+            highest_salary = None
 
         try:
-            desc_div = wait.until(EC.presence_of_element_located(
-                (By.CSS_SELECTOR, "div#job-listing-show-container")
-                ))
-            return desc_div.text if desc_div.text.strip() else None
-        except Exception as e:
-            logging.info(f"Error finding description div: {e}")
-            return None
+            description_element = driver.find_element(By.CSS_SELECTOR, "div.lis-container__job__content__description")
+            description = description_element.text if description_element else None
+
+        except:
+            description = None
+
+        return highest_salary, description
 
     except Exception as e:
         logging.info(f"Error loading page: {e}")
-        return None
+        return None, None
 
     finally:
         driver.quit()
 
-    return None
+    return None, None
 
 def scrape_monster(url):
     jobs = []
