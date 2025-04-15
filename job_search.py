@@ -1127,6 +1127,8 @@ def scrape_dice(base_url):
 def get_dice_job_description(url):
     try:
         driver = load_page(url, skip_cloudflare_detection=True)
+            if not driver:  # Check if driver is None after load_page
+            return None, None
 
         try:
             salary_element = driver.find_element(By.CSS_SELECTOR, "div[data-cy='payDetails'] span")
