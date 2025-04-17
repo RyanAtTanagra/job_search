@@ -1493,6 +1493,7 @@ def search_board(board, progress=None):
         logging.info(job.url)
         sleep(1)
         if board == "linkedin":
+            sleep(1)
             job_details = get_linkedin_job_details(job.id)
             if job_details is None:
                 job.description = None
