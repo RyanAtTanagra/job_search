@@ -147,6 +147,7 @@ The script incorporates several techniques to avoid detection as a bot:
 - Debug logging can be enabled with the `--debug` flag to investigate issues
 - For LinkedIn API errors, verify your credentials in the .env file
 - For AWS errors, check your AWS credentials and ensure DynamoDB tables exist
+- If running against LinkedIn on a different server from your workstation, copy the ~/.linkedin_api/cookies/jar file over
 
 ## Disclaimer
 
