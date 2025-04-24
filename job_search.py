@@ -44,7 +44,7 @@ insight_search_url = 'https://jobs.insightglobal.com/jobs/find_a_job/?rd=Distanc
 ziprecruiter_search_url = 'https://www.ziprecruiter.com/jobs-search?search=aws+cloud+engineer&location=Remote+%28USA%29&refine_by_location_type=only_remote&radius=5000&days=7&refine_by_employment=employment_type%3Aall&refine_by_salary=180000&refine_by_salary_ceil=295000'
 #ziprecruiter_search_url = 'https://www.ziprecruiter.com/jobs-search?search=aws+cloud+engineer&location=Grass+Valley%2C+CA&refine_by_location_type=only_remote&radius=5000&days=7&refine_by_employment=employment_type%3Aall&refine_by_salary=180000&refine_by_salary_ceil=295000'
 cybercoders_search_url = 'https://www.cybercoders.com/search/cloud?days=7&locationtype=3&sortType=relevance'
-dice_search_url = 'https://www.dice.com/jobs?q=aws%20cloud%20engineer&countryCode=US&radius=30&radiusUnit=mi&pageSize=100&filters.postedDate=SEVEN&filters.workplaceTypes=Remote&language=en'
+dice_search_url = 'https://www.dice.com/jobs?q=cloud%20engineer&countryCode=US&radius=300&radiusUnit=mi&pageSize=100&filters.postedDate=SEVEN&filters.workplaceTypes=Remote&language=en'
 #wwr_search_url = 'https://weworkremotely.com/remote-jobs/search?search_uuid=&term=&sort=past_week&categories%5B%5D=6&region%5B%5D=1'
 wwr_search_url = 'https://weworkremotely.com/categories/remote-devops-sysadmin-jobs#job-listings'
 monster_search_url = 'https://www.monster.com/jobs/search?q=Aws+Cloud&where=San+Francisco%2C+CA&page=1&recency=last+week&rd=100'
