@@ -336,6 +336,9 @@ def load_page(url, skip_cloudflare_detection=False, load_more=False):
                     "#jobDescriptionText",
                     "div#job-listing-show-container",
                     "li.new-listing-container",
+                    "div[data-id]",
+                    "a[data-testid='job-search-job-detail-link']",
+                    "div[data-testid='jobSearchResultsContainer']"
                     ]
 
             wait.until(
@@ -1073,37 +1076,71 @@ def scrape_dice(base_url):
             # Navigate to the page
             logging.info(f"Scraping Dice page {current_page}: {page_url}")
             driver = load_page(page_url)
+            # Try newer css elements
             try:
-                job_cards = driver.find_elements(By.CSS_SELECTOR, "dhi-search-card")
-                if not job_cards:
-                    break
-                logging.info(f"Found {len(job_cards)} Dice jobs")
+                job_cards = driver.find_elements(By.CSS_SELECTOR, "div[data-id]")
             except Exception as e:
-                logging.info(f"Error finding job cards: {e}")
-                break
+                logging.info(f"Error finding job cards with new selector: {e}")
+
+            # Try older elements
+            if not job_cards:
+                try:
+                    job_cards = driver.find_elements(By.CSS_SELECTOR, "dhi-search-card")
+                    if not job_cards:
+                        break
+                    logging.info(f"Found {len(job_cards)} Dice jobs")
+                except Exception as e:
+                    logging.info(f"Error finding job cards: {e}")
+                    break
 
             # Process each job card
             for card in job_cards:
                 try:
-                    # Find the title link element which contains both title and id
-                    title_link = card.find_element(By.CSS_SELECTOR, "a[data-cy='card-title-link']")
+                    # Check which type of card we're dealing with
+                    if card.tag_name == "div":  # New format
+                        # Extract job ID from the data-id attribute
+                        job_id = card.get_attribute('data-id')
+                        
+                        # Find the title link with the updated selector
+                        title_link = card.find_element(By.CSS_SELECTOR, "a[data-testid='job-search-job-detail-link']")
+                        title = title_link.get_attribute('aria-label').strip()
+                        
+                        # Find the company link with the updated selector
+                        company_element = card.find_element(By.CSS_SELECTOR, "a[data-rac][href*='company-profile']")
+                        company = company_element.text.strip()
+                        
+                        # Get the URL from the title link
+                        url = title_link.get_attribute('href')
+                        
+                        job = Job(
+                            id=f"{company}_{title}".lower().strip(),
+                            url=url,
+                            title=title,
+                            company=company
+                        )
 
-                    # Get company element
-                    company_element = card.find_element(By.CSS_SELECTOR, "a[data-cy='search-result-company-name']")
+                    # Otherwise old type
+                    else:
 
-                    # Extract job details
-                    job_id = title_link.get_attribute('id').strip('()').strip(',').strip()
-                    title = title_link.text.strip().strip('()').strip(',').strip()
-                    company = company_element.text.strip()
-                    job = Job(
-                            # Different job_id because Dice is so fucking noisy due to companies spamming the same position over and over
-                            id = f"{company}_{title}".lower().strip(),
-                            url = f"https://www.dice.com/job-detail/{job_id}",
-                            title = title,
-                            company = company
-                            )
+                        # Find the title link element which contains both title and id
+                        title_link = card.find_element(By.CSS_SELECTOR, "a[data-cy='card-title-link']")
 
-                    jobs.append(job)
+                        # Get company element
+                        company_element = card.find_element(By.CSS_SELECTOR, "a[data-cy='search-result-company-name']")
+
+                        # Extract job details
+                        job_id = title_link.get_attribute('id').strip('()').strip(',').strip()
+                        title = title_link.text.strip().strip('()').strip(',').strip()
+                        company = company_element.text.strip()
+                        job = Job(
+                                # Different job_id because Dice is so fucking noisy due to companies spamming the same position over and over
+                                id = f"{company}_{title}".lower().strip(),
+                                url = f"https://www.dice.com/job-detail/{job_id}",
+                                title = title,
+                                company = company
+                                )
+    
+                        jobs.append(job)
 
                 except Exception as e:
                     print(f"Error processing job card: {e}")
