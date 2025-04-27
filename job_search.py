@@ -91,7 +91,8 @@ poor_fit_companies = [
     "nvidia",
     "apple",
     "microsoft",
-    "peraton" # Always requires active security clearance
+    "peraton", # Always requires active security clearance
+    "jobot" # Too much spam, not worth it
 ]
 
 software_role_indicatiors = [
