@@ -28,7 +28,7 @@ soft, hard = resource.getrlimit(resource.RLIMIT_NOFILE)
 resource.setrlimit(resource.RLIMIT_NOFILE, (2048, hard))
 
 # Annual salary threshold
-salary_threshold = 180
+salary_threshold = 170
 
 # Hourly threshold
 hourly_threshold = 80
