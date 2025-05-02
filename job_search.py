@@ -372,16 +372,21 @@ def get_company_from_description(description):
         Job Description:
             {description}
         """
-    client = anthropic.Client(api_key=anthropic_api_key)
-    message = client.messages.create(
-            model="claude-3-5-haiku-20241022",
-            max_tokens=1000,
-            messages=[{
-                "role": "user",
-                "content": prompt
-                }]
-            )
-    company=str(message.content[0].text)
+    try:
+        client = anthropic.Client(api_key=anthropic_api_key)
+        message = client.messages.create(
+                model="claude-3-5-haiku-20241022",
+                max_tokens=1000,
+                messages=[{
+                    "role": "user",
+                    "content": prompt
+                    }]
+                )
+        company=str(message.content[0].text)
+    except Exception as e:
+        logging.info(f"Error connecting to Claude to get company name: {e}")
+        return None
+    
     return company
 
 def get_fitness_rating(description, company, title):
