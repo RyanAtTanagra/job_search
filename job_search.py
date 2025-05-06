@@ -549,7 +549,9 @@ def scrape_linkedin(search_term):
     except Exception as e:
         print(f"Error connecting to LinkedIn to get search results. Details: {e}")
         return
-    job_cards = api.search_jobs(keywords=search_term, listed_at=18000, remote=['2'])
+    job_cards_remote = api.search_jobs(keywords=search_term, listed_at=18000, remote=['2'])
+    job_cards_hybrid = api.search_jobs(keywords=search_term, listed_at=86400, remote=['3'], experience=['4'], distance=100, location_name='Grass Valley')
+    job_cards = job_cards_remote + job_cards_hybrid
     if len(job_cards) < 1:
         print("No search results")
         return None
