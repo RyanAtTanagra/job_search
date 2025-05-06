@@ -45,6 +45,8 @@ ziprecruiter_search_url = 'https://www.ziprecruiter.com/jobs-search?search=aws+c
 #ziprecruiter_search_url = 'https://www.ziprecruiter.com/jobs-search?search=aws+cloud+engineer&location=Grass+Valley%2C+CA&refine_by_location_type=only_remote&radius=5000&days=7&refine_by_employment=employment_type%3Aall&refine_by_salary=180000&refine_by_salary_ceil=295000'
 cybercoders_search_url = 'https://www.cybercoders.com/search/cloud?days=7&locationtype=3&sortType=relevance'
 dice_search_url = 'https://www.dice.com/jobs?q=cloud%20engineer&countryCode=US&radius=300&radiusUnit=mi&pageSize=100&filters.postedDate=SEVEN&filters.workplaceTypes=Remote&language=en'
+dice_search_url_remote = 'https://www.dice.com/jobs?q=cloud%20engineer&countryCode=US&radius=300&radiusUnit=mi&pageSize=100&filters.postedDate=SEVEN&filters.workplaceTypes=Remote&language=en'
+dice_search_url_hybrid = 'https://www.dice.com/platform/jobs?filters.postedDate=SEVEN&filters.workplaceTypes=Hybrid&radius=75&location=Grass+Valley%2C+CA%2C+USA&q=cloud+engineer&latitude=39.2190608&longitude=-121.0610606&countryCode=US&locationPrecision=City&adminDistrictCode=CA'
 #wwr_search_url = 'https://weworkremotely.com/remote-jobs/search?search_uuid=&term=&sort=past_week&categories%5B%5D=6&region%5B%5D=1'
 wwr_search_url = 'https://weworkremotely.com/categories/remote-devops-sysadmin-jobs#job-listings'
 monster_search_url = 'https://www.monster.com/jobs/search?q=Aws+Cloud&where=San+Francisco%2C+CA&page=1&recency=last+week&rd=100'
@@ -1491,7 +1493,12 @@ def print_metrics(metrics, progress=None):
     print(f"{metrics['valid_count']} potential jobs sent")
 
 def search_board(board, progress=None):
-    jobs = globals()[f"scrape_{board}"](globals()[f"{board}_search_url"])
+    if f'{board}_search_url_remote' in globals():
+        jobs_remote = globals()[f"scrape_{board}"](globals()[f"{board}_search_url_remote"])
+        jobs_hybrid = globals()[f"scrape_{board}"](globals()[f"{board}_search_url_hybrid"])
+        jobs = jobs_remote + jobs_hybrid
+    else:
+        jobs = globals()[f"scrape_{board}"](globals()[f"{board}_search_url"])
     if not jobs:
         print(f"No {board} search results")
         return
