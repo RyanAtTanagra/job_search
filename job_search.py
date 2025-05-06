@@ -38,6 +38,8 @@ fitness_threshold = 75
 
 # Search URLs and terms
 linkedin_search_url = "cloud engineer"
+linkedin_search_url_remote = "keywords=search_term, listed_at=18000, remote=['2']"
+linkedin_search_url_hybrid = "keywords=search_term, listed_at=86400, remote=['3'], experience=['4'], distance=100, location_name='Grass Valley'"
 indeed_search_url = 'https://www.indeed.com/jobs?q=aws&l=San+Francisco%2C+CA&fromage=7&salaryType=%24185%2C000&radius=100&from=searchOnDesktopSerp'
 upwork_search_url = 'https://www.upwork.com/nx/search/jobs/?q=aws%20cloud&sort=recency&per_page=50&&user_location_match=1'
 insight_search_url = 'https://jobs.insightglobal.com/jobs/find_a_job/?rd=Distance&remote=true&miles=False&srch=AWS+Cloud+Engineer'
@@ -551,9 +553,7 @@ def scrape_linkedin(search_term):
     except Exception as e:
         print(f"Error connecting to LinkedIn to get search results. Details: {e}")
         return
-    job_cards_remote = api.search_jobs(keywords=search_term, listed_at=18000, remote=['2'])
-    job_cards_hybrid = api.search_jobs(keywords=search_term, listed_at=86400, remote=['3'], experience=['4'], distance=100, location_name='Grass Valley')
-    job_cards = job_cards_remote + job_cards_hybrid
+    job_cards = api.search_jobs(search_term)
     if len(job_cards) < 1:
         print("No search results")
         return None
