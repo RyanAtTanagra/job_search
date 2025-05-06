@@ -1087,6 +1087,7 @@ def scrape_dice(base_url):
             # Try newer css elements
             try:
                 job_cards = driver.find_elements(By.CSS_SELECTOR, "div[data-id]")
+                logging.info(f"Found {len(job_cards)} Dice jobs")
             except Exception as e:
                 logging.info(f"Error finding job cards with new selector: {e}")
 
@@ -1104,51 +1105,27 @@ def scrape_dice(base_url):
             # Process each job card
             for card in job_cards:
                 try:
-                    # Check which type of card we're dealing with
-                    if card.tag_name == "div":  # New format
-                        # Extract job ID from the data-id attribute
-                        job_id = card.get_attribute('data-id')
-                        
-                        # Find the title link with the updated selector
-                        title_link = card.find_element(By.CSS_SELECTOR, "a[data-testid='job-search-job-detail-link']")
-                        title = title_link.get_attribute('aria-label').strip()
-                        
-                        # Find the company link with the updated selector
-                        company_element = card.find_element(By.CSS_SELECTOR, "a[data-rac][href*='company-profile']")
-                        company = company_element.text.strip()
-                        
-                        # Get the URL from the title link
-                        url = title_link.get_attribute('href')
-                        
-                        job = Job(
-                            id=f"{company}_{title}".lower().strip(),
-                            url=url,
-                            title=title,
-                            company=company
-                        )
-
-                    # Otherwise old type
-                    else:
-
-                        # Find the title link element which contains both title and id
-                        title_link = card.find_element(By.CSS_SELECTOR, "a[data-cy='card-title-link']")
-
-                        # Get company element
-                        company_element = card.find_element(By.CSS_SELECTOR, "a[data-cy='search-result-company-name']")
-
-                        # Extract job details
-                        job_id = title_link.get_attribute('id').strip('()').strip(',').strip()
-                        title = title_link.text.strip().strip('()').strip(',').strip()
-                        company = company_element.text.strip()
-                        job = Job(
-                                # Different job_id because Dice is so fucking noisy due to companies spamming the same position over and over
-                                id = f"{company}_{title}".lower().strip(),
-                                url = f"https://www.dice.com/job-detail/{job_id}",
-                                title = title,
-                                company = company
-                                )
-    
-                        jobs.append(job)
+                    job_id = card.get_attribute('data-id')
+                            
+                    # Title element - using the correct selector from the current page
+                    title_link = card.find_element(By.CSS_SELECTOR, "a[data-testid='job-search-job-detail-link']")
+                    title = title_link.text.strip()  # Use text instead of aria-label
+                    
+                    # Company element - the selector needs to be updated
+                    company_element = card.find_element(By.CSS_SELECTOR, "a[href*='company-profile']")
+                    company = company_element.text.strip()
+                    
+                    # URL from the title link
+                    url = title_link.get_attribute('href')
+        
+                    job = Job(
+                        id=f"{company}_{title}".lower().strip(),
+                        url=url,
+                        title=title,
+                        company=company
+                    )
+                    
+                    jobs.append(job)
 
                 except Exception as e:
                     print(f"Error processing job card: {e}")
@@ -1156,7 +1133,7 @@ def scrape_dice(base_url):
 
             driver.quit()
 
-            if len(job_cards) == 0:
+            if len(job_cards) < 20:
                 break
 
             current_page += 1
@@ -1166,7 +1143,7 @@ def scrape_dice(base_url):
 
     finally:
         driver.quit()
-
+    
     return jobs
 
 def get_dice_job_description(url):
