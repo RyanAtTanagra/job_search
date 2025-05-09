@@ -404,10 +404,11 @@ def get_fitness_rating(description, company, title):
             return 0  # Return 0 for poor fit jobs
 
     # Check company name if we can identify it
-    for poor_company in poor_fit_companies:
-        if poor_company in company.lower():
-            logging.info(f"Job filtered out due to company {poor_company}")
-            return 0
+    if company:
+        for poor_company in poor_fit_companies:
+            if poor_company in company.lower():
+                logging.info(f"Job filtered out due to company {poor_company}")
+                return 0
 
 
     # Count how many software development indicators are present
