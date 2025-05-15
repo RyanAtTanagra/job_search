@@ -1572,11 +1572,13 @@ def search_board(board, progress=None):
                 job.company = get_company_from_description(job.description)
             # Been getting a lot of repeat spam postings on linked in, so search for company-title and skip if we've seen it
             if board == "linkedin" and job.company:
-                id2 = f"{job.company}_{job.title}".lower().strip()
-                if awsutils.dynamodb_check_if_value_exists(f"{board}_jobs", 'job_id', id2):
-                    logging.info(f"{board} job {id2} already seen")
+                job_id2 = f"{job.company}_{job.title}".lower().strip()
+                if awsutils.dynamodb_check_if_value_exists(f"{board}_spam", 'job_id', job_id2):
+                    logging.info(f"{board} job {job_id2} already seen")
                     metrics["seen_count"] += 1
                     continue
+                else:
+                    awsutils.dynamodb_put_item(f"{board}_spam", 'job_id', job_id2)
             job.fitness = get_fitness_rating(job.description, job.company, job.title)
             if job.fitness is None:
                 continue
