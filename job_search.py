@@ -569,13 +569,13 @@ def scrape_linkedin(search_term):
                 id = job_id,
                 url = f"https://www.linkedin.com/jobs/view/{job_id}"
             )
-
+            
             jobs.append(job)
-
+            
         except Exception as e:
             logging.info(f"Error processing job card: {e}")
             continue
-
+            
     return jobs
 
 def get_linkedin_job_details(id):
@@ -1570,6 +1570,13 @@ def search_board(board, progress=None):
         else:
             if not job.company:
                 job.company = get_company_from_description(job.description)
+            # Been getting a lot of repeat spam postings on linked in, so search for company-title and skip if we've seen it
+            if board == "linkedin" and job.company:
+                id2 = f"{job.company}_{job.title}".lower().strip()
+                if awsutils.dynamodb_check_if_value_exists(f"{board}_jobs", 'job_id', id2):
+                    logging.info(f"{board} job {id2} already seen")
+                    metrics["seen_count"] += 1
+                    continue
             job.fitness = get_fitness_rating(job.description, job.company, job.title)
             if job.fitness is None:
                 continue
