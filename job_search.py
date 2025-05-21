@@ -1498,8 +1498,8 @@ def print_metrics(metrics, progress=None):
 
 def search_board(board, progress=None):
     if f'{board}_search_url_remote' in globals():
-        jobs_remote = globals()[f"scrape_{board}"](globals()[f"{board}_search_url_remote"])
-        jobs_hybrid = globals()[f"scrape_{board}"](globals()[f"{board}_search_url_hybrid"])
+        jobs_remote = globals()[f"scrape_{board}"](globals()[f"{board}_search_url_remote"]) or []
+        jobs_hybrid = globals()[f"scrape_{board}"](globals()[f"{board}_search_url_hybrid"]) or []
         jobs = jobs_remote + jobs_hybrid
     else:
         jobs = globals()[f"scrape_{board}"](globals()[f"{board}_search_url"])
