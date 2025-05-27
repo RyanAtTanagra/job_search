@@ -164,7 +164,10 @@ class Job:
 # Used for web scraping
 def load_page(url, skip_cloudflare_detection=False, load_more=False):
     domain = urlparse(url).netloc.replace('www.', '')
-    driver = Driver(uc=True,headless=True)
+    if not head:
+        driver = Driver(uc=True,headless=True,user_data_dir="~/Library/Application Support/Google/Chrome/Python")
+    else:
+        driver = Driver(uc=True,headless=False,user_data_dir="~/Library/Application Support/Google/Chrome/Python")
     
     try:
         # Open the URL
@@ -1606,6 +1609,7 @@ if __name__ == "__main__":
     )
     parser.add_argument("--cron", action="store_true", help="If set, suppress progress output for cron jobs")
     parser.add_argument("--debug", action="store_true", help="Enable debug logging")
+    parser.add_argument("--head", action="store_true", help="Run Chrome in the foreground")
     args = parser.parse_args()
     # Determine if progress output should be included
     progress = not args.cron
@@ -1617,6 +1621,9 @@ if __name__ == "__main__":
         filename="debug.log",
         format="%(asctime)s - %(levelname)s - %(message)s"
     )
+    # Turn off headless if --head passed
+    global head
+    head = args.head
     selenium_boards = [
             "indeed",
             "upwork",
