@@ -38,8 +38,10 @@ fitness_threshold = 75
 
 # Search URLs and terms
 linkedin_search_url = "cloud engineer"
-linkedin_search_url_remote = { "keywords": "cloud engineer", "listed_at": 18000, "remote": ['2'] }
+#linkedin_search_url_remote = { "keywords": "cloud engineer", "listed_at": 18000, "remote": ['2'] }
+linkedin_search_url_remote = { "keywords": "cloud engineer", "listed_at": 86400, "remote": ['2'] }
 linkedin_search_url_hybrid = { "keywords": "cloud engineer", "listed_at": 86400, "remote": ['3'], "experience": ['4'], "distance": 100, "location_name": "Grass Valley" }
+#linkedin_search_url_hybrid = { "keywords": "cloud engineer", "listed_at": 86400, "remote": ['3'], "experience": ['4'], "distance": 100, "location_name": "Grass Valley" }
 indeed_search_url = 'https://www.indeed.com/jobs?q=aws&l=San+Francisco%2C+CA&fromage=7&salaryType=%24185%2C000&radius=100&from=searchOnDesktopSerp'
 indeed_search_url_remote = 'https://www.indeed.com/jobs?q=cloud+engineer&l=&fromage=7&salaryType=%24160%2C000%2B&sc=0kf%3Aattr%28DSQF7%29%3B&from=searchOnDesktopSerp'
 indeed_search_url_hybrid = 'https://www.indeed.com/jobs?q=cloud+engineer&latLong=39.12264%2C-121.03436&locString=Grass+Valley%2C+CA%2C+95949&fromage=7&salaryType=%24160%2C000&radius=100&from=searchOnDesktopSerp'
@@ -338,6 +340,7 @@ def load_page(url, skip_cloudflare_detection=False, load_more=False):
                     ".result",
                     ".detailpage-desc",
                     ".job_result_two_pane",
+                    ".job_result_two_pane_v2",
                     "div.job_description",
                     "article.job-tile",
                     "div[data-test='job-description']",
@@ -349,7 +352,8 @@ def load_page(url, skip_cloudflare_detection=False, load_more=False):
                     "li.new-listing-container",
                     "div[data-id]",
                     "a[data-testid='job-search-job-detail-link']",
-                    "div[data-testid='jobSearchResultsContainer']"
+                    "div[data-testid='jobSearchResultsContainer']",
+                    "#react-serp-root"
                     ]
 
             wait.until(
@@ -906,7 +910,7 @@ def scrape_ziprecruiter(base_url):
             driver = load_page(page_url)
 
             # Find all job result containers
-            job_cards = driver.find_elements(By.CLASS_NAME, "job_result_two_pane")
+            job_cards = driver.find_elements(By.CLASS_NAME, "job_result_two_pane_v2")
             logging.info(f"Found {len(job_cards)} jobs")
 
             # If no jobs found, we've reached the end
@@ -915,23 +919,46 @@ def scrape_ziprecruiter(base_url):
 
             for card in job_cards:
                 try:
-                    # Find job link which contains title and URL
-                    job_link = card.find_element(By.TAG_NAME, "h2").find_element(By.TAG_NAME, "a")
-                    company_elem = card.find_element(By.XPATH, ".//a[@data-testid='job-card-company']")
-                    company = company_elem.text.strip() if company_elem else None
-                    title = job_link.text.strip().replace("NEW!", "")
+                    article = card.find_element(By.TAG_NAME, "article")
+                    article_id = article.get_attribute("id")
+                    job_id = article_id.replace("job-card-", "") if article_id else None
+                    job_link = card.find_element(By.CSS_SELECTOR, "button[type='button']")
+                    try:
+                        company_elem = card.find_element(By.CSS_SELECTOR, "a[data-testid='job-card-company']")
+                        company = company_elem.text.strip()
+                    except:
+                        company = None
+                    try:
+                        title_button = card.find_element(By.CSS_SELECTOR, "button[type='button'] h1")
+                        title = title_button.get_attribute("aria-label") or title_button.text.strip()
+                        # Clean up title (remove "NEW!" badges etc)
+                        title = title.replace("NEW!", "").strip()
+                    except:
+                        title = None
+                    job_url = None
+                    if company and title and job_id:
+                        # Convert company and title to URL-friendly format
+                        company_slug = company.lower().replace(' ', '-').replace(',', '').replace('.', '').replace('&', 'and')
+                        title_slug = title.lower().replace(' ', '-').replace(',', '').replace('.', '')
+
+                        # Generate hash-like IDs (ZipRecruiter seems to use 8-character hashes)
+                        import hashlib
+                        company_hash = hashlib.md5(company_slug.encode()).hexdigest()[:8]
+                        title_hash = hashlib.md5(title_slug.encode()).hexdigest()[:8]
+
+                        # Construct URL: /jobs/{company}-{company_hash}/{title}-{title_hash}?lvk={job_id}.current
+                        job_url = f"https://www.ziprecruiter.com/jobs/{company_slug}-{company_hash}/{title_slug}-{title_hash}?lvk={job_id}.current"
 
                     job = Job(
-                            # Zip Recruiter is annoying and doesn't show the unique job id in the search results, so we'll fake one with company+title
                             id = f"{company}_{title}".lower().strip(),
-                            url = job_link.get_attribute("href"),
+                            url = job_url,
                             company = company,
                             title = title
                             )
 
                     # Find salary info
                     try:
-                        salary_elem = card.find_element(By.CSS_SELECTOR, "div.flex.items-center")
+                        salary_elem = card.find_element(By.CSS_SELECTOR, ".mr-8.break-all p")
                         job.salary_text = salary_elem.text.strip() if salary_elem else None
                     except Exception as e:
                         job.salary_text = None
@@ -945,8 +972,15 @@ def scrape_ziprecruiter(base_url):
                     continue
 
             # Check for next page button
-            next_button = driver.find_element(By.XPATH, "//a[@title='Next Page']")
-            if not next_button:
+            try:
+                next_button = driver.find_element(By.CSS_SELECTOR, "button[title='Next Page']")
+                if next_button and next_button.is_enabled() and "opacity-[.45]" not in next_button.get_attribute("class"):
+                    pass
+                else:
+                    logging.info("No more pages available")
+                    break
+            except:
+                logging.info("No pagination found")
                 break
 
             driver.quit()
@@ -1622,7 +1656,7 @@ if __name__ == "__main__":
         format="%(asctime)s - %(levelname)s - %(message)s"
     )
     # Turn off headless if --head passed
-    global head
+    global ead
     head = args.head
     selenium_boards = [
             "indeed",
@@ -1630,9 +1664,9 @@ if __name__ == "__main__":
             "insight",
             "cybercoders",
             "wwr",
-            "ziprecruiter",
             "kforce",
             "monster",
+            "ziprecruiter",
             "dice"
         ]
     if args.website == "all":
