@@ -1560,14 +1560,30 @@ def get_salary_from_description(description):
 
     return None
 
-def print_metrics(metrics, progress=None):
-    if progress:
-        print("\r" + " " * 80, end="\r")  # Clears the progress line
+def print_metrics_realtime(metrics, current_idx, total_jobs):
+    """Print metrics in real-time, updating the same lines"""
+    # Use ANSI escape codes to control cursor position
+    print(f"\033[2K\rProcessing {current_idx}/{total_jobs}")  # Clear line and show progress
+    print(f"\033[2K\r{metrics['seen_count']} already seen")
+    print(f"\033[2K\r{metrics['salary_count']} with no or low salary")
+    print(f"\033[2K\r{metrics['fitness_count']} with a bad fit")
+    print(f"\033[2K\r{metrics['description_count']} failed to get description")
+    print(f"\033[2K\r{metrics['valid_count']} potential jobs sent")
+    # Move cursor back up to the top of our metrics block
+    print("\033[6A", end="")  # Move up 6 lines
+
+def print_metrics_final(metrics, progress=None):
+    # Clear all 6 lines first, then print final metrics
+    for i in range(6):
+        print(f"\033[2K")  # Clear each line
+    print(f"\033[6A", end="")  # Move back up to start
+    
     print(f"{metrics['seen_count']} already seen")
     print(f"{metrics['salary_count']} with no or low salary")
-    print(f"{metrics['fitness_count']} with a bad fit")
+    print(f"{metrics['fitness_count']} with a bad fit") 
     print(f"{metrics['description_count']} failed to get description")
     print(f"{metrics['valid_count']} potential jobs sent")
+    print()  # Add a blank line at the end
 
 def search_board(board, progress=None):
     if f'{board}_search_url_remote' in globals():
@@ -1585,7 +1601,7 @@ def search_board(board, progress=None):
     metrics = {key: 0 for key in metrics}
     for idx, job in enumerate(jobs):
         if progress:
-            print(f"Processing {idx}/{len(jobs)}", end="\r")
+            print_metrics_realtime(metrics, idx, len(jobs))
         if not job.id:
             logging.info(f"No job id: {job.id}")
             continue
@@ -1666,7 +1682,7 @@ def search_board(board, progress=None):
             awsutils.send_email(f"Python {board} Search <python@twistedslinky.org>", mail_to, job.company + " - " + job.title, email_body, cover_letter_path)
             awsutils.dynamodb_put_item(f"{board}_jobs", 'job_id', job.id)
             metrics["valid_count"] += 1
-    print_metrics(metrics, progress)
+    print_metrics_final(metrics)
     return None
 
 if __name__ == "__main__":
