@@ -29,13 +29,13 @@ soft, hard = resource.getrlimit(resource.RLIMIT_NOFILE)
 resource.setrlimit(resource.RLIMIT_NOFILE, (2048, hard))
 
 # Annual salary threshold
-salary_threshold = 170
+salary_threshold = 150
 
 # Hourly threshold
-hourly_threshold = 80
+hourly_threshold = 75
 
 # Job fitness score threshold
-fitness_threshold = 75
+fitness_threshold = 80
 
 # Search URLs and terms
 linkedin_search_url = "cloud engineer"
@@ -1009,7 +1009,7 @@ def scrape_ziprecruiter(base_url):
 
             # Check for next page button
             try:
-                next_button = driver.find_element(By.CSS_SELECTOR, "a[title='Next Page']")
+                next_button = driver.find_element(By.CSS_SELECTOR, "[title='Next Page']")
                 if next_button and (next_button.is_enabled() and "opacity-[.45]" not in next_button.get_attribute("class") or next_button.get_attribute("href")):
                     pass
                 else:
@@ -1289,7 +1289,7 @@ def scrape_wwr(base_url):
         # Process each job card
         for card in job_cards:
             try:
-                job_link = card.find_element(By.CSS_SELECTOR, "a[href^='/remote-jobs/']")
+                job_link = card.find_element(By.CSS_SELECTOR, "a[href^='/listings/']")
                 # Extract job URL and ID
                 job_url = job_link.get_attribute("href")
                 job_id = job_url.split("/")[-1].strip() if job_url else None
