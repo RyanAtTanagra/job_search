@@ -1712,7 +1712,6 @@ if __name__ == "__main__":
     head = args.head
     selenium_boards = [
             "indeed",
-            "upwork",
             "insight",
             "cybercoders",
             "wwr",
