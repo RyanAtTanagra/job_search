@@ -909,8 +909,11 @@ def scrape_ziprecruiter(base_url):
             logging.info(f"Scraping Ziprecruiter page {current_page}...")
 
             driver = load_page(page_url)
+            if not driver:
+                logging.info("Failed to load page")
+                break
 
-            # Find all job result containers
+            # Find all job result containers - both old and new layouts
             job_cards = driver.find_elements(By.CSS_SELECTOR, ".job_result_two_pane, .job_result_two_pane_v2")
             logging.info(f"Found {len(job_cards)} jobs")
 
@@ -920,25 +923,41 @@ def scrape_ziprecruiter(base_url):
 
             for card in job_cards:
                 try:
+                    # Get the article element which contains the job data
                     article = card.find_element(By.TAG_NAME, "article")
-                    article_id = article.get_attribute("id") or None
-                    if article_id:
-                        # New site layout
-                        job_id = article_id.replace("job-card-", "") if article_id else None
-                        job_link = card.find_element(By.CSS_SELECTOR, "button[type='button']")
-                        try:
-                            company_elem = card.find_element(By.CSS_SELECTOR, "a[data-testid='job-card-company']")
-                            company = company_elem.text.strip()
-                        except:
-                            company = None
-                        try:
-                            title_button = card.find_element(By.CSS_SELECTOR, "button[type='button'] h1")
-                            title = title_button.get_attribute("aria-label") or title_button.text.strip()
-                            # Clean up title (remove "NEW!" badges etc)
-                            title = title.replace("NEW!", "").strip()
-                        except:
-                            title = None
-                        job_url = None
+                    article_id = article.get_attribute("id")
+                    
+                    if not article_id:
+                        continue
+                    
+                    # Extract job ID from article id (e.g., "job-card-4Ne3iLL6x5KqXxuAhAsUwg" -> "4Ne3iLL6x5KqXxuAhAsUwg")
+                    job_id = article_id.replace("job-card-", "") if article_id.startswith("job-card-") else article_id
+                    
+                    # Try to find the title in the button element
+                    try:
+                        title_button = card.find_element(By.CSS_SELECTOR, "button[type='button'] h2")
+                        title = title_button.get_attribute("aria-label") or title_button.text.strip()
+                        # Clean up title (remove "NEW!" badges etc)
+                        title = title.replace("NEW!", "").strip()
+                    except:
+                        title = None
+                    
+                    # Try to find company name
+                    try:
+                        company_elem = card.find_element(By.CSS_SELECTOR, "a[data-testid='job-card-company']")
+                        company = company_elem.text.strip()
+                    except:
+                        company = None
+
+                    # For ZipRecruiter, we need to construct the URL differently
+                    # Look for apply button or job redirect URL in the HTML
+                    job_url = None
+                    try:
+                        # Try to find an apply button with href
+                        apply_link = card.find_element(By.CSS_SELECTOR, "a[aria-label='Apply']")
+                        job_url = apply_link.get_attribute('href')
+                    except:
+                        # If no direct apply link, construct URL from job ID
                         if company and title and job_id:
                             # Convert company and title to URL-friendly format
                             company_slug = company.lower().replace(' ', '-').replace(',', '').replace('.', '').replace('&', 'and')
@@ -948,57 +967,37 @@ def scrape_ziprecruiter(base_url):
                             company_hash = hashlib.md5(company_slug.encode()).hexdigest()[:8]
                             title_hash = hashlib.md5(title_slug.encode()).hexdigest()[:8]
 
-                            # Construct URL: /jobs/{company}-{company_hash}/{title}-{title_hash}?lvk={job_id}.current
-                            job_url = f"https://www.ziprecruiter.com/jobs/{company_slug}-{company_hash}/{title_slug}-{title_hash}?lvk={job_id}.current"
-                    else:
-                        # Old site layout
-                        element_id = card.get_attribute("id")
-                        job_id = element_id.replace("job-card-", "")
-                        job_link = card.find_element(By.CSS_SELECTOR, "button[type='button']")
-                        try:
-                            company_elem = card.find_element(By.XPATH, ".//a[@data-testid='job-card-company']")
-                            company = company_elem.text.strip() if company_elem else None
-                        except:
-                            company = None
-                        try:
-                            title_elem = card.find_element(By.CSS_SELECTOR, "h2.text-header-sm")
-                            title = title_elem.text.strip()
-                            # Clean up title (remove "NEW!" badges etc)
-                            title = title.replace("NEW!", "").strip()
-                        except:
-                            title = None
-                        job_url = None
-                        if company and title and job_id:
-                            company_slug = company.lower().replace(' ', '-').replace(',', '').replace('.', '').replace('&', 'and')
-                            title_slug = title.lower().replace(' ', '-').replace(',', '').replace('.', '')
-                            company_hash = hashlib.md5(company_slug.encode()).hexdigest()[:8]
-                            title_hash = hashlib.md5(title_slug.encode()).hexdigest()[:8]
-                            job_url = f"https://www.ziprecruiter.com/jobs/{company_slug}-{company_hash}/{title_slug}-{title_hash}?lvk={job_id}.current"
+                            # Construct URL: /jobs/{company}-{company_hash}/{title}-{title_hash}?lvk={job_id}
+                            job_url = f"https://www.ziprecruiter.com/jobs/{company_slug}-{company_hash}/{title_slug}-{title_hash}?lvk={job_id}"
 
+                    # Use the same ID format as other scrapers for consistency
+                    # Most of your other scrapers use company_title format
+                    if company and title:
+                        formatted_id = f"{company}_{title}".lower().strip()
+                    else:
+                        formatted_id = job_id  # Fallback to ZipRecruiter's job ID
+                    
                     job = Job(
-                            id = f"{company}_{title}".lower().strip(),
-                            url = job_url,
-                            company = company,
-                            title = title
-                            )
+                        id=formatted_id,
+                        url=job_url,
+                        company=company,
+                        title=title
+                    )
 
-                    # Find salary info
-                    if article_id:
-                        # New layout
+                    # Find salary info - try multiple selectors
+                    try:
+                        # Try new layout first
+                        salary_elem = card.find_element(By.CSS_SELECTOR, ".mr-8.break-all p")
+                        job.salary_text = salary_elem.text.strip()
+                    except:
                         try:
-                            salary_elem = card.find_element(By.CSS_SELECTOR, ".mr-8.break-all p")
-                            job.salary_text = salary_elem.text.strip() if salary_elem else None
-                        except Exception as e:
+                            # Try old layout
+                            salary_elem = card.find_element(By.CSS_SELECTOR, "div.flex.items-center p")
+                            job.salary_text = salary_elem.text.strip()
+                        except:
                             job.salary_text = None
-                        job.highest_salary = get_salary_from_text(job.salary_text) or None
-                    else:
-                        # Old layout
-                        try:
-                            salary_elem = card.find_element(By.CSS_SELECTOR, "div.flex.items-center")
-                            job.salary_text = salary_elem.text.strip() if salary_elem else None
-                        except Exception as e:
-                            job.salary_text = None
-                        job.highest_salary = get_salary_from_text(job.salary_text) or None
+
+                    job.highest_salary = get_salary_from_text(job.salary_text) if job.salary_text else None
 
                     # Add job details to list
                     jobs.append(job)
@@ -1010,8 +1009,8 @@ def scrape_ziprecruiter(base_url):
             # Check for next page button
             try:
                 next_button = driver.find_element(By.CSS_SELECTOR, "[title='Next Page']")
-                if next_button and (next_button.is_enabled() and "opacity-[.45]" not in next_button.get_attribute("class") or next_button.get_attribute("href")):
-                    pass
+                if next_button and (next_button.is_enabled() and "opacity-[.45]" not in next_button.get_attribute("class")):
+                    pass  # Continue to next page
                 else:
                     logging.info("No more pages available")
                     break
@@ -1029,13 +1028,17 @@ def scrape_ziprecruiter(base_url):
         logging.info(f"Error scraping ZipRecruiter: {str(e)}")
 
     finally:
-        driver.quit()
+        if 'driver' in locals() and driver:
+            driver.quit()
 
     return jobs
 
 def get_ziprecruiter_job_description(url):
+    driver = None
     try:
         driver = load_page(url)
+        if not driver:
+            return None
 
         try:
             job_desc_div = driver.find_element(By.CLASS_NAME, "job_description")
@@ -1061,7 +1064,8 @@ def get_ziprecruiter_job_description(url):
         return None
 
     finally:
-        driver.quit()
+        if driver:
+            driver.quit()
 
     return None
 
