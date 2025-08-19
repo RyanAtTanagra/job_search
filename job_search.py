@@ -1718,7 +1718,6 @@ if __name__ == "__main__":
             "indeed",
             "insight",
             "cybercoders",
-            "wwr",
             "kforce",
             "monster",
             "ziprecruiter",
