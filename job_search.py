@@ -43,9 +43,9 @@ linkedin_search_url = "cloud engineer"
 linkedin_search_url_remote = { "keywords": "cloud engineer", "listed_at": 86400, "remote": ['2'] }
 linkedin_search_url_hybrid = { "keywords": "cloud engineer", "listed_at": 86400, "remote": ['3'], "experience": ['4'], "distance": 100, "location_name": "Grass Valley" }
 #linkedin_search_url_hybrid = { "keywords": "cloud engineer", "listed_at": 86400, "remote": ['3'], "experience": ['4'], "distance": 100, "location_name": "Grass Valley" }
-indeed_search_url = 'https://www.indeed.com/jobs?q=aws&l=San+Francisco%2C+CA&fromage=7&salaryType=%24185%2C000&radius=100&from=searchOnDesktopSerp'
-indeed_search_url_remote = 'https://www.indeed.com/jobs?q=cloud+engineer&l=&fromage=7&salaryType=%24160%2C000%2B&sc=0kf%3Aattr%28DSQF7%29%3B&from=searchOnDesktopSerp'
-indeed_search_url_hybrid = 'https://www.indeed.com/jobs?q=cloud+engineer&latLong=39.12264%2C-121.03436&locString=Grass+Valley%2C+CA%2C+95949&fromage=7&salaryType=%24160%2C000&radius=100&from=searchOnDesktopSerp'
+#indeed_search_url = 'https://www.indeed.com/jobs?q=aws&l=San+Francisco%2C+CA&fromage=7&salaryType=%24155%2C000&radius=100&from=searchOnDesktopSerp'
+indeed_search_url_remote = 'https://www.indeed.com/jobs?q=cloud+engineer&l=&fromage=7&salaryType=%24155%2C000&sc=0kf%3Aattr%28DSQF7%29%3B&from=searchOnDesktopSerp'
+indeed_search_url_hybrid = 'https://www.indeed.com/jobs?q=cloud+engineer&latLong=39.12264%2C-121.03436&locString=Grass+Valley%2C+CA%2C+95949&fromage=7&salaryType=%24155%2C000&radius=100&from=searchOnDesktopSerp'
 upwork_search_url = 'https://www.upwork.com/nx/search/jobs/?q=aws%20cloud&sort=recency&per_page=50&&user_location_match=1'
 insight_search_url = 'https://jobs.insightglobal.com/jobs/find_a_job/?rd=Distance&remote=true&miles=False&srch=AWS+Cloud+Engineer'
 ziprecruiter_search_url_remote = 'https://www.ziprecruiter.com/jobs-search?search=cloud+engineer&location=Remote+%28USA%29&refine_by_location_type=only_remote&radius=5000&days=7&refine_by_employment=employment_type%3Aall&refine_by_salary=150000&refine_by_salary_ceil=295000'
