@@ -383,7 +383,13 @@ def load_page(url, skip_cloudflare_detection=False, load_more=False):
         return None
 
 def get_company_from_description(description):
-    prompt = f"""Given this job description, what is the company name?  only respond with the company name.  if no company name is found, respond with "Unknown Company".
+    prompt = f"""Extract only the company name from this job description. 
+
+        Rules:
+        - Respond with ONLY the company name, nothing else
+        - No explanations, no parentheses, no additional text
+        - If no company name is found, respond with exactly: Unknown Company
+
         Job Description:
             {description}
         """
