@@ -1,8 +1,15 @@
 .env
-__pycache__
-utils/__pycache__
-utils/linkedin_api/__pycache__
+__pycache__/
+*/__pycache__/
+*/*/__pycache__/
 
-# debugging output files
+# User-specific files (contain PII)
+config.yaml
+*.txt
+!resume.example.txt
+*.docx
+!header_template.example.docx
+
+# Debugging output
 *.html
 debug.log

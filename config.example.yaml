@@ -1,0 +1,102 @@
+thresholds:
+  annual_salary: 150000       # minimum annual salary in dollars
+  hourly_rate: 75             # minimum hourly rate in dollars
+  fitness_score: 80           # minimum fitness score (0-100)
+
+ai:
+  model: "claude-3-5-haiku-20241022"
+  max_tokens: 1000
+
+user:
+  name: "Your Name"
+  location: "Your City, State"
+  resume_path: "resume.txt"
+  template_path: "header_template.docx"
+
+email:
+  to: "you@example.com"
+  from_domain: "example.com"    # used in email From header
+
+# Search URLs per job board.
+# Boards with remote + hybrid variants get both keys.
+# Boards with a single search get a "url" key.
+# LinkedIn uses API parameters (dict), not URLs.
+searches:
+  linkedin:
+    remote:
+      keywords: "cloud engineer"
+      listed_at: 86400          # seconds (86400 = 24 hours)
+      remote: ["2"]
+    hybrid:
+      keywords: "cloud engineer"
+      listed_at: 86400
+      remote: ["3"]
+      experience: ["4"]
+      distance: 100
+      location_name: "Your City"
+  indeed:
+    remote: "PASTE_YOUR_INDEED_REMOTE_URL_HERE"
+    hybrid: "PASTE_YOUR_INDEED_HYBRID_URL_HERE"
+  upwork:
+    url: "PASTE_YOUR_UPWORK_URL_HERE"
+  insight:
+    url: "PASTE_YOUR_INSIGHT_GLOBAL_URL_HERE"
+  ziprecruiter:
+    remote: "PASTE_YOUR_ZIPRECRUITER_REMOTE_URL_HERE"
+    hybrid: "PASTE_YOUR_ZIPRECRUITER_HYBRID_URL_HERE"
+  cybercoders:
+    url: "PASTE_YOUR_CYBERCODERS_URL_HERE"
+  dice:
+    remote: "PASTE_YOUR_DICE_REMOTE_URL_HERE"
+    hybrid: "PASTE_YOUR_DICE_HYBRID_URL_HERE"
+  monster:
+    url: "PASTE_YOUR_MONSTER_URL_HERE"
+  kforce:
+    url: "PASTE_YOUR_KFORCE_URL_HERE"
+
+# Boards included when running with "selenium" argument
+selenium_boards:
+  - indeed
+  - insight
+  - cybercoders
+  - kforce
+  - monster
+  - ziprecruiter
+  - dice
+
+# Job filtering lists — customize to match your background
+filters:
+  poor_fit_titles:
+    - "software engineer"
+    - "software architect"
+    - "software develop"
+    - "frontend engineer"
+    - "backend engineer"
+    - "full stack engineer"
+    - "machine learning engineer"
+    - "security engineer"
+    - "solution"
+    - "sales"
+    - "product manager"
+    - "director"
+
+  poor_fit_companies:
+    - "example-company"
+
+  software_role_indicators:
+    - "angular"
+    - "react"
+    - "java "
+    - "c++"
+    - "rust"
+    - "golang"
+    - "frontend"
+    - "backend"
+    - "full stack"
+    - "fullstack"
+    - "ui/ux"
+    - "mobile app"
+
+browser:
+  user_data_dir: "~/Library/Application Support/Google/Chrome/Python"
+  ulimit_nofile: 2048
