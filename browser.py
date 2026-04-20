@@ -32,7 +32,9 @@ def load_page(url, headless=True, debug=False, skip_cloudflare_detection=False,
               load_more=False, user_data_dir=None):
     """Load a page using an undetected Chrome browser and return the driver."""
     domain = urlparse(url).netloc.replace('www.', '')
-    profile_dir = user_data_dir or "~/Library/Application Support/Google/Chrome/Python"
+    profile_dir = os.path.expanduser(
+        user_data_dir or "~/Library/Application Support/Google/Chrome/Python"
+    )
     _clean_profile_locks(profile_dir)
     driver = Driver(
         uc=True,
