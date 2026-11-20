@@ -2,6 +2,12 @@
 
 Automated job search across multiple job boards. Scrapes listings, filters by salary and resume fit using Claude AI, generates tailored cover letters, and emails matches to you.
 
+## Disclaimer
+
+For personal and educational use. Scraping may violate the terms of service of
+the sites involved; you are responsible for how you use this and for complying
+with the ToS of any site you point it at. Provided as-is, without warranty.
+
 ## Supported Job Boards
 
 - **LinkedIn** (via API)
