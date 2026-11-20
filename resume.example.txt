@@ -1,0 +1,31 @@
+YOUR NAME
+Your City, State ZIP
+your.email@example.com | 555-555-5555 | linkedin.com/in/yourprofile
+
+PROFESSIONAL SUMMARY
+Infrastructure engineer with X years of experience in AWS cloud services,
+Linux administration, and production system operations.
+
+EXPERIENCE
+
+Senior Cloud Engineer | Company Name | City, State | 2020-Present
+- Managed AWS infrastructure including EC2, RDS, S3, Lambda, and CloudFormation
+- Led migration of on-premise services to AWS, reducing costs by X%
+- Implemented disaster recovery procedures and automated backup systems
+
+Cloud Engineer | Company Name | City, State | 2017-2020
+- Administered Linux servers and maintained CI/CD pipelines
+- Deployed and managed Kubernetes clusters in production
+- Automated infrastructure provisioning with Terraform
+
+SKILLS
+AWS (EC2, RDS, S3, Lambda, CloudFormation, ECS, Route53)
+Linux Administration (RHEL, Ubuntu, CentOS)
+Infrastructure as Code (Terraform, CloudFormation)
+CI/CD (Jenkins, GitHub Actions)
+Containers (Docker, Kubernetes)
+Monitoring (CloudWatch, Grafana, Prometheus)
+Scripting (Python, Bash)
+
+EDUCATION
+B.S. in Computer Science | University Name | Year

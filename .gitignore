@@ -1,0 +1,24 @@
+# Secrets
+.env*
+!.env.sample
+
+# Python
+__pycache__/
+*/__pycache__/
+*/*/__pycache__/
+
+# Editor / tooling local state
+.claude/settings.local.json
+
+# User-specific files (contain PII)
+config.yaml
+*.txt
+!resume.example.txt
+!requirements.txt
+*.docx
+!header_template.example.docx
+
+# Debugging output
+*.html
+debug.log
+downloaded_files/
